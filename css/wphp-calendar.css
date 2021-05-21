@@ -1,0 +1,74 @@
+.calendar-area {
+    width:300px;
+    margin:auto;
+    text-align: center;
+}
+
+#wphp-cal {
+    width: calc(40px * 7 + 8px);    
+    margin:0;    
+}
+
+@media (max-width: 575px) {
+    #wphp-cal {
+        margin:auto;
+    }
+}
+#wphp-cal .dayofweek {
+    background: #6F6F6F;
+    border:1px solid #666;
+    color:white;
+}
+#wphp-cal table, #wphp-cal th, #wphp-cal td {
+border:1px solid #CCC;
+font-size:14px;
+}
+#wphp-cal th, #wphp-cal td {
+    width:40px;
+    height:40px;
+    text-align:center;
+}
+#wphp-cal .cell {
+    cursor: pointer;
+}
+#wphp-cal .not-available {
+    color:#CCC;
+    background: rgba(220,220,220,.5);
+}
+#wphp-cal .available {
+    color:#333;
+    background: rgba(255,255,255,.7);
+    transition: background 1s, color 1s;
+}
+#wphp-cal .available:hover {
+    background: #9cff75;
+}
+#wphp-cal .choosen-cell {
+    background: #c9ffb4;
+}
+
+/*
+#wphp-cal .panel-outter {
+border:1px solid var(--main);;
+}*/
+
+#wphp-cal .panel-btn, #wphp-cal .panel-body {
+    color:white;
+    font-size:20px;
+    border:none !important;
+}
+#wphp-cal .panel-body {
+    color:#333;
+}
+#wphp-cal .panel-btn {
+    cursor: pointer;
+    color: var(--main);
+    transition: background .5s;
+}
+#wphp-cal .panel-btn:hover {
+    background: #999;
+}
+
+
+
+.text-booked {font-size:20px;color:var(--main);}
