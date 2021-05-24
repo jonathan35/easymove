@@ -90,24 +90,24 @@ a:hover {
 }
 
 
-.btn-white-in {
+.btn-signup-in {
   background: rgba(0, 0, 0, .1);
   cursor: pointer;  
   transition: background .5s, border .3s;
 }
 
-.btn-white, .btn-black {
+.btn-signup, .btn-black {
   color: white;
   border:1px solid transparent;
   padding-left: 20px;
   padding-right: 20px;
 }
-.btn-white {
+.btn-signup {
   background: rgba(0, 0, 0, .1);
   cursor: pointer;  
   transition: background .5s, border .3s;
 }
-.btn-white:hover, .btn-white-visited {
+.btn-signup:hover, .btn-signup-visited {
   color: white;
   border:1px solid #333;
   background: #333;
@@ -132,7 +132,23 @@ a:hover {
   color: white;
   background: var(--third);
 }
-
+.btn-red {
+  color: white;
+  background: rgb(204, 95, 95);
+  transition: background .5s;
+}
+.btn-red:hover {
+  background: rgb(201, 61, 61) !important;
+}
+.btn-white {
+  color: #333;
+  border:1px solid #CCC; 
+  background: #FFF;
+  transition: background .5s;
+}
+.btn-white:hover {
+  background: #EFEFEF !important;
+}
 
 /* ------------------------------------- Header ------------------------------------- */
 

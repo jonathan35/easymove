@@ -127,9 +127,9 @@ foreach((array)$ds as $d){
 
     <?php }else{?>
 
-        <h1>NO DRIVER ONLINE within 30 minutes</h1>
-        <div style="color:gray;">
-            If driver off GPS, their location can't be track. 
+        
+        <div style="color:gray; padding-top:20px;">
+            NO ONLINE DRIVER FOUND
             <span style="color:white"><?php echo time()?></span>
         </div>
 

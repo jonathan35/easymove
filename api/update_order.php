@@ -17,6 +17,11 @@ if(!empty($order_id) && !empty($_POST['action'])){
 
     if($_POST['action'] == 'accept'){
 
+        $driver = sql_read('select name, mobile_number from driver where id=? limit 1', 's', $driver_id);
+
+        $data['driver_name'] = $driver['name'];
+        $data['driver_phone'] = $driver['mobile_number'];
+
         $data['status'] = 'Accepted';
         $data['accepted_datetime'] = date('Y-m-d H:i:s');
         $deadline = getFastPickDeadline($order['id']);

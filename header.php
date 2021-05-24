@@ -33,7 +33,7 @@
                             <div class="col-12 pt-2 pb-4 text-center">
                         
 
-                                <div class="btn btn-white account-menu-trigger float-right" style="border-radius: 20px 20px 20px 20px;">
+                                <div class="btn btn-signup account-menu-trigger float-right" style="border-radius: 20px 20px 20px 20px;">
                                     <img src="<?php echo ROOT?>images/user.svg" width="16px">&nbsp;
                                     <?php 
                                     echo substr($_SESSION['auth_user']['username'],0,29);
@@ -59,10 +59,10 @@
                             </div>
                             <?php }else{?>
                             <div class="col-12 pt-2 pb-4 text-center text-md-right">
-                                <a href="<?php echo ROOT?>signup"><div class="btn btn-white <?php if(strpos($_SERVER['PHP_SELF'], 'merchant_signup.php')) echo 'btn-white-visited';?>" style="border-radius: 20px 0 0 20px;">
+                                <a href="<?php echo ROOT?>signup"><div class="btn btn-signup <?php if(strpos($_SERVER['PHP_SELF'], 'merchant_signup.php')) echo 'btn-signup-visited';?>" style="border-radius: 20px 0 0 20px;">
                                     <img src="<?php echo ROOT?>images/user.svg" width="16px">&nbsp;
                                     Sign Up
-                                </div></a><div class="btn btn-white" data-toggle="modal" data-target="#loginModal" style="border-radius: 0 20px 20px 0; border-left:0;">
+                                </div></a><div class="btn btn-signup" data-toggle="modal" data-target="#loginModal" style="border-radius: 0 20px 20px 0; border-left:0;">
                                     <img src="<?php echo ROOT?>images/login.svg" width="19px">&nbsp;
                                     Sign In
                                 </div>

@@ -109,14 +109,14 @@ $type['created'] = 'date';
 //$type['address'] = 'textarea'; $tinymce['address']=false;  $labelFullRow['address']=false; $height['address'] = '80px;'; $width['address'] = '100%;'; 
 $type['group_id'] = 'select'; $option['group_id'] = array('1'=>'Master Admin');//,'2'=>'Admin'
 
-$type['status'] = 'select'; $option['status'] = array('Ordered'=>'New','Accepted'=>'Accepted','Collected'=>'Collected','Delivered'=>'Delivered'); $default_option['status'] = 1;
+$type['status'] = 'select'; $option['status'] = array('Ordered'=>'New','Accepted'=>'Accepted','Collected'=>'Collected','Delivered'=>'Delivered','Cancelled'=>'Cancelled'); $default_option['status'] = 1;
 
 $type['type'] = 'select'; $option['type'] = array('Headquarter'=>'Headquarter','Branch'=>'Branch');$default_option['type'] = 'Branch';
 
 $required['title'] = 'required';
 
 $cols = $items =array();
-$cols = array('ORDER' => '2', 'TIME' => '2', 'REGION & ZONE' => '2', 'COMPANY BRANCH' => '3', 'DISTANCE (KM)' => 2, 'DRIVER' => 1);
+$cols = array('DISTANCE' => 1, 'DRIVER' => 2, 'ASSIGN' => 2, 'ORDER' => 1, 'TIME' => 2, 'REGION & ZONE' => 2, 'COMPANY BRANCH' => 2);
 
 
 if(empty($_POST['get_config_only'])){
@@ -190,7 +190,7 @@ if($_GET['tab'] == 'New' || $_GET['tab'] ==''){
 	$tab = " and status='".$_GET['tab']."' ";
 }
 
-$rows = sql_read('select id, region, zone, company, branch, branch_name, driver, distance, time, status, created from '.$table.' '.$condition.' '.$tab.' '.$condition_ext.' '.$sort, str_repeat('s',count($params)), $params);
+$rows = sql_read('select id, region, zone, company, branch, branch_name, assign, driver, distance, time, status, created from '.$table.' '.$condition.' '.$tab.' '.$condition_ext.' '.$sort, str_repeat('s',count($params)), $params);
 $count = sql_count("select id from ".$table.' '.$condition.' '.$condition_ext.' '.$sort, str_repeat('s',count($params)), $params);
 
 ?>
@@ -250,7 +250,7 @@ if($edit==true){?>
                     <input type="hidden" name="<?php echo $field?>" id="hidden-filter-<?php echo $field?>" value="" >
                 
                 <?php }else{ ?>
-					<div class="col-2">
+					<div class="col-12 col-md-2 p-1">
                 	<select name="<?php echo $field?>">
 						<option value="">All <?php echo str_replace("_", " ", $field)?></option>
 						<?php 
@@ -293,7 +293,7 @@ if($edit==true){?>
 					?>
 					<a href="?tab=<?php echo $l?>" class="content">
 					<li <?php if((empty($_GET['tab']) && $v == 'Ordered') || $_GET['tab'] == $l){?>class="active"<?php }?>>
-					<?php echo $l?> ( <?php echo $s_count;?> )
+					<?php echo $l?> <div class="circle_num"><?php echo $s_count;?></div>
 					</li></a>
 				<?php }?>
 			</ul>
@@ -305,7 +305,7 @@ if($edit==true){?>
 	<thead>    
 		<?php if($list_method=='list'){?>
 		<tr>
-			<th style="width:2% !important;"></th>
+			<th style="width:2% !important; background-color: #868f96;"></th>
 			<?php 
 			if($edit==true){	$usable_width = 88/12;	}else{	$usable_width = 96/12;}
 			$c=2;
@@ -313,6 +313,7 @@ if($edit==true){?>
 				<th style="
 					width:<?php echo $usable_width*$colWidth;?>%; 
 					<?php if($list_sort){?>cursor:pointer;<?php }?>
+					background-color: #868f96; color:white;
 				" 
 				<?php if($list_sort){?> onClick="sortTable('#item_list', '<?php echo $c;?>')" <?php }?>
 				>
@@ -353,7 +354,16 @@ if($edit==true){?>
                     <input type="hidden" name="id" value="<?php echo $val['id'];?>" />
                 </td>
 				<td>
-					<div link="<?php echo ROOT?>admin_order/<?php echo $defender->encrypt('encrypt', $val['id'])?>" target="_blank" style="font-size:16px" class="mymodal-btn btn btn-xs btn-default list-edit ref-btn" ><?php echo sprintf("%06d", $val['id']);?></div>
+					<?php echo $val['distance'].'KM' ?: '-';?>
+                </td>
+				<td>
+					<?php echo $option['driver'][$val['driver']] ?: '-';?>
+                </td>
+				<td>
+					<?php echo $option['driver'][$val['assign']] ?: '-';?>
+                </td>
+				<td>
+					<div link="<?php echo ROOT?>admin_order/<?php echo $defender->encrypt('encrypt', $val['id'])?>" target="_blank" class="mymodal-btn btn list-edit" style="font-size:16px; width:90px !important; height:28px; padding-top:2px;"><?php echo sprintf("%06d", $val['id']);?></div>
                 </td>
 				<td>
 					<?php echo date('d/m/y, g:i a', strtotime(substr($val['created'],0,10).' '.$val['time'].':00'));?>
@@ -365,12 +375,7 @@ if($edit==true){?>
 				<td>
 					<?php echo $val['branch_name'] ?: '-'; ?>
                 </td>
-				<td>
-					<?php echo $val['distance'].'KM' ?: '-';?>
-                </td>
-				<td>
-					<?php echo $option['driver'][$val['driver']] ?: '-';?>
-                </td>
+				
 				
 
             </tr>

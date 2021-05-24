@@ -49,15 +49,18 @@ if($_SESSION['validation']=='YES'){
     <span class="d-block d-md-none">CMS</span>
   
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
+    <span class="navbar-toggler-icon">
+      <img src="<?php echo ROOT?>cms/images/burger-20.png">
+    </span>
   </button>
   
   <div class="d-inline d-sm-none rel-nav">
     <div class="collapse navbar-collapse abso-nav" id="navbarText">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Product</a>
-        </li>
+        
+      
+        <?php include ROOT.'cms/layout/menu.php';?>
+
         <li class="nav-item">
           <a class="nav-link" href="<?php echo ROOT?>cms/authentication/change_password">Change Password</a>
         </li>

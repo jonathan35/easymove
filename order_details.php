@@ -84,32 +84,45 @@ if(!$auth){
        
         <div class="row content">
 
-            <div class="col-12 col-md-4 header-content">
+        <div class="col-12 col-md-4 pl-3 header-content">
                 <img src="<?php echo ROOT?>images/logo.jpg" class="img-fluid mt-2">
                 
-                <div class="title">ORDER</div>
-                <div class="text-label2 pr-2">ORDER</div>
-                <div class="pb-3"><?php echo $mo = sprintf("%06d", $order['id']); ?></div>   
-
-                <div class="text-label2 pr-2">STATUS</div>
-                <div class="pb-3"><?php echo $order['status'];?></div> 
-
-                <div class="text-label2 pr-2">DATE</div>
-                <div class="pb-3"><?php echo date('d/m/Y', strtotime($order['modified']));?></div>
+                <div class="row title">
+                    <div class="col-6">ORDER</div>
+                    <div class="col-6 text-right">
+                        [<?php if($order['status'] =='Ordered') echo 'New'; 
+                        else echo $order['status'];?>]
+                    </div>
+                </div>
                 
-                
-                <div class="title">DRIVER</div>
+                <div class="pt-2">
+                    <span class="text-label2">ID: </span>
+                    <?php echo $mo = sprintf("%06d", $order['id']); ?>
+                </div>   
+                <div class="pt-2">
+                    <span class="text-label2">DATE: </span>
+                    <?php echo date('d/m/Y', strtotime($order['modified']));?>
+                </div>
 
-                <div class="text-label2 pr-2">DRIVER</div>
-                <div class="pb-3"><?php echo $order['driver_name'];?></div>
-                
-                <div class="text-label2 pr-2">PHONE</div>
-                <div class="pb-3"><?php echo $order['driver_phone'];?></div>
+                <div class="row title"><div class="col-6">DRIVER</div></div>
+                <?php if($order['driver']){?>
 
-                <div class="text-label2 pr-2">DESTANCE</div>
-                <div class="pb-3"><?php echo $order['distance'];?>KM</div>
+                    <div class="pt-2">
+                        <span class="text-label2">DRIVER: </span>
+                        <?php echo $order['driver_name'];?>
+                    </div>   
+                    <div class="pt-2">
+                        <span class="text-label2">PHONE: </span>
+                        <?php echo $order['driver_phone'];?>
+                    </div>
+                    <div class="pt-2">
+                        <span class="text-label2">DESTANCE: </span>
+                        <?php echo $order['distance'];?>KM
+                    </div>
 
-
+                <?php }else{?>
+                <div class="text-label2 pr-2">NO DRIVER</div>
+                <?php }?>
             </div>
 
             <div class="col-12 col-md-4">

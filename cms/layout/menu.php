@@ -1,7 +1,11 @@
 <div class="leftmenu-contain">  
 
   <h4 class="icon-gear">Order</h4>
-  <div class="nav lnav" link="../order/orders">Order</div>
+  <div class="nav lnav" link="../order/orders">Order 
+    <div class="circle_num ml-1">
+      <?php echo sql_count('select id from orders where status=?', 's', 'Ordered');?>
+    </div>
+  </div>
   <!--<div class="nav lnav" link="../tour/message?tab=New">Enquiry</div>
   -->
 

@@ -62,7 +62,7 @@ a:hover { text-decoration:none; color:#00a1e6/*#a2c253;*/}
 .rel-nav {position:relative;width:100%;}
 .abso-nav { background-color: orange; color: white; position: absolute; top:2px; left:-16px; width:calc(100% + 32px); z-index:99; box-shadow:2px 2px 2px rgba(0,0,0,.3); background-color: #343a40 !important; border-top:1px solid #4e565e}
 .abso-nav .nav-item { padding-left:10px; }
-.navbar-toggler-icon { background-color: wheat;}
+.navbar-toggler-icon {border:1px solid #EFEFEF; padding: 4px; }
 
 
 /*---------------------- Left navigation menu -------------------- */
@@ -199,4 +199,16 @@ input[name='keyword'] { height: 32px; /*border-radius:16px;*/}
     background:rgba(0,0,0,.1);
     padding:20px 0 20px 0;
     margin-bottom: 20px;
+}
+
+.circle_num {
+    display: inline-block;
+    border-radius: 50%;
+    min-width: 16px;
+    height: 16px;
+    overflow: visible;
+    text-align: center;
+    background: rgb(177, 39, 14, .6);
+    color: white;
+    font-size: 11px;
 }
