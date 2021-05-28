@@ -75,16 +75,18 @@ $danger_links = array('https://www', 'https://', 'http://www', 'http://','');//s
 $danger_links_exception = array('google_map_link');
 
 foreach((array)$_POST as $key => $val){
-	if(!in_array($key, $post_exception)){
-		$_POST[$key] = @strip_tags($val, $tag_allowed);//This will remove tinymce's HTML tags
-	}else{
-		$_POST[$key] = str_replace(array(
-			'<?php', '<?', '?>', '<script>','</script>'
-		), '', $val);
+	if(!is_array($val)){
+		if(!in_array($key, $post_exception)){
+			$_POST[$key] = @strip_tags($val, $tag_allowed);//This will remove tinymce's HTML tags
+		}else{
+			$_POST[$key] = str_replace(array(
+				'<?php', '<?', '?>', '<script>','</script>'
+			), '', $val);
+		}
+		if(!in_array($key, $danger_links_exception)){
+			$_POST[$key] = str_replace($danger_links, '', $val);
+		}	
 	}
-	if(!in_array($key, $danger_links_exception)){
-		$_POST[$key] = str_replace($danger_links, '', $val);
-	}	
 }
 
 

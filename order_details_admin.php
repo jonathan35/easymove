@@ -4,6 +4,8 @@ require_once 'config/security.php';
 require_once 'config/auth.php';
 require_once 'cart_function.php';
 require_once 'head.php';
+require_once 'api/send_notification.php';
+
 
 $auth = false;
 
@@ -71,7 +73,9 @@ if($oid){
         <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close" style="position:relative; top:-2px;">×</a>
         Assign driver successfully, waiting driver acceptance.</div>';
 
-        //here app notify driver
+        $title = 'Order Assigned';
+		$body = 'Order ' .sprintf("%06d", $oid).' has been assigned to you.';
+		sendNotification($_POST['driver'], $title, $body);
     }
 
     if($_POST['cancel'] && $_POST['oid']){
@@ -84,7 +88,16 @@ if($oid){
         $_SESSION['session_msg'] = '<div class="alert alert-success">
         <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close" style="position:relative; top:-2px;">×</a>
         Order cancelled successfully, please inform merchant about cancellation.</div>';
+
+        $order = sql_read('select driver from orders where id=? limit 1', 's', $oid);
+
+        if($order['driver']){
+            $title = 'Order Cancelled';
+            $body = 'Order ' .sprintf("%06d", $oid).' has been cancelled.';
+            sendNotification($order['driver'], $title, $body);
+        }
     }
+
 
     $order = sql_read('select * from orders where id=? limit 1', 's', $oid);
     $branch = sql_read("select * from branch where id=? limit 1", 'i', array($order['branch']));
@@ -243,7 +256,7 @@ if(!empty($order['id'])){?>
                 <div class="row" >
                     <div class="col-12 p-3 text-right">
                         <?php if($branch['contact_person']){?>
-                        <a class="btn btn-white" href="https://api.whatsapp.com/send/?phone=<?php echo $order['phone'];?>&text='Sorry to cancel your order <?php echo $mo = sprintf("%06d", $order['id']); ?>.'&app_absent=0" style="color:#2cb742">
+                        <a class="btn btn-white" href="https://api.whatsapp.com/send/?phone=<?php echo $order['phone'];?>&text='Sorry to cancel your order <?php echo $mo = sprintf("%06d", $order['id']); ?>.'&app_absent=0" style="color:#2cb742" target="_blank">
                             <?php echo $branch['contact_person'];?> 
                             <?php echo $branch['mobile_number'];?>
                             <img src="<?php echo ROOT?>images/whatsapp-16.png" style="position:relative; top:-1px; margin-left:6px;">
@@ -282,7 +295,7 @@ if(!empty($order['id'])){?>
             </div>
             <div>
                 <img src="../images/phone-20.png" style="width:18px; padding-right:4px; top:-3px; position:relative;">
-                <a class="btn btn-white p-0 pl-1 pr-1" href="https://api.whatsapp.com/send/?phone=<?php echo $order['phone'];?>&text='Sorry to cancel your order <?php echo $mo = sprintf("%06d", $order['id']); ?>.'&app_absent=0" style="color:#2cb742">
+                <a class="btn btn-white p-0 pl-1 pr-1" href="https://api.whatsapp.com/send/?phone=<?php echo $order['phone'];?>&text='Sorry to cancel your order <?php echo $mo = sprintf("%06d", $order['id']); ?>.'&app_absent=0" style="color:#2cb742" target="_blank">
                     <?php echo $driver['mobile_number'];?>
                     <img src="<?php echo ROOT?>images/whatsapp-16.png" style="position:relative; top:-1px;">
                 </a>
@@ -300,6 +313,10 @@ if(!empty($order['id'])){?>
                     $est_distance = round($degree_diff * 111);//1 degree about 111km                    
                     echo $est_distance.'km ';
                     echo getTimePass($driver['location_time']);
+
+
+   
+
                 ?>
             </div>
             <form action="" method="post" enctype="multipart/form-data">

@@ -9,12 +9,13 @@ $order_id = $_POST['oid'];
 $result = array('result' => false, 'message' => 'Api started.');
 $gains = $loses = array();
 
+
 if(!empty($order_id) && !empty($_POST['action'])){
 
     $order = sql_read('select id, collected_datetime, time from orders where id=? limit 1', 'i', $order_id);
 
     $deadline = 'expired';
-
+    
     if($_POST['action'] == 'accept'){
 
         $driver = sql_read('select name, mobile_number from driver where id=? limit 1', 's', $driver_id);
@@ -32,12 +33,15 @@ if(!empty($order_id) && !empty($_POST['action'])){
         $data['collected_datetime'] = date('Y-m-d H:i:s');
 
     }elseif($_POST['action'] == 'pod'){
-        
+
+        $gains['peak'] = peakCollect($driver_id, $order['id'], strtotime($order['collected_datetime']));
         $gains['pick'] = fastCollect($driver_id, $order['id'], strtotime($order['collected_datetime']));
         $gains['delivery'] = fastDelivery($driver_id, $order['id'], time());
         $gains['season'] = season($driver_id, $order['id'], time());
         $gains['slow_pick'] = slowCollect($driver_id, $order['id'], strtotime($order['collected_datetime']));
-        $gains['slow_delivery'] = slowDelivery($driver_id, $order['id'], time());
+        $gains['slow_delivery'] = slowDelivery($driver_id, $order['id'], time());  
+
+        standardMeritChecker($driver_id);
 
         $data['status'] = 'Delivered';
         $data['delivered_datetime'] = date('Y-m-d H:i:s');
@@ -50,10 +54,10 @@ if(!empty($order_id) && !empty($_POST['action'])){
     
     $result = array('result' => true, 'message' => 'Accepted', 'deadline' => $deadline);
 
+
 }else{
     $result = array('result' => false, 'message' => 'No driver or order id.');
 }
-
 $data = json_encode($result);
 echo $data;
 ?>

@@ -11,11 +11,13 @@ function get_string_between($string, $start, $end){
     return substr($string, $ini, $len);
 }
 
-
+$earlier = time()-(60*30);//30 minutes early than now
 $region_id = $defender->encrypt('decrypt', $_GET['r']);
+
 $region = sql_read('select latitude, longitude from region where id=? limit 1', 'i', array($region_id));
-$ds = sql_read('select name, merit, location from driver where region=? and status = ? and location_time > ?', 'iii', array($region_id, 1, time()-(60*30)));//30 minutes early than now
+$ds = sql_read('select name, merit, location from driver where region=? and status = ? and location_time > ?', 'iii', array($region_id, 1, $earlier));
 $drivers = array();
+
 
 foreach((array)$ds as $d){
     
@@ -131,7 +133,8 @@ foreach((array)$ds as $d){
         <div style="color:gray; padding-top:20px;">
             NO ONLINE DRIVER FOUND
             <span style="color:white"><?php echo time()?></span>
-        </div>
+            <span style="color:white">--<?php echo time()-(60*30);?></span>
+            
 
     <?php }?>
 </body>

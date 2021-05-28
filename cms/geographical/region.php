@@ -51,7 +51,7 @@ foreach((array)$fields as $field){
 	$placeholder[$field] = '';
 	$required[$field] = '';
 }
-/* Tag module uses session*/
+///--- Tag module uses session--
 $type['tag'] = 'tag';
 $_SESSION['tag_name']='tag';//name for input table field.
 $_SESSION['tag_module']=$table;
@@ -82,19 +82,6 @@ $type['status'] = 'select'; $option['status'] = array('1'=>'Display','2'=>'Hide'
 $required['title'] = 'required';
 
 
-/*if(empty($id)){
-	$required['photo01'] = 'required';
-}*/
-/*
-echo '<div style="margin-left:20%;">';
-foreach((array)$fields as $field){
-	echo $field;
-	echo $width[$field];
-	echo '<br>';
-	print_r($fic_1);
-}
-echo '</div>';
-*/
 
 $cols = $items =array();
 $cols = array('Region' => '2', 'Latitude' => '3', 'Longitude' => '3', 'Position' => '4');//Column title and width
@@ -105,7 +92,7 @@ $items['Position'] = array('position');
 //$items['Programme'] = array('programme','experience','experience_detail');
 //$items['Condition'] = array('illnesses','bankrupt','court');
 
-
+if(empty($_POST['get_config_only'])){
 ?>
 
 <link href="<?php echo ROOT?>cms/css/bootstrap.4.5.0.css" rel="stylesheet">
@@ -120,8 +107,8 @@ $items['Position'] = array('position');
 <script src="<?php echo ROOT?>js/datepicker/jquery-ui.js"></script>
 <script>
 $( function() {
-    $( ".datepicker" ).datepicker({ /*minDate: +7,*/ maxDate: "+10Y +6M +1D", dateFormat: 'dd/mm/yy' });
-} );
+    $( ".datepicker" ).datepicker({  maxDate: "+10Y +6M +1D", dateFormat: 'dd/mm/yy' });
+} );//minDate: +7,
 </script>
 <!--For date picker use - end -->
 <style>
@@ -180,7 +167,5 @@ function chkAll(frm, arr, mark){
 <script type="text/javascript" src="<?php echo ROOT?>js/layout.js"></script>
 <script type="text/javascript" src="<?php echo ROOT?>js/functions.jquery.js"></script>
 <?php include '../../config/session_msg.php';?>
-
-
-
 </html>
+<?php }?>

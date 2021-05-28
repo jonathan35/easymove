@@ -3,6 +3,9 @@ require_once '../../config/ini.php';
 require_once '../../config/security.php';
 require_once '../../config/str_convert.php';
 require_once '../../config/image.php';
+require_once '../../api/send_notification.php';
+
+
 //include '../layout/savelog.php';
 
 
@@ -22,11 +25,31 @@ $list = true;
 $list_method = 'list';
 $sort = 'order by id DESC';
 
-if($_POST){
-	if(empty($_POST['id'])){
-		$_POST['merit'] = 100;
-	}else{
-		unset($_POST['merit']);
+
+if($_POST['add2020']){
+	$_POST['merit'] = 100;
+	$_POST['status'] = 1;
+}
+if($_POST['update2020']){
+	unset($_POST['merit']);
+}
+
+
+if($_POST['action'] == 'Approve' || $_POST['action'] == 'Reject'){
+
+	if($_POST['productIdList']){
+		
+		foreach($_POST['productIdList'] as $driver_id){
+
+			if($_POST['action'] == 'Approve'){
+				$title = 'Account Approved';
+				$body = 'Your driver account has been approved.';
+			}elseif($_POST['action'] == 'Reject'){
+				$title = 'Account Rejected';
+				$body = 'Your driver account has been rejected.';
+			}
+			sendNotification($driver_id, $title, $body);
+		}
 	}
 }
 
@@ -36,16 +59,16 @@ $keywordFields=array('name', 'plate_number', 'vehicle_belonging');
 $filter = true;
 $filFields = array('vehicle_type');
 
-$actions=array('Delete', 'Activate', 'Suspend');//, 'Display', 'Hide'
+$actions=array('Delete', 'Approve', 'Reject');//, 'Display', 'Hide'
 $msg['Delete']='Are you sure you want to delete?';
 $msg['Display']='Set as "Display"?';	$db['Display']=array('status', '1');
 $msg['Hide']='Set as "Hide"?';			$db['Hide']=array('status', '2');
-$msg['Activate']='Set as "Activate"?';	$db['Activate']=array('status', '1');
-$msg['Suspend']='Set as "Suspend"?';	$db['Suspend']=array('status', '0');
+$msg['Approve']='Set as "Approve"?';	$db['Approve']=array('status', '1');
+$msg['Reject']='Set as "Reject"?';	$db['Reject']=array('status', '0');
 $msg['Pending']='Set as "Pending"?';	$db['Pending']=array('status', '2');
 
 
-$fields = array('id', 'name', 'working_time', 'mobile_number', 'emergency_contact_number', 'vehicle_type', 'region', 'plate_number', 'vehicle_belonging', 'status', 'photo_of_ic', 'photo_of_driving_license', 'vehicle_front_view', 'vehicle_back_view', 'merit');
+$fields = array('id', 'name', 'working_time', 'mobile_number', 'emergency_contact_number', 'vehicle_type', 'region', 'plate_number', 'vehicle_belonging', 'photo_of_ic', 'photo_of_driving_license', 'vehicle_front_view', 'vehicle_back_view', 'merit');
 $value = array();
 $type = array();
 $width = array();//width for input field
@@ -53,7 +76,7 @@ $placeholder = array();
 
 #####Design part#######
 $back = false;// "Back to listing" button, true = enable, false = disable
-$fic_1 = array(0=>array('10', '4'));//fic = fiels in column, number of fields by column $fic_1 normally for add or edit template
+$fic_1 = array(0=>array('9', '4'));//fic = fiels in column, number of fields by column $fic_1 normally for add or edit template
 $fic_2 = array('5', '1');//fic = fiels in column, number of fields by column $fic_2 normally for list template
 
 foreach((array)$fields as $field){
@@ -108,7 +131,7 @@ $type['vehicle_back_view'] = 'image';
 //$type['publish_date'] = 'date';
 //$type['address'] = 'textarea'; $tinymce['address']=false;  $labelFullRow['address']=false; $height['address'] = '80px;'; $width['address'] = '100%;'; 
 $type['group_id'] = 'select'; $option['group_id'] = array('1'=>'Master Admin');//,'2'=>'Admin'
-$type['status'] = 'select'; $option['status'] = array('1'=>'Activated','0'=>'Suspended', '2'=>'Pending');$default_option['status'] = '1';
+$type['status'] = 'select'; $option['status'] = array('1'=>'Approved','0'=>'Rejected');$default_option['status'] = '1';
 $type['working_time'] = 'select'; $option['working_time'] = array('full'=>'Full Time','part'=>'Part Time');$default_option['type'] = 'Full Time';
 
 
@@ -186,7 +209,10 @@ label {width:30%;}
 </div>
 <div class="row">
 	<div class="col-12">
-		<?php if(!$_GET['no_list']) include '../layout/list.php';?>
+		<?php 
+		$fields = array('id', 'name', 'working_time', 'mobile_number', 'emergency_contact_number', 'vehicle_type', 'region', 'plate_number', 'vehicle_belonging', 'status', 'photo_of_ic', 'photo_of_driving_license', 'vehicle_front_view', 'vehicle_back_view', 'merit');
+		
+		if(!$_GET['no_list']) include '../layout/list.php';?>
 	</div>
 </div>
 

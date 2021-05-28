@@ -2,6 +2,7 @@
 require_once 'config/ini.php';
 require_once 'config/security.php';
 require_once 'config/auth.php';
+require_once 'api/send_notification.php';
 
 if(empty($_SESSION['auth_user']['id'])){
     header("Location: please_login");
@@ -75,6 +76,23 @@ if($_POST){
             $_SESSION['session_msg'] = '<div class="alert alert-success">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close" title="close" style="position:relative; top:-2px;">×</a>
             Order successfully.</div>';
+
+
+            //-----Notify nearby (<=10km) drivers - Start -----------
+            $earlier = time()-(60*30);//30 minutes early than now
+            $region_id = $data['region'];
+            $nearby_drivers = sql_read('select id from driver where region=? and status=? and location_time>?', 'iii', array($region_id, 1, $earlier));
+            
+            foreach((array)$nearby_drivers as $driver){
+                $title = 'Nearby Order';
+                $body = 'A nearby order, accept delivery order now!';
+                
+                if($driver['id']){
+                    sendNotification($driver['id'], $title, $body);
+                }
+            }
+            //-----Notify nearby (<=10km) drivers - End -----------
+
         }
         
         //debug($data);

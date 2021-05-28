@@ -18,7 +18,7 @@ if($_POST['action']=="Delete"){
 			}
 		}
 	}
-}elseif(!empty($_POST['action'])){	
+}elseif(!empty($_POST['action'])){
 	$items_id_array=$_POST['productIdList'];
 	if(!empty($_POST['productIdList'])){
 		foreach((array)$items_id_array as $items_id){
@@ -164,14 +164,17 @@ if($edit==true){?>
     
     <div class="nav-act">	
 		<div class="row pt-2 pb-1">
-			<div class="col-auto">
 			<?php if(!empty($actions)){?>
+			<div class="col-auto">
+			
 				<input name="Input" type="checkbox" value="" onClick="chkAll(this.form, 'productIdList[]', this.checked)" title="Check all item">
 				<span class="glyphicon glyphicon-arrow-down" style="color:#CCC; padding-left:1px;"></span>
 			</div>
-			<div class="col-auto">
 			<?php }?>
-			<?php foreach((array)$actions as $action){?><input class="btn-check"  type="submit" name="action" value="<?php echo $action?>" onClick="return confirmAction('<?php echo $msg[$action]?>');" title="<?php echo $msg[$action]?> selected item(s)"><?php }?>
+			<div class="col-auto">
+			<?php foreach((array)$actions as $action){?>
+			<input class="btn-check"  type="submit" name="action" value="<?php echo $action?>" onClick="return confirmAction('<?php echo $msg[$action]?>');" title="<?php echo $msg[$action]?> selected item(s)">
+			<?php }?>
 			</div>
 		</div>
     </div>
