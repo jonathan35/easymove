@@ -18,7 +18,7 @@ if(!empty($_POST['oid'])){
     $result = array('result' => false, 'message' => 'No order');
     $oid = $_POST['oid'];
 
-    $order = sql_read("select id, zone, branch_name, customer_name, phone, origin, destination,origin_coordinate as o_coor, destination_coordinate as d_coor, distance, address, time, message, requirement, status, proof_of_delivery as pod, accepted_datetime as accepted, collected_datetime as collected, delivered_datetime as delivery, created from orders where id=? limit 1", 'i', $oid);
+    $order = sql_read("select id, zone, branch_name, customer_name, phone, origin, destination,origin_coordinate as o_coor, destination_coordinate as d_coor, distance, address, time, message, requirement, status, proof_of_delivery as pod, accepted_datetime as accepted, collected_datetime as collected, delivered_datetime as delivery, created , report , decline, assign from orders where id=? limit 1", 'i', $oid);
     
 
     if(empty($order['origin']) || empty($order['destination']) || empty($order['o_coor']) || empty($order['d_coor']) || empty($order['distance'])){
@@ -81,7 +81,7 @@ if(!empty($_POST['oid'])){
         $order['d_lat'] = $d_coor[0];
         $order['d_lon'] = $d_coor[1];
 
-        if($order['distance'] <= 5){      $order['diff'] = 0.05;
+        if($order['distance'] <= 5){            $order['diff'] = 0.05;
         }elseif($order['distance'] <= 10){      $order['diff'] = 0.12;
         }elseif($order['distance'] <= 20){      $order['diff'] = 0.3;
         }elseif($order['distance'] <= 30){      $order['diff'] = 0.49;

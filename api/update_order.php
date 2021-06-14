@@ -12,11 +12,24 @@ $gains = $loses = array();
 
 if(!empty($order_id) && !empty($_POST['action'])){
 
-    $order = sql_read('select id, collected_datetime, time from orders where id=? limit 1', 'i', $order_id);
+    $order = sql_read('select id, collected_datetime, time, distance from orders where id=? limit 1', 'i', $order_id);
 
     $deadline = 'expired';
-    
-    if($_POST['action'] == 'accept'){
+
+    if($_POST['action'] == 'decline'){
+
+        $data['assign'] = '';
+        $data['decline'] = $driver_id;
+        $data['decline_datetime'] = date('Y-m-d H:i:s');
+
+    }elseif($_POST['action'] == 'report'){
+
+        $data['report'] = 'no internet';
+        $data['report_datetime'] = date('Y-m-d H:i:s');
+
+        $unmerit = sql_exec('delete from merit where driver=? and order_id=? and (note=? or note=?)', 'iiss', array($driver_id, $order_id, 'slow pick', 'fast pick'));
+
+    }elseif($_POST['action'] == 'accept'){
 
         $driver = sql_read('select name, mobile_number from driver where id=? limit 1', 's', $driver_id);
 
@@ -34,17 +47,34 @@ if(!empty($order_id) && !empty($_POST['action'])){
 
     }elseif($_POST['action'] == 'pod'){
 
-        $gains['peak'] = peakCollect($driver_id, $order['id'], strtotime($order['collected_datetime']));
-        $gains['pick'] = fastCollect($driver_id, $order['id'], strtotime($order['collected_datetime']));
+        $gains['peak'] = peakCollect($driver_id, $order['id'], strtotime($order['collected_datetime']));        
         $gains['delivery'] = fastDelivery($driver_id, $order['id'], time());
         $gains['season'] = season($driver_id, $order['id'], time());
-        $gains['slow_pick'] = slowCollect($driver_id, $order['id'], strtotime($order['collected_datetime']));
+
+        if($order['report'] != 'no internet'){
+            $gains['pick'] = fastCollect($driver_id, $order['id'], strtotime($order['collected_datetime']));
+            $gains['slow_pick'] = slowCollect($driver_id, $order['id'], strtotime($order['collected_datetime']));
+        }
+
         $gains['slow_delivery'] = slowDelivery($driver_id, $order['id'], time());  
 
         standardMeritChecker($driver_id);
 
         $data['status'] = 'Delivered';
         $data['delivered_datetime'] = date('Y-m-d H:i:s');
+
+
+        //------- Create Commission - Start ----------- 
+        $standard_commission = sql_read("select commission from basic_commission where commission !='' and max_distance >= ? order by commission asc limit 1", 's', $order['distance']);
+
+        if(!empty($standard_commission['commission'])){
+            $commission['commission'] = $standard_commission['commission'];
+            $commission['driver'] = $driver_id;
+            $commission['order_id'] = $order['id'];
+            sql_save('commission', $commission);
+        }
+        //------- Create Commission - End -----------
+
     }
 
     $data['id'] = $order_id;

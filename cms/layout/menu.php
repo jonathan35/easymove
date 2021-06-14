@@ -84,7 +84,7 @@
   <div class="nav lnav" link="../content/home_block">Why Choose Us?</div>
   <div class="nav lnav" link="../content/banner_dashboard?id=Mg==">Banner (Account Dashboard)</div>-->
 
-  <? /*
+  <?php /*
 
 <div class="nav lnav" link="../tour/tour_type">Type</div>
 

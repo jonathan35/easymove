@@ -8,7 +8,6 @@ $result = array('result' => false, 'message' => 'Api started.');
 if(!empty($_POST['uid'])){
 
     $result = array('result' => false, 'message' => 'No order');
-
     $uid = $_POST['uid'];
     
     //Use region instead of nearby 10km
@@ -21,42 +20,37 @@ if(!empty($_POST['uid'])){
 
     }else{
         
-        $sql = " select id, distance as dis, created as date, status from orders ";//WHERE
+        $sql = " select id, distance as dis, created as date, assign, status from orders where (assign is null or assign=? or assign = '0' or id=5) and region=? and ";//WHERE
         $order = " order by distance asc, created desc ";
 
-        $news = sql_read("
-            $sql where region=? and status = ? and driver is null $order", 'is', array($driver['region'], 'Ordered'));
 
-        $delivers = sql_read("
-            $sql where region=? and driver=? and (status=? OR status=? OR status=?) $order", 
-            'iisss', array($driver['region'], $uid, 'Accepted', 'Collected', 'Delivering')
-        );
-        $delivereds = sql_read("
-            $sql where region=? and created like ? and (driver is null or driver=?) and status=? $order", 
-            'isis', array($driver['region'], date('Y-m-').'%', $uid, 'Delivered')
-        );
-        $new_count = $del_count = $his_count = 0;
+        $news = sql_read("$sql status = ? and driver is null $order", 'iis', array($uid, $driver['region'], 'Ordered'));
+        $delivers = sql_read("$sql driver=? and (status=? OR status=? OR status=?) $order", 'iiisss', array($uid, $driver['region'], $uid, 'Accepted', 'Collected', 'Delivering'));
+        $delivereds = sql_read("$sql created like ? and (driver is null or driver=?) and status=? $order", 'iisis', array($uid, $driver['region'], date('Y-m-').'%', $uid, 'Delivered'));
+
+        //$new_count = $del_count = $his_count = 0;
 
         foreach($news as $k => $v){
             $news[$k]['sid'] = sprintf("%08d", $v['id']);
             $news[$k]['date'] = date_format(date_create($v['date']), 'd-m-y, g:ia');
-            $new_count++;
+            //$new_count++;
         }
         foreach($delivers as $k => $v){
             $delivers[$k]['sid'] = sprintf("%08d", $v['id']);
             $delivers[$k]['date'] = date_format(date_create($v['date']), 'd-m-y, g:ia');
-            $del_count++;
+            //$del_count++;
         }
         foreach($delivereds as $k => $v){
             $delivereds[$k]['sid'] = sprintf("%08d", $v['id']);
             $del_count[$k]['date'] = date_format(date_create($v['date']), 'd-m-y, g:ia');
-            $his_count++;
+            //$his_count++;
         }
 
         $n= '';
-        $orders = array(        'new_count' => $new_count,
-            'del_count' => $del_count,
-            'his_count' => $his_count,
+        $orders = array(
+            'new_count' => count($news),
+            'del_count' => count($delivers),
+            'his_count' => count($delivereds),
             'news' => $news,
             'delivers' => $delivers,
             'delivereds' => $delivereds

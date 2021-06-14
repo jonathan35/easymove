@@ -232,7 +232,7 @@ if(!empty($_POST['submit']) && !empty($_POST['name']) && !empty($_POST['email'])
     <div class="row">
         <div class="col-12">
             <div class="row"><div class="col-12"><br><br><br><br><br></div></div>
-            <? include 'footer.php';?>        
+            <?php include 'footer.php';?>        
         </div>
     </div>                
             

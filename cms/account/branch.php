@@ -36,7 +36,7 @@ $msg['Activate']='Are you sure you want to activate?';	$db['Activate']=array('st
 $msg['Suspend']='Are you sure you want to suspend?';	$db['Suspend']=array('status', '0');
 
 
-$fields = array('id', 'region_id', 'company_id', 'type', 'branch_name', 'contact_person', 'mobile_number', 'address', 'branch_location', 'branch_location_coordinate');
+$fields = array('id', 'region_id', 'company_id', 'type', 'branch_name', 'contact_person', 'mobile_number', 'address', 'no_internet', 'branch_location', 'branch_location_coordinate');
 $value = array();
 $type = array();
 $width = array();//width for input field
@@ -44,7 +44,7 @@ $placeholder = array();
 
 #####Design part#######
 $back = false;// "Back to listing" button, true = enable, false = disable
-$fic_1 = array(0=>array('8', '1'));//fic = fiels in column, number of fields by column $fic_1 normally for add or edit template
+$fic_1 = array(0=>array('9', '2'));//fic = fiels in column, number of fields by column $fic_1 normally for add or edit template
 $fic_2 = array('5', '1');//fic = fiels in column, number of fields by column $fic_2 normally for list template
 
 foreach((array)$fields as $field){
@@ -59,6 +59,8 @@ $type['branch_location_coordinate'] = 'coordinate';
 
 $label['region_id'] = 'Region';
 $label['company_id'] = 'Company';
+
+$label['no_internet'] = 'Collection area no internet';
 
 $labelFullRow['branch_location'] = true;
 
@@ -97,6 +99,7 @@ $type['address'] = 'textarea';
 $type['group_id'] = 'select'; $option['group_id'] = array('1'=>'Master Admin');//,'2'=>'Admin'
 $type['status'] = 'select'; $option['status'] = array('1'=>'Activated','0'=>'Suspended');$default_option['status'] = '1';
 $type['type'] = 'select'; $option['type'] = array('Headquarter'=>'Headquarter','Branch'=>'Branch');$default_option['type'] = 'Branch';
+$type['no_internet'] = 'select'; $option['no_internet'] = array('with internet'=>'With Internet','no internet'=>'No Internet');$default_option['no_internet'] = 'Branch';
 
 
 //$type['thumbnail_align'] = 'select'; $option['thumbnail_align'] = array('left'=>'Image align left','right'=>'Image align right');

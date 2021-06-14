@@ -1,4 +1,4 @@
-<? 
+<?php 
 $devs = sql_read("select * from developer where status=?" , 'i', 1);
 
 $n = $c = 0;
@@ -28,21 +28,21 @@ foreach((array)$devs as $dev){
       <div class="bd-example" data-example-id="">
           <div id="carouselBlock" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner" role="listbox" style="padding:40px; height:140px;">                 
-            <? 
+            <?php 
             $o = 0;
             foreach((array)$developers as $developer){?>
-              <div class="carousel-item <? if($o==0){?>active<? }?>">
+              <div class="carousel-item <?php if($o==0){?>active<?php }?>">
             
                 <div class="row">
-                    <? foreach((array)$developer as $n){?>
+                    <?php foreach((array)$developer as $n){?>
                     <div class="col-12 col-md-2" style="background-position: center; background-repeat: no-repeat; background-size: contain; height: 60px; background-image:url('<?php echo $n['developer_photo']?>')">
                     
                     </div>	
-                    <? }?>
+                    <?php }?>
                 </div>
                      
               </div>
-  <? 
+  <?php 
           $o++;
           }?>
               

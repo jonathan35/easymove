@@ -163,11 +163,11 @@ $('.add-trigger').click(function(){
 
 */?>
 
-<div id="addbody" class="row pb-1 mb-5"><!--style="border-bottom:1px solid #DDD;"-->
+<div id="addbody" class="row p-2 pb-1 mb-5"><!--style="border-bottom:1px solid #DDD;"-->
 <div class="col">
 <div class="row">
     <div class="col-12">
-        <h3 class="pl-2">
+        <h3 class="pl-3">
             <?php if($id){?>Edit<?php }else{?>Create<?php }?> <?php echo $module_name;?>
             
             <?php if(!empty($_SESSION['proj_name'])){

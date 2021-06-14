@@ -1,7 +1,6 @@
 <?php require_once '../../config/ini.php'; ?>
 <?php
 session_start();
-
 global $subName, $passw, $sessData;
 
 include("captcha/securimage.php");

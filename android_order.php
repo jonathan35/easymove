@@ -226,7 +226,7 @@ if($_POST['action'] == 'signup' && !empty($_SESSION['auth_user']['id'])){
 </div>
 
 
-<? /*
+<?php /*
 <div id="confirmModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content modal-edit-panel"  style="width:305px; margin-top:30vh; margin-left: calc(50% - 120px);">

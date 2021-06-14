@@ -15,7 +15,7 @@
                             <div class="col-12 text-center">
                                 <p class="login-title display-4" style="color:#333">Login</p>
                             </div>
-                            <? /*
+                            <?php /*
                             <div class="col-12 col-sm-12 col-md-6 col-lg-6 text-center mb-2">
                                 <!--<button type="button" class="btn facebook-btn btn-primary btn-block p-2"><i
                                         class="fab fa-facebook-square fa-2x"></i> <span

@@ -147,7 +147,7 @@ function chkAll(frm, arr, mark){
 <div id="session-page"></div>
 
 
-<? /*
+<?php /*
 <script type="text/javascript" src="<?php echo ROOT?>js/jquery-1.js"></script>
 <script type="text/javascript" src="<?php echo ROOT?>js/layout.js"></script>
 */?>

@@ -52,7 +52,7 @@ $('#cart_summary').load('cart_summary.php');
             
             <div>
                 <p class="signup-label">Use to rebates</p>
-                <? /*<label class="switch">
+                <?php /*<label class="switch">
                     <input type="checkbox" id="onoff" <?php if($_SESSION['rebate'] == 'yes'){?>checked<?php }?>>
                     <span class="slider round"></span>
                 </label>*/?>

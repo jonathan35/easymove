@@ -1,4 +1,4 @@
-<? 
+<?php 
 require_once '../../config/ini.php'; 
 require_once('../../config/str_convert.php');
 require_once '../../config/image.php';
@@ -158,7 +158,7 @@ label {
 <div class="container-fluid nopadding">
     <div class="row nopadding">
 		<div class=" col-lg-12 col-md-12 col-sm-12 col-xs-12 main" style="background:#F8F8F8;padding-top:0;">
-            <? if($add==true || $_GET['id']){?>
+            <?php if($add==true || $_GET['id']){?>
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding" style="margin-bottom:30px;">
 
 
@@ -189,15 +189,15 @@ label {
                 
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding">
                     <h3 style="line-height:0.6; padding-top:0;">
-                        Add <? echo $module_name;?>
+                        Add <?php echo $module_name;?>
                     </h3>
                 </div>
                 
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding">
                     <form action="" method="post" enctype="multipart/form-data">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding" style="margin-top:12px; <? if($type[$field]=='hidden'){?> display:none;<? }?>">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 nopadding" style="margin-top:12px; <?php if($type[$field]=='hidden'){?> display:none;<?php }?>">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom:10px; text-align:left;">
-                               <? if($_GET['id'] && !empty($value[$field])){//Remove feature only available when edit mode?>
+                               <?php if($_GET['id'] && !empty($value[$field])){//Remove feature only available when edit mode?>
                                  <img src="../../<?=$value[$field]?>" class="img-responsive" id="previewing" alt="" 
                                  style="max-height:70px; max-width:120px;">
                                 <div class="col">
@@ -212,33 +212,33 @@ label {
                                     }
                                     </script>
                                 </div>
-                                <? }else{?>
-                                    <? if($type[$field] == 'image'){?>
+                                <?php }else{?>
+                                    <?php if($type[$field] == 'image'){?>
                                         <div id="img<?=$field?>"><!--class="def_img_bg" -->
                                             <img src="../../images/default_img.jpg" class="img-responsive" id="previewing<?=$field?>" 
                                             alt="" style="max-height:70px; max-width:120px;">
                                               <!--<span class="glyphicon glyphicon-picture" style="font-size:30px; color:#ccc;"></span>-->
                                         </div>
-                                    <? }elseif($type[$field] == 'video'){?>
+                                    <?php }elseif($type[$field] == 'video'){?>
                                         <div style="border:1px solid red; padding:6px 18px 8px 12px; width:43px; border-radius:4px; border:1px solid #D9686B;">
                                             <span class="glyphicon glyphicon-play" style="color:#D9686B; font-size:20px;"></span>
                                         </div>
-                                    <? }elseif($type[$field] == 'pdf'){?>
+                                    <?php }elseif($type[$field] == 'pdf'){?>
                                         <img src="../images/pdf.png" width="50px"></span>
-                                    <? }?>
-                                <? }?>
+                                    <?php }?>
+                                <?php }?>
                                 
                                 <div class="col">
-                                    <input name="<?=$field?>" type="file" value="<?=$value[$field]?>" <? if(empty($_GET['id'])){ echo $required[$field]; }?>
+                                    <input name="<?=$field?>" type="file" value="<?=$value[$field]?>" <?php if(empty($_GET['id'])){ echo $required[$field]; }?>
                                     id="imgfile<?=$field?>" 
                                     accept="
-                                    <? if($type[$field] == 'image'){?>
+                                    <?php if($type[$field] == 'image'){?>
                                         .png,.gif,.jpg,.jpeg
-                                    <? }elseif($type[$field] == 'video'){?>
+                                    <?php }elseif($type[$field] == 'video'){?>
                                         .webm,.mkv,.flv,.vob,.avi,.wmv,.mov,.rmvb,.mp4,.mpg
-                                    <? }elseif($type[$field] == 'pdf'){?>
+                                    <?php }elseif($type[$field] == 'pdf'){?>
                                         .pdf
-                                    <? }?>" style=" <?=$styles?>"> 
+                                    <?php }?>" style=" <?=$styles?>"> 
                                     
                                     <script>                                
                                     $("#imgfile<?=$field?>").change(function() {
@@ -266,7 +266,7 @@ label {
                                 </div>
                                 <div class="col">
                                     <input type="submit" name="add" value="Add" class="btn btn-primary" >
-                                    <? if($save){echo $save;}?>
+                                    <?php if($save){echo $save;}?>
                                 </div>
                             </div>
                         </div>
@@ -274,9 +274,9 @@ label {
                 </div>
 			</div>
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="border-top:1px solid #CCC; border-bottom:1px solid white; height:0; padding-bottom:0;">&nbsp;</div>
-            <? }?>
+            <?php }?>
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom:30px; padding:0 0 20px 0; ">
-				<? include("../layout/list.php");?>
+				<?php include("../layout/list.php");?>
 			</div>
 		</div>
     </div>

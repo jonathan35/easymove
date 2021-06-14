@@ -181,7 +181,7 @@ if($_POST['action'] == 'signup'){
                         </div>                        
                     </div>
                     <div class="col-md-5 offset-md-1">
-                        <? /*<img src="<?php echo ROOT?>images/vectorfair061829.jpg" class="img-fluid"><br><br>*/?>
+                        <?php /*<img src="<?php echo ROOT?>images/vectorfair061829.jpg" class="img-fluid"><br><br>*/?>
                        
                         <h3 class="pt-4">Become our Merchant</h3>
                      
