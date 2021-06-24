@@ -50,7 +50,7 @@ include_once 'head.php';
                     
                     sql_save('orders', $data);
                
-                    $payment_num = sprintf("%06d", $order['id']);
+                    $payment_num = sprintf("%08d", $order['id']);
                     $payment_amt = number_format(0+$order['total'],2,'.',',');
 
                 }

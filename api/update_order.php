@@ -66,13 +66,25 @@ if(!empty($order_id) && !empty($_POST['action'])){
 
         //------- Create Commission - Start ----------- 
         $standard_commission = sql_read("select commission from basic_commission where commission !='' and max_distance >= ? order by commission asc limit 1", 's', $order['distance']);
-
+ 
         if(!empty($standard_commission['commission'])){
+            
+            //------- Bonus - Start -----------
+            $driver = sql_read('select merit from driver where id=? limit 1', 's', $driver_id);
+            $bonus_rules = sql_read("select commission from bonus where min_point <=? and max_distance >= ? order by min_point desc, max_distance asc limit 1", 'ss', array($driver['merit'], $order['distance']));
+            if(!empty($bonus_rules['commission'])){
+                $commission['bonus'] = $bonus_rules['commission'];
+            }
+            //------- Bonus - End -----------
+
             $commission['commission'] = $standard_commission['commission'];
             $commission['driver'] = $driver_id;
             $commission['order_id'] = $order['id'];
             sql_save('commission', $commission);
         }
+
+
+        
         //------- Create Commission - End -----------
 
     }

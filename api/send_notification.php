@@ -1,10 +1,25 @@
 <?php 
 
+if(empty($DB)){
+    require_once '../config/ini.php';
+}
+
+/*
+$title = 'Title';
+$body = 'content';
+$driver_id = 1;
+sendNotification($driver_id, $title, $body);
+*/
+
+
+
+
 function sendNotification($driver_id, $title, $body){
     
     if($title && $body){
 
         $driver = sql_read('select push_token from driver where id=? limit 1', 'i', $driver_id);
+        //debug($driver);
 
         if($driver['push_token']){
 
@@ -24,11 +39,11 @@ function sendNotification($driver_id, $title, $body){
             curl_close($ch);
         }        
     }
-
-
+    
     header('Content-type:text/html');
 
-
 }
+
+
 
 ?>

@@ -1,10 +1,10 @@
 #suPHP_ConfigPath /home/kuching3/public_html/beta
-DirectoryIndex index.htm index.html index.php
+#DirectoryIndex index.htm index.html index.php
 Options -Indexes
 
-Header set X-XSS-Protection "1; mode=block"
-Header set X-Content-Type-Options nosniff
-Header always append X-Frame-Options SAMEORIGIN
+#Header set X-XSS-Protection "1; mode=block"
+#Header set X-Content-Type-Options nosniff
+#Header always append X-Frame-Options SAMEORIGIN
 
 AddDefaultCharset UTF-8
 DefaultLanguage en-us
@@ -16,8 +16,8 @@ DefaultLanguage en-us
 #php_value error_log  /home/hotelcom/grocere.com.my/errors.log
 
 RewriteEngine On
-RewriteCond %{HTTPS} !=on
-RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301,NE] 
+#RewriteCond %{HTTPS} !=on
+#RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301,NE] 
 
 
 RewriteRule ^home?$ index.php [QSA,L]
@@ -34,20 +34,27 @@ RewriteRule ^staff/([^/\.]+)?$ merchant_staff.php?i=$1 [QSA,L]
 RewriteRule ^staff_list?$ merchant_staffs.php [QSA,L]
 RewriteRule ^please_login?$ merchant_login.php [QSA,L]
 
-RewriteRule ^tours?$ index.php [QSA,L]
-RewriteRule ^tours/([^/\.]+)?$ index.php?c=$1 [QSA,L]
-RewriteRule ^tours/([^/\.]+)/([^/\.]+)?$ index.php?c=$1&cat=$2 [QSA,L]
-RewriteRule ^type/([^/\.]+)?$ index.php?ty=$1 [QSA,L]
-RewriteRule ^type/([^/\.]+)/([^/\.]+)?$ index.php?c=$1&ty=$2 [QSA,L]
-RewriteRule ^tour_details/([^/\.]+)?$ tour_details.php?p=$1 [QSA,L]
+RewriteRule ^trip?$ trip_statement.php [QSA,L]
 RewriteRule ^page/([^/\.]+)?$ page.php?t=$1
 
-RewriteRule ^cart?$ cart.php [QSA,L]
-RewriteRule ^guest?$ guest.php [QSA,L]
-RewriteRule ^checkout?$ checkout.php [QSA,L]
-RewriteRule ^thank_you?$ payment_return_page.php [QSA,L]
-
 RewriteRule ^the_order/([^/\.]+)?$ order_details.php?i=$1
-RewriteRule ^the_order/([^/\.]+)/([^/\.]+)?$ order_details.php?i=$1&t=$2
-RewriteRule ^the_order/([^/\.]+)/([^/\.]+)/staff?$ order_details.php?i=$1&t=$2&s=1
 RewriteRule ^admin_order/([^/\.]+)?$ order_details_admin.php?i=$1
+
+#RewriteRule ^the_order/([^/\.]+)/([^/\.]+)?$ order_details.php?i=$1&t=$2
+#RewriteRule ^the_order/([^/\.]+)/([^/\.]+)/staff?$ order_details.php?i=$1&t=$2&s=1
+
+
+#RewriteRule ^tours?$ index.php [QSA,L]
+#RewriteRule ^tours/([^/\.]+)?$ index.php?c=$1 [QSA,L]
+#RewriteRule ^tours/([^/\.]+)/([^/\.]+)?$ index.php?c=$1&cat=$2 [QSA,L]
+#RewriteRule ^type/([^/\.]+)?$ index.php?ty=$1 [QSA,L]
+#RewriteRule ^type/([^/\.]+)/([^/\.]+)?$ index.php?c=$1&ty=$2 [QSA,L]
+#RewriteRule ^tour_details/([^/\.]+)?$ tour_details.php?p=$1 [QSA,L]
+
+
+#RewriteRule ^cart?$ cart.php [QSA,L]
+#RewriteRule ^guest?$ guest.php [QSA,L]
+#RewriteRule ^checkout?$ checkout.php [QSA,L]
+#RewriteRule ^thank_you?$ payment_return_page.php [QSA,L]
+
+

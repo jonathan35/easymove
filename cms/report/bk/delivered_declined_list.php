@@ -96,7 +96,7 @@ $count = sql_count('select * from orders '.$condition.' '.$sort, str_repeat('s',
             foreach((array)$rows as $val){?>
                 <tr>
                     <td><?php echo $c;?></td>
-                    <td><?php echo $mo = 'E'.sprintf("%06d", $val['id']); ?></td>
+                    <td><?php echo $mo = 'E'.sprintf("%08d", $val['id']); ?></td>
                     <td><?php if(!empty($val['receipt_id'])) echo $val['receipt_id']; else echo '-'; ?></td>
                     <td><?php if(!empty($val['delivered_date'])) echo date('d/m/Y', strtotime($val['delivered_date']));?></td>
                     <td><?php if(!empty($drivers[$val['driver']])) echo $drivers[$val['driver']]; ?></td>

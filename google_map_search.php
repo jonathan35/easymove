@@ -275,7 +275,7 @@ function initMap() {
     
     <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
     <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5uh3mV2UVFhyB_BpPFBvD-HdEY0LLEdc&callback=initMap&libraries=places&v=weekly"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgCnKKXcbfDHhiyfjum75uIuRE0ZtvvOo&callback=initMap&libraries=places&v=weekly"
       async
     ></script>
   </body>

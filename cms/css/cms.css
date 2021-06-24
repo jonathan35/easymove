@@ -92,7 +92,7 @@ input[type=submit]{
 }
 input[type=submit]:hover{background-color:#97c71e; color:white;}
 input[type=checkbox] { margin:10px 5px;}
-input[type=text], input[type=email], input[type=date], input[type=number], input[type=password], select, textarea {
+input[type=decimal], input[type=text], input[type=email], input[type=date], input[type=number], input[type=password], select, textarea {
     border-radius:4px;
     padding:5px 6px;
     border:1px solid #CCC;

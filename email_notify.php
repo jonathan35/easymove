@@ -18,7 +18,7 @@ if(!empty($current_order['member'])){
         $date = date('d M Y', strtotime($current_order['confirmed_date']));
         
         
-        $order_id = 'E'.sprintf("%06d", $current_order['id']);
+        $order_id = 'E'.sprintf("%08d", $current_order['id']);
         $area = sql_read("select * from area where id='".$current_order['area']."' limit 1");
         $token = uniqid();
         $expiry = date('Y-m-d H:i:s', strtotime("+10 minutes"));

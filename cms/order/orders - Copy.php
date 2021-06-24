@@ -572,7 +572,7 @@ if($edit==true){?>
                 </td>
                 <td>
 					<div class="col-lg-12" style="padding:0; font-size:22px;">					
-						<a href="<?php echo ROOT?>the_order/<?php echo $defender->encrypt('encrypt',$val['id']);?>" target="_blank"><?php echo $mo = 'E'.sprintf("%06d", $val['id']); ?></a>
+						<a href="<?php echo ROOT?>the_order/<?php echo $defender->encrypt('encrypt',$val['id']);?>" target="_blank"><?php echo $mo = 'E'.sprintf("%08d", $val['id']); ?></a>
 					</div>
 					<div class="col-lg-12" style="padding:0;">
 						<?php if(!empty($val['receipt_id'])) echo '<span style="color:gray;">Receipt ID: </span>'.$val['receipt_id'];?>

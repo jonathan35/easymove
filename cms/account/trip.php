@@ -43,7 +43,7 @@ if($_POST['add2020'] == 'Add'){
 }
 
 
-$fields = array('id', 'branch', 'trip_distance', 'topup_trip');
+$fields = array('id', 'branch', 'trip_distance', 'topup_trip', 'trip_price');
 $value = array();
 $type = array();
 $width = array();//width for input field
@@ -51,7 +51,7 @@ $placeholder = array();
 
 #####Design part#######
 $back = false;// "Back to listing" button, true = enable, false = disable
-$fic_1 = array(0=>array('3', '1'));//fic = fiels in column, number of fields by column $fic_1 normally for add or edit template
+$fic_1 = array(0=>array('3', '2'));//fic = fiels in column, number of fields by column $fic_1 normally for add or edit template
 $fic_2 = array('5', '1');//fic = fiels in column, number of fields by column $fic_2 normally for list template
 
 foreach((array)$fields as $field){
@@ -85,12 +85,14 @@ foreach((array)$results as $a){
 }
 
 $placeholder['title'] = 'Title for profile page';
-//$placeholder['post_content'] = 'Description for profile page';
+$attributes['trip_price'] = array('placeholder' => 'Price pay by merchant (for reporting purpose)');
 
 
 $type['id'] = 'hidden';
-$type['password'] = 'password';
-$type['address'] = 'textarea';
+$type['trip_price'] = 'decimal';
+
+//$type['password'] = 'password';
+//$type['address'] = 'textarea';
 //$type['position'] = 'number';
 $type['created'] = 'date';
 //$type['address'] = 'textarea'; $tinymce['address']=false;  $labelFullRow['address']=false; $height['address'] = '80px;'; $width['address'] = '100%;'; 

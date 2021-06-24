@@ -3,7 +3,7 @@ require_once '../../config/ini.php';
 require_once '../../config/security.php';
 require_once '../../config/str_convert.php';
 require_once '../../config/image.php';
-require_once '../../api/send_notification.php';
+include '../../api/send_notification.php';
 
 
 //include '../layout/savelog.php';
@@ -48,10 +48,18 @@ if($_POST['action'] == 'Approve' || $_POST['action'] == 'Reject'){
 				$title = 'Account Rejected';
 				$body = 'Your driver account has been rejected.';
 			}
-			sendNotification($driver_id, $title, $body);
+
+			//sendNotification($driver_id, $title, $body);
+			
+			//need add ip/domain to google console https://console.cloud.google.com/apis/credentials/oauthclient/88228738966-365pv180pv12akkhmhqvfejv2p09k9v2.apps.googleusercontent.com?authuser=5&project=lateral-pathway-313313
+			
+			//to do above, need real domain
+
 		}
 	}
 }
+
+
 
 $keyword = true;//Component to search by keyword
 $keywordMustFullWord=false;
@@ -154,16 +162,16 @@ foreach((array)$fields as $field){
 }
 echo '</div>';
 */
+
 $cols = $items =array();
-$cols = array('Region' => '2', 'Driver' => '3', 'Contact' => '2', 'Emergency' => '2', 'Vehicle' => '1', 'Plate' => '1', 'Belonging' => '1');//Column title and width
+$cols = array('Region' => '2', 'Driver' => '3', 'Contact' => '2', 'Emergency Contact' => '2', 'Vehicle' => '1', 'Merit' => '1', 'Plate No.' => 1);//Column title and width
 $items['Region'] = array('region');
 $items['Driver'] = array('name', 'working_time');
 $items['Contact'] = array('mobile_number');
-$items['Emergency'] = array('emergency_contact_number');
-$items['Vehicle'] = array('vehicle_type');
-$items['Plate'] = array('plate_number');
-$items['Belonging'] = array('vehicle_belonging');
-
+$items['Emergency Contact'] = array('emergency_contact_number');
+$items['Vehicle'] = array('vehicle_type', 'vehicle_belonging');
+$items['Plate No.'] = array('plate_number');
+$items['Merit'] = array('merit');
 
 if(empty($_POST['get_config_only'])){
 ?>
@@ -210,11 +218,16 @@ label {width:30%;}
 <div class="row">
 	<div class="col-12">
 		<?php 
+	
 		$fields = array('id', 'name', 'working_time', 'mobile_number', 'emergency_contact_number', 'vehicle_type', 'region', 'plate_number', 'vehicle_belonging', 'status', 'photo_of_ic', 'photo_of_driving_license', 'vehicle_front_view', 'vehicle_back_view', 'merit');
 		
+		$type['merit'] = 'text';
+
 		if(!$_GET['no_list']) include '../layout/list.php';?>
 	</div>
 </div>
+
+
 
 <script>
 function chkAll(frm, arr, mark){
@@ -226,6 +239,15 @@ function chkAll(frm, arr, mark){
    } catch(er) {}
   }
 }
+
+
+$(".commission_merit").each(function( index ) {
+	var i = $(this).attr('link');
+	$(this).after('<a href="commission.php?id='+i+'" target="_blank" style="text-align:center;">Commission & Merit</a>');
+	//<a href="merit_statement.php?id='+i+'" target="_blank" class="btn btn-xs btn-default list-edit ref-btn" style="margin-left:5px;">Merit</a>
+});
+
+
 </script>
 
 

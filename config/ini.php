@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 date_default_timezone_set('ASIA/KUALA_LUMPUR');
 error_reporting(0);
@@ -8,16 +7,14 @@ error_reporting(0);
 //------------------- Database Connection ---------------------
 Class DBConn{
 	var $hostname = "localhost";
-	var $database = "easymove";
-	var $username = "root";
-	var $password = "";
+	var $database = "easymove";//easy
+	var $username = "root";//easyuser
+	var $password = "";//hoasd182oasdDs1
 }
 
 $DB = New DBConn;
-
 $conn = mysqli_connect($DB->hostname, $DB->username, $DB->password) or trigger_error(mysql_error(),E_USER_ERROR); 
 mysqli_select_db($conn, $DB->database);	
-
 
 
 
@@ -31,7 +28,7 @@ if (!defined('ROOT')) {
 }
 
 if (!defined('A_ROOT')) {
-	define('A_ROOT', 'https://localhost/easymove/');
+	define('A_ROOT', HTTP.'localhost/easymove/');
 }
 
 if (!defined('ENCRYPTION_KEY')) {

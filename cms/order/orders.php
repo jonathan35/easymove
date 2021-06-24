@@ -363,7 +363,7 @@ if($edit==true){?>
 					<?php echo $option['driver'][$val['assign']] ?: '-';?>
                 </td>
 				<td>
-					<div link="<?php echo ROOT?>admin_order/<?php echo $defender->encrypt('encrypt', $val['id'])?>" target="_blank" class="mymodal-btn btn list-edit" style="font-size:16px; width:90px !important; height:28px; padding-top:2px;"><?php echo sprintf("%06d", $val['id']);?></div>
+					<div link="<?php echo ROOT?>admin_order/<?php echo $defender->encrypt('encrypt', $val['id'])?>" target="_blank" class="mymodal-btn btn list-edit" style="font-size:16px; width:90px !important; height:28px; padding-top:2px;"><?php echo sprintf("%08d", $val['id']);?></div>
                 </td>
 				<td>
 					<?php echo date('d/m/y, g:i a', strtotime(substr($val['created'],0,10).' '.$val['time'].':00'));?>

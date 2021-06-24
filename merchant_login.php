@@ -3,6 +3,10 @@ require_once 'config/ini.php';
 require_once 'config/security.php';
 require_once 'config/auth.php';
 
+if(!empty($_SESSION['auth_user']['id'])){
+    header("Location: home");
+}
+
 ?>
 
 

@@ -8,9 +8,9 @@ date_default_timezone_set('ASIA/KUALA_LUMPUR');
 //------------------- Database Connection ---------------------
 Class DBConn{
 	var $hostname = "localhost";
-	var $database = "mingming_easyapi";
-	var $username = "mingming_easyapiusr";
-	var $password = "easyapiusr28971g987gf";
+	var $database = "easy";//mingming_easyapi
+	var $username = "easyuser";//mingming_easyapiusr
+	var $password = "hoasd182oasdDs1";//easyapiusr28971g987gf
 }
 
 $DB = New DBConn;
@@ -23,7 +23,7 @@ mysqli_select_db($conn, $DB->database);
 
 //------------------- Constant ---------------------
 if (!defined('HTTP')) {
-	define('HTTP', 'https://');
+	define('HTTP', 'http://');
 }
 
 if (!defined('ROOT')) {
@@ -31,7 +31,7 @@ if (!defined('ROOT')) {
 }
 
 if (!defined('A_ROOT')) {
-	define('A_ROOT', 'https://localhost/easymove/');
+	define('A_ROOT', HTTP.'localhost/easymove/');
 }
 
 if (!defined('ENCRYPTION_KEY')) {

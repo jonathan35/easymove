@@ -27,7 +27,7 @@ $news = sql_read("select * from news where status=? order by position asc, id de
                 <div class="row">
                     <div class="col-12 p-0" style="overflow:hidden;">
           
-                        <div class="d-none d-md-block bg-cover bg-pic-<?php echo $c?> zoom-in" style="cursor:pointer; height:calc(100vh / 2.4); background-color:#CCC; background-image:url('<?php echo ROOT.$new['photo']?>'); " data-toggle="modal" data-target="#enlargeModal" onclick="$('.indicator-<?php echo $c?>').click();"></div>
+                        <div class="d-none d-md-block bg-cover bg-pic-<?php echo $c?> zoom-in" style="height:calc(100vh / 2.4); background-color:#CCC; background-image:url('<?php echo ROOT.$new['photo']?>'); " data-toggle="modal" data-target="#enlargeModal" onclick="$('.indicator-<?php echo $c?>').click();"><!--cursor:pointer; --></div>
 
                         <div class="d-md-none bg-cover bg-pic-<?php echo $c?>" style="height:calc(100vw / 2); background-color:#CCC;background-image:url('<?php echo ROOT.$new['photo']?>'); "></div>
                         <img class="img-fluid" src="<?php echo ROOT.$new['photo']?>" onload="cover_contain(this, '<?php echo $c?>')" style="display:none;">

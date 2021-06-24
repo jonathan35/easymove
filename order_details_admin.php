@@ -74,7 +74,7 @@ if($oid){
         Assign driver successfully, waiting driver acceptance.</div>';
 
         $title = 'Order Assigned';
-		$body = 'Order ' .sprintf("%06d", $oid).' has been assigned to you.';
+		$body = 'Order ' .sprintf("%08d", $oid).' has been assigned to you.';
 		sendNotification($_POST['driver'], $title, $body);
     }
 
@@ -93,7 +93,7 @@ if($oid){
 
         if($order['driver']){
             $title = 'Order Cancelled';
-            $body = 'Order ' .sprintf("%06d", $oid).' has been cancelled.';
+            $body = 'Order ' .sprintf("%08d", $oid).' has been cancelled.';
             sendNotification($order['driver'], $title, $body);
         }
     }
@@ -160,7 +160,7 @@ if(!empty($order['id'])){?>
                 
                 <div class="pt-2">
                     <span class="text-label2">ID: </span>
-                    <?php echo $mo = sprintf("%06d", $order['id']); ?>
+                    <?php echo $mo = sprintf("%08d", $order['id']); ?>
                 </div>   
                 <div class="pt-2">
                     <span class="text-label2">DATE: </span>
@@ -170,24 +170,18 @@ if(!empty($order['id'])){?>
                 
                 
                 <div class="row title"><div class="col-6">DRIVER</div></div>
-                <?php if($order['driver']){?>
-
-                    <div class="pt-2">
-                        <span class="text-label2">DRIVER: </span>
-                        <?php echo $order['driver_name'];?>
-                    </div>   
-                    <div class="pt-2">
-                        <span class="text-label2">PHONE: </span>
-                        <?php echo $order['driver_phone'];?>
-                    </div>
-                    <div class="pt-2">
-                        <span class="text-label2">DESTANCE: </span>
-                        <?php echo $order['distance'];?>KM
-                    </div>
-
-                <?php }else{?>
-                <div class="text-label2 pr-2">NO DRIVER</div>
-                <?php }?>
+                <div class="pt-2">
+                    <span class="text-label2">DRIVER: </span>
+                    <?php if($order['driver_name']){ echo $order['driver_name'];}else{echo '-';}?>
+                </div>   
+                <div class="pt-2">
+                    <span class="text-label2">PHONE: </span>
+                    <?php if($order['driver_phone']){ echo $order['driver_phone'];}else{echo '-';}?>
+                </div>
+                <div class="pt-2">
+                    <span class="text-label2">DESTANCE: </span>
+                    <?php echo $order['distance'];?>KM
+                </div>
             </div>
 
             <div class="col-12 col-md-4">
@@ -256,7 +250,7 @@ if(!empty($order['id'])){?>
                 <div class="row" >
                     <div class="col-12 p-3 text-right">
                         <?php if($branch['contact_person']){?>
-                        <a class="btn btn-white" href="https://api.whatsapp.com/send/?phone=<?php echo $order['phone'];?>&text='Sorry to cancel your order <?php echo $mo = sprintf("%06d", $order['id']); ?>.'&app_absent=0" style="color:#2cb742" target="_blank">
+                        <a class="btn btn-white" href="https://api.whatsapp.com/send/?phone=<?php echo $order['phone'];?>&text='Sorry to cancel your order <?php echo $mo = sprintf("%08d", $order['id']); ?>.'&app_absent=0" style="color:#2cb742" target="_blank">
                             <?php echo $branch['contact_person'];?> 
                             <?php echo $branch['mobile_number'];?>
                             <img src="<?php echo ROOT?>images/whatsapp-16.png" style="position:relative; top:-1px; margin-left:6px;">
@@ -295,7 +289,7 @@ if(!empty($order['id'])){?>
             </div>
             <div>
                 <img src="../images/phone-20.png" style="width:18px; padding-right:4px; top:-3px; position:relative;">
-                <a class="btn btn-white p-0 pl-1 pr-1" href="https://api.whatsapp.com/send/?phone=<?php echo $order['phone'];?>&text='Sorry to cancel your order <?php echo $mo = sprintf("%06d", $order['id']); ?>.'&app_absent=0" style="color:#2cb742" target="_blank">
+                <a class="btn btn-white p-0 pl-1 pr-1" href="https://api.whatsapp.com/send/?phone=<?php echo $order['phone'];?>&text='Sorry to cancel your order <?php echo $mo = sprintf("%08d", $order['id']); ?>.'&app_absent=0" style="color:#2cb742" target="_blank">
                     <?php echo $driver['mobile_number'];?>
                     <img src="<?php echo ROOT?>images/whatsapp-16.png" style="position:relative; top:-1px;">
                 </a>

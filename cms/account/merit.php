@@ -15,20 +15,13 @@ if($_SESSION['validation']=='YES'){
 
 if($_POST['driver']){
 	$d_data['id'] = $_POST['driver'];
-
 	$r_driver = sql_read('select id, merit from driver where id=? limit 1', 'i', $d_data['id']);
 	
 	if($r_driver['id']){
-		if($_POST['transfer'] == 'in'){
-			$d_data['merit'] = $r_driver['merit'] + $_POST['points'];
-		}elseif($_POST['transfer'] == 'out'){
-			$d_data['merit'] = $r_driver['merit'] - $_POST['points'];
-		}
+		$d_data['merit'] = $r_driver['merit'] + $_POST['points'];
 		sql_save('driver', $d_data);
 	}
-
 }
-
 
 
 $table = 'merit';
@@ -57,7 +50,7 @@ $msg['Suspend']='Are you sure you want to suspend?';	$db['Suspend']=array('statu
 
 
 
-$fields = array('id', 'driver', 'transfer', 'points', 'reason');
+$fields = array('id', 'driver', 'points', 'note');
 $value = array();
 $type = array();
 $width = array();//width for input field
@@ -65,8 +58,7 @@ $placeholder = array();
 
 #####Design part#######
 $back = false;// "Back to listing" button, true = enable, false = disable
-$fic_1 = array(0=>array('5'));//fic = fiels in column, number of fields by column $fic_1 normally for add or edit template
-$fic_2 = array('5', '1');//fic = fiels in column, number of fields by column $fic_2 normally for list template
+$fic_1 = array(0=>array('4'));//fic = fiels in column, number of fields by column $fic_1 normally for add or edit template
 
 foreach((array)$fields as $field){
 	$value[$field] = '';
@@ -77,7 +69,6 @@ foreach((array)$fields as $field){
 
 $type['points'] = 'number';
 $type['topup_merit'] = 'number';
-
 
 /* Tag module uses session*/
 $type['tag'] = 'tag';
@@ -96,27 +87,24 @@ foreach((array)$results as $a){
 }
 
 $placeholder['title'] = 'Title for profile page';
-
+$attributes['note'] = array('required' => 'required');
 
 $type['id'] = 'hidden';
 $type['password'] = 'password';
-$type['reason'] = 'textarea';
+$type['note'] = 'textarea';
 $type['created'] = 'date';
 //$type['address'] = 'textarea'; $tinymce['address']=false;  $labelFullRow['address']=false; $height['address'] = '80px;'; $width['address'] = '100%;'; 
 $type['group_id'] = 'select'; $option['group_id'] = array('1'=>'Master Admin');//,'2'=>'Admin'
 //$type['status'] = 'select'; $option['status'] = array('1'=>'Activated','0'=>'Suspended');$default_option['status'] = '1';
-$type['transfer'] = 'select'; $option['transfer'] = array('in'=>'Merit','out'=>'Demerit');$default_option['transfer'] = 'in';
-
 
 $required['title'] = 'required';
 
 
 $cols = $items =array();
-$cols = array('Driver' => '3', 'Transfer' => '2', 'Points' => '2', 'Reason' => '3', 'Date' => '2');//Column title and width
+$cols = array('Driver' => '5', 'Points' => '2', 'Reason' => '3', 'Date' => '2');//Column title and width
 $items['Driver'] = array('driver');
-$items['Transfer'] = array('transfer');
 $items['Points'] = array('points');
-$items['Reason'] = array('reason');
+$items['Reason'] = array('note');
 $items['Date'] = array('created');
 
 
@@ -149,17 +137,17 @@ label {width:30%;}
 
 <div class="row">
 
-	<?php if($_GET['no_list'] != 'true'){?>
+	<?php /*if($_GET['no_list'] != 'true'){?>
 	<div class="btn btn-secondary ml-3 mb-3" onclick="$('.add_page').slideToggle(); $('.icon_add, .icon_minus').toggle();">
 		Add <?php echo $module_name?>
 		<span class="icon_add" style="font-size:20px;">+</span>
 		<span class="icon_minus collapse" style="font-size:20px;"> - </span>
 	</div>
-	<?php }?>
+	<?php }*/?>
 
 
 	<?php if($add==true || $_GET['id']){?>
-	<div class="col-12 add_panel <?php if($_GET['no_list'] != 'true'){?>collapse add_page<?php }?>">
+	<div class="col-12 "><?php /*if($_GET['no_list'] != 'true'){?>collapse add_page<?php }*/?><!--add_panel-->
 		<div class="row">
 			<div class="col-6">
 				<?php include '../layout/add.php';?>
@@ -167,8 +155,9 @@ label {width:30%;}
 			<div class="offset-1 col-5">
 				<div class="tips_box">
 				<h4>Tips<img src="<?php echo ROOT?>cms/images/idea-32.png" style="display:inline-block; width:30px;"></h4>
-					<div class="p-1">Use 'merit' for ad-hoc merit reward.</div>
-					<div class="p-1">Use 'merit' for ad-hoc merit compensate.</div>
+					<div class="p-1">Points number for merit.</div>
+					<div class="p-1">Negative points number for demerit.</div>
+					<div class="p-1">Can use for ad-hoc or withdraw purpose.</div>
 				</div>
 			</div>
 			
@@ -181,7 +170,7 @@ label {width:30%;}
 </div>
 <div class="row">
 	<div class="col-12">
-		<?php if(!$_GET['no_list']) include '../layout/list.php';?>
+		<?php //if(!$_GET['no_list']) include '../layout/list.php';?>
 	</div>
 </div>
 

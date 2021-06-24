@@ -168,7 +168,7 @@ Order successfully.</div>';
                             <tr class="page page<?php echo $itemCount?>" style=" <?php if($itemCount>$maxPerPage){?> display:none;<?php }?>">
                                 <td><?php echo $itemCount?></td>
                                 <td style="font-weight:bold;">
-                                    <a href="<?php echo ROOT?>the_order/<?php echo $defender->encrypt('encrypt', $order['id'])?>" target="_blank" style="font-size:130%;"><?php echo sprintf("%06d", $order['id']);?></a>
+                                    <a href="<?php echo ROOT?>the_order/<?php echo $defender->encrypt('encrypt', $order['id'])?>" target="_blank" style="font-size:130%;"><?php echo sprintf("%08d", $order['id']);?></a>
                                 </td>
                                 <?php if($branch_type == 'Headquarter'){?>
                                     <td><?php echo $order['branch_name']?></td>

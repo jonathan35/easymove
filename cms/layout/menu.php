@@ -17,16 +17,24 @@
   <div class="nav lnav" link="../account/trip">Trip Topup</div>
 
   <h4 class="icon-gear">Driver</h4>
-  <div class="nav lnav" link="../account/driver">Driver Account</div>
-  <div class="nav lnav" link="../account/vehicle_type">Vehicle Type</div>
-  <div class="nav lnav" link="../account/merit_setup">Merit Rule</div>
-  <div class="nav lnav" link="../account/merit">Merit Ad-Hoc +Withdraw?</div>
-
-  <div class="nav lnav" link="../order/basic_commission">Basic Commission</div>
-  <div class="nav lnav" link="../order/bonus">Trip Bonus (Merit)</div>
+  <div class="nav lnav" link="../account/driver">Drivers</div>
   
-  <h4 class="icon-gear">Payment</h4>
-  <div class="nav lnav" link="../order/xxx">Merit Withdraw??</div>
+  <div class="nav lnav" link="../account/merit">Merit Ad-Hoc/Withdraw</div>
+
+  <div class="nav lnav" link="../account/merit_setup">Merit Rules</div>
+  <div class="nav lnav" link="../order/basic_commission">Commission Rules</div>
+  <div class="nav lnav" link="../order/bonus">Bonus Rules</div>
+
+  <div class="nav lnav" link="../account/vehicle_type">Vehicle Type</div>
+
+
+  
+
+  <h4 class="icon-gear">Report</h4>
+  <div class="nav lnav" link="../account/sales_by_zone">Sales by Zone/Merchant</div>
+  <div class="nav lnav" link="../account/driver_by_region">Driver by Region</div>
+
+
 
   <h4 class="icon-gear">Administrator</h4>
   <div class="nav lnav" link="../account/login">Admin Account</div>  

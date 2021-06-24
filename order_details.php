@@ -97,7 +97,7 @@ if(!$auth){
                 
                 <div class="pt-2">
                     <span class="text-label2">ID: </span>
-                    <?php echo $mo = sprintf("%06d", $order['id']); ?>
+                    <?php echo $mo = sprintf("%08d", $order['id']); ?>
                 </div>   
                 <div class="pt-2">
                     <span class="text-label2">DATE: </span>
@@ -105,24 +105,18 @@ if(!$auth){
                 </div>
 
                 <div class="row title"><div class="col-6">DRIVER</div></div>
-                <?php if($order['driver']){?>
-
-                    <div class="pt-2">
-                        <span class="text-label2">DRIVER: </span>
-                        <?php echo $order['driver_name'];?>
-                    </div>   
-                    <div class="pt-2">
-                        <span class="text-label2">PHONE: </span>
-                        <?php echo $order['driver_phone'];?>
-                    </div>
-                    <div class="pt-2">
-                        <span class="text-label2">DESTANCE: </span>
-                        <?php echo $order['distance'];?>KM
-                    </div>
-
-                <?php }else{?>
-                <div class="text-label2 pr-2">NO DRIVER</div>
-                <?php }?>
+                <div class="pt-2">
+                    <span class="text-label2">DRIVER: </span>
+                    <?php if($order['driver_name']){ echo $order['driver_name'];}else{echo '-';}?>
+                </div>   
+                <div class="pt-2">
+                    <span class="text-label2">PHONE: </span>
+                    <?php if($order['driver_phone']){ echo $order['driver_phone'];}else{echo '-';}?>
+                </div>
+                <div class="pt-2">
+                    <span class="text-label2">DESTANCE: </span>
+                    <?php echo $order['distance'];?>KM
+                </div>
             </div>
 
             <div class="col-12 col-md-4">

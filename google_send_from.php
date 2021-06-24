@@ -374,7 +374,7 @@ function initMap() {
 
     <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
     <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5uh3mV2UVFhyB_BpPFBvD-HdEY0LLEdc&callback=initMap&libraries=places&v=weekly"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgCnKKXcbfDHhiyfjum75uIuRE0ZtvvOo&callback=initMap&libraries=places&v=weekly"
       async
     ></script>
  
@@ -395,7 +395,7 @@ function get_distance(){
   var destination = $('#sendto_coordinate').val();
   
   if(origin != '' && destination != ''){
-    const url = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins='+origin+'&destinations='+destination+'&key=AIzaSyC5uh3mV2UVFhyB_BpPFBvD-HdEY0LLEdc';
+    const url = 'https://maps.googleapis.com/maps/api/distancematrix/json?origins='+origin+'&destinations='+destination+'&key=AIzaSyBgCnKKXcbfDHhiyfjum75uIuRE0ZtvvOo';
 
     url = url.replace(new RegExp(",", "g"), '%2C');
     //alert(url);
@@ -424,7 +424,7 @@ function get_distance(){
 $(document).ready(function() {
   var url='https://jsonplaceholder.typicode.com/posts';
 
-  //url='https://maps.googleapis.com/maps/api/distancematrix/json?origins=1.5125012504193178%2C110.38926830000001&destinations=1.556023450431367%2C110.3553963&key=AIzaSyC5uh3mV2UVFhyB_BpPFBvD-HdEY0LLEdc';
+  //url='https://maps.googleapis.com/maps/api/distancematrix/json?origins=1.5125012504193178%2C110.38926830000001&destinations=1.556023450431367%2C110.3553963&key=AIzaSyBgCnKKXcbfDHhiyfjum75uIuRE0ZtvvOo';
 
   $.getJSON(url, function(data) {
     alert(data);

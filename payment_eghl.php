@@ -17,7 +17,7 @@ $PaymentDesc = 'Order Purchase';
 $CustIP = $_SERVER['REMOTE_ADDR'];
 
 $PaymentID = $order['pid'];
-$OrderNumber = 'E'.sprintf("%06d", $order['id']);
+$OrderNumber = 'E'.sprintf("%08d", $order['id']);
 $CustName = $_SESSION['auth_user']['name'];
 $CustEmail = $_SESSION['auth_user']['email'];
 $CustPhone = $_SESSION['auth_user']['mobile_number'];;//undefined

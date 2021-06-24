@@ -11,7 +11,7 @@ $PaymentDesc = 'Order Purchase';
 $CustIP = $_SERVER['REMOTE_ADDR'];
 
 $PaymentID = 'PID'.date('YmdHis');
-$OrderNumber = 'E'.sprintf("%06d", 1);
+$OrderNumber = 'E'.sprintf("%08d", 1);
 $CustName = 'Jonathan';
 $CustEmail = 'jonathan.wphp@gmail.com';
 $CustPhone = '1234557678';//undefined

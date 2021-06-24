@@ -45,8 +45,9 @@
                                     <div id="account-menu" style="z-index:3;">
                                         <div class="account-menu-block">
                                             <a href="<?php echo ROOT?>orders"><div>Orders</div></a>
-                                            <a href="<?php echo ROOT?>staff_list"><div>List Accounts</div></a>
                                             <a href="<?php echo ROOT?>staff"><div>Create Account</div></a>
+                                            <a href="<?php echo ROOT?>staff_list"><div>List Accounts</div></a>
+                                            <a href="<?php echo ROOT?>trip"><div>Trip</div></a>
                                             <br>
                                             <a href="<?php echo ROOT?>signout"><div>Sign Out</div></a>
                                         </div>
@@ -189,14 +190,21 @@ function reheight(){
 
 
 $('.account-menu-trigger').click(function(){
-    $('#account-menu').fadeIn().delay(2000);
+    $('#account-menu').fadeIn();//.delay(2000)
 })
 
-window.addEventListener('click', function(e){
-    if (!document.getElementById('account-menu').contains(e.target)){
-        //$('#account-menu').fadeOut();
-    }
-});
 
+$(function() {
+  $("body").click(function(e) {
+
+    var btn = $(e.target).attr("class");
+
+    if (e.target.id == "account-menu" || $(e.target).parents("#account-menu").length || btn == 'btn btn-signup account-menu-trigger float-right') {
+      //alert("Inside div");
+    } else {
+        $('#account-menu').fadeOut(1);
+    }
+  });
+})
 
 </script>

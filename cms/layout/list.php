@@ -198,7 +198,8 @@ if($edit==true){?>
 					<?php if($list_sort){?>&#8597;<?php }?>
 				</th>
 			<?php }?>
-			<th>&nbsp;</th>			
+			<th>&nbsp;</th>
+			<?php if($table == 'driver'){?><th>&nbsp;</th><?php }?>			
 		</tr>
 		<?php }?>
     
@@ -230,14 +231,19 @@ if($edit==true){?>
                     	<input type="checkbox" value="<?php echo $val['id']; ?>" name="productIdList[]">
 					<?php }?>
                     <input type="hidden" name="id" value="<?php echo $val['id'];?>" />
-					
                 </td>
-                
+
 				<?php include '../layout/value.php';?>
                 
-                
-                
-                
+
+				<?php if($table == 'driver'){?>
+				<td>
+					<div class="commission_merit" link="<?php echo base64_encode($val['id'])?>"></div>
+				</td>
+				
+				
+				<?php }?>
+
                 <td class="text-center" style="width:10% !important;">                         
 					<?php 
 					
@@ -248,6 +254,7 @@ if($edit==true){?>
 					-->
 					
 					<div link="<?php echo $edit_page?>.php?id=<?php echo base64_encode($val['id'])?>" class="mymodal-btn btn btn-xs btn-default list-edit ref-btn" ><img src="<?php echo ROOT.'cms/images/edit.png'?>" width="22"></div>
+					
 					<?php }?>
 					<?php if($read){?>
 						<div link="../layout/read.php?id=<?php echo base64_encode($val['id'])?>&table=<?php echo $table?>&fields=<?php echo base64_encode(json_encode($fields))?>" class="mymodal-btn btn btn-xs btn-default list-edit"><img src="<?php echo ROOT.'cms/images/envelope_open.svg'?>" width="22" style="padding-right:2px;"></div>
@@ -259,6 +266,7 @@ if($edit==true){?>
 						</div>
                 	<?php }?>
                 </td>
+
                 
 
 				<?php /*if($delete_in_row){?>

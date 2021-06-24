@@ -1,0 +1,39 @@
+Options -Indexes
+ErrorDocument 400 /ocs/error.php?error=400
+ErrorDocument 401 /ocs/error.php?error=401
+ErrorDocument 403 /ocs/error.php?error=403
+ErrorDocument 404 /ocs/error.php?error=404
+ErrorDocument 500 /ocs/error.php?error=500
+
+
+RewriteEngine on
+RewriteRule ^category/?$ catalog.php
+RewriteRule ^category/wishlist?$ catalog.php?wishlist=true
+RewriteRule ^category/recent?$ catalog.php?recent=true
+RewriteRule ^category/new?$ catalog.php?new=true
+RewriteRule ^category/updated?$ catalog.php?updated=true
+RewriteRule ^category/([^/\.]+)/([^/\.]+)/?$ catalog.php?category=$1&sub_category=$2
+RewriteRule ^category/([^/\.]+)/([^/\.]+)/([^/\.]+)/?$ catalog.php?category=$1&sub_category=$2&product=$3
+RewriteRule ^share/([^/\.]+)/?$ addthis.php?o=$1
+
+#RewriteRule ^my/order/([^/\.]+)/?$ cms/content/order_details.php?o=$1
+RewriteRule ^my/order/([^/\.]+)/?$ cms/content/swipe.php?o=$1
+RewriteRule ^my/history_order/([^/\.]+)/?$ cms/content/order_details.php?o=$1&history=true
+
+
+RewriteRule ^brand/([^/\.]+)/?$ catalog.php?brand=$1
+RewriteRule ^cart?$ cart.php
+RewriteRule ^confirm?$ confirm.php
+RewriteRule ^catalog?$ catalog.php
+RewriteRule ^my_order?$ my_order.php
+RewriteRule ^my_profile?$ my_profile.php
+
+
+RewriteRule ^page/([^/\.]+)/?$ page.php?page=$1
+
+RewriteRule ^member/([^/\.]+)?$ $1.php
+RewriteRule ^member/login/([^/\.]+)/([^/\.]+)?$ login.php?message-type=$1&message=$2
+RewriteRule ^member/logout/?$ logout.php
+RewriteRule ^member/reset_password/?$ reset_password.php
+
+

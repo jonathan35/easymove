@@ -475,7 +475,7 @@ $('#msg_trigger2').mouseleave(function(){
                                             foreach((array)$my_orders as $order){?>
                                             <tr>
                                                 <td scope="row"
-                                                    class="text-center text-sm-center text-md-left text-lg-left"><?php echo 'E'.sprintf("%06d", $order['id']); ?>
+                                                    class="text-center text-sm-center text-md-left text-lg-left"><?php echo 'E'.sprintf("%08d", $order['id']); ?>
                                                 </td>
                                                 <td><span class="d-block d-md-none">Date: </span>
                                                     <?php echo date('d M Y', strtotime($order['confirmed_date']));?>

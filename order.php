@@ -220,11 +220,10 @@ $trips = sql_read("select SUM(trip_balance) as balance, SUM(topup_trip) as topup
                                                 <select name="requirement" class="form-group">
                                                     <?php foreach((array)$vehicle_types as $vehicle_type){?>
                                                     <option value="<?php echo $vehicle_type['id']?>">
-                                                        <?php echo $vehicle_type['vehicle_type']?><?php echo $vehicle_type['id']?>
+                                                        <?php echo $vehicle_type['vehicle_type']?>
                                                     </option>
                                                     <?php }?>
                                                 </select>
-
                                             </div>
                                         </div>
 
