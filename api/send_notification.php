@@ -2,11 +2,10 @@
 /*
 This page need to be install in mingmingtravel.com/easyapi/api/, because expo server only accept https request
 Flow to be: A (http) --> B (https) --> Expo --> Google Firebase --> Phone Notification
-*/
 
-if(!empty($_GET['i'])){ $token = $_GET['i'];}else{$token = 'ExponentPushToken[TT1n5_MWlZqy_thPbmbccG]';}
-if(!empty($_GET['t'])){ $title = $_GET['t'];}else{$title = 'GET NO TITLE';}
-if(!empty($_GET['b'])){ $body = $_GET['b'];}else{$body = 'GET NOT CONTENT';}
+if(!empty($_GET['i'])){ $token = $_GET['i'];}else{$token = 'ExponentPushToken[ouHslCDPEokBuNyk0LMT8x]';}
+if(!empty($_GET['t'])){ $title = $_GET['t'];}else{$title = 'DEFAULT TITLE ('.$_SERVER['SERVER_NAME'].')';}
+if(!empty($_GET['b'])){ $body = $_GET['b'];}else{$body = 'DEFAULT CONTENT';}
 
 if($token && $title && $body){
 
@@ -29,12 +28,12 @@ if($token && $title && $body){
     }        
 }
 
-header('Content-type:text/html');
+header('Content-type:text/html');*/
 ?>
 
 
 <?php 
-/*
+
 if(empty($DB)){
     require_once '../config/ini.php';
 }
@@ -46,7 +45,6 @@ function sendNotification($driver_id, $title, $body){
     if($title && $body){
 
         $driver = sql_read('select push_token from driver where id=? limit 1', 'i', $driver_id);
-        //debug($driver);
 
         if($driver['push_token']){
 
@@ -70,7 +68,6 @@ function sendNotification($driver_id, $title, $body){
     header('Content-type:text/html');
 
 }
-*/
 
 
 ?>

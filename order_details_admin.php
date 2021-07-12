@@ -76,10 +76,10 @@ if($oid){
         $title = 'Order Assigned';
 		$body = 'Order ' .sprintf("%08d", $oid).' has been assigned to you.';
 
-        $driver_id = $order['driver'];
-        include 'api/remote_push.php';
+        //$driver_id = $order['driver'];
+        //include 'api/remote_push.php';
 		
-        //sendNotification($_POST['driver'], $title, $body);
+        sendNotification($_POST['driver'], $title, $body);
     }
 
     if($_POST['cancel'] && $_POST['oid']){
@@ -99,10 +99,10 @@ if($oid){
             $title = 'Order Cancelled';
             $body = 'Order ' .sprintf("%08d", $oid).' has been cancelled.';
 
-            $driver_id = $order['driver'];
-            include 'api/remote_push.php';
+            //$driver_id = $order['driver'];
+            //include 'api/remote_push.php';
             
-            //sendNotification($order['driver'], $title, $body);
+            sendNotification($order['driver'], $title, $body);
         }
     }
 

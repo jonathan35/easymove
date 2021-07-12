@@ -49,9 +49,9 @@ if($_POST['action'] == 'Approve' || $_POST['action'] == 'Reject'){
 				$body = 'Your driver account has been rejected.';
 			}
 			
-			include '../../api/remote_push.php';
+			//include '../../api/remote_push.php';
 
-			//sendNotification($driver_id, $title, $body);
+			sendNotification($driver_id, $title, $body);
 			
 			//need add ip/domain to google console https://console.cloud.google.com/apis/credentials/oauthclient/88228738966-365pv180pv12akkhmhqvfejv2p09k9v2.apps.googleusercontent.com?authuser=5&project=lateral-pathway-313313
 			

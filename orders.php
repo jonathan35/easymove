@@ -94,10 +94,10 @@ if($_POST){
                 $body = 'A nearby order, accept delivery order now!';
                 
                 if($driver['id']){
-                    $driver_id = $driver['id'];
-                    include 'api/remote_push.php';
+                    //$driver_id = $driver['id'];
+                    //include 'api/remote_push.php';
                     
-                    //sendNotification($driver['id'], $title, $body);
+                    sendNotification($driver['id'], $title, $body);
                 }
             }
             //-----Notify nearby (<=10km) drivers - End -----------
