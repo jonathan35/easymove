@@ -13,6 +13,7 @@ function upload_file($file){
 	
 	if($is_img){
 		$destination = 'images/'.date('Ymd-His').uniqid().'.'.$type;
+		
 		move_uploaded_file($file['tmp_name'], $destination);
 	}else{
 		$destination = 'type: '.$type.' target: '.$target.'file: '.json_encode($file);

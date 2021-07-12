@@ -340,11 +340,15 @@ function standardMeritChecker($driver_id){
                 $data['notify_note'] = '70';
                 sql_save('driver', $data);
 
-                sendNotification(
+                $title = 'Account Rejected!';
+                $body = 'Hi '.$driver['name'].', your merit are now '.$driver['merit'].'. Account rejected.';
+                include 'remote_push.php';
+
+                /*sendNotification(
                     $driver_id,
                     'Account Rejected!', 
                     'Hi '.$driver['name'].', your merit are now '.$driver['merit'].'. Account rejected.'
-                );
+                );*/
 
             }elseif($driver['merit'] <=75 && $driver['notify_note'] !='75'){
 
@@ -352,44 +356,60 @@ function standardMeritChecker($driver_id){
                 $data['notify_note'] = '75';
                 sql_save('driver', $data);
 
-                sendNotification(
+                $title = 'Warning!';
+                $body = 'Hi '.$driver['name'].', your merit are now '.$driver['merit'].'. It is dangerously close to account suspension.';
+                include 'remote_push.php';
+
+                /*sendNotification(
                     $driver_id,
                     'Warning!', 
                     'Hi '.$driver['name'].', your merit are now '.$driver['merit'].'. It is dangerously close to account suspension.'
-                );
+                );*/
             }elseif($driver['merit'] <=85 && $driver['notify_note'] !='85'){
 
                 $data['id'] = $driver['id'];
                 $data['notify_note'] = '85';
                 sql_save('driver', $data);
 
-                sendNotification(
+                $title = 'Keep it up!';
+                $body = 'Hi '.$driver['name'].', your merit are now '.$driver['merit'].'. Keep it up!';
+                include 'remote_push.php';
+
+                /*sendNotification(
                     $driver_id,
                     'Keep it up!', 
                     'Hi '.$driver['name'].', your merit are now '.$driver['merit'].'. Keep it up!'
-                );
+                );*/
             }elseif($driver['merit'] >=120 && $driver['merit'] <140 && $driver['notify_note'] !='120'){
 
                 $data['id'] = $driver['id'];
                 $data['notify_note'] = '120';
                 sql_save('driver', $data);
 
-                sendNotification(
+                $title = 'Well Done!';
+                $body = 'Hi '.$driver['name'].', your merit are now '.$driver['merit'].'. Well done!';
+                include 'remote_push.php';
+
+                /*sendNotification(
                     $driver_id,
                     'Well Done!', 
                     'Hi '.$driver['name'].', your merit are now '.$driver['merit'].'. Well done!'
-                );
+                );*/
             }elseif($driver['merit'] >=140 && $driver['notify_note'] !='140'){
 
                 $data['id'] = $driver['id'];
                 $data['notify_note'] = '140';
                 sql_save('driver', $data);
 
-                sendNotification(
+                $title = 'Excellence!';
+                $body = 'Hi '.$driver['name'].', your merit are now '.$driver['merit'].'. Excellence!';
+                include 'remote_push.php';
+
+                /*sendNotification(
                     $driver_id,
                     'Excellence!', 
                     'Hi '.$driver['name'].', your merit are now '.$driver['merit'].'. Excellence!'
-                );
+                );*/
             /*}else{
                 $data['notify_note'] = 'NOTHING';
                 sendNotification(

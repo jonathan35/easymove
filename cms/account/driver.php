@@ -48,12 +48,14 @@ if($_POST['action'] == 'Approve' || $_POST['action'] == 'Reject'){
 				$title = 'Account Rejected';
 				$body = 'Your driver account has been rejected.';
 			}
+			
+			include '../../api/remote_push.php';
 
 			//sendNotification($driver_id, $title, $body);
 			
 			//need add ip/domain to google console https://console.cloud.google.com/apis/credentials/oauthclient/88228738966-365pv180pv12akkhmhqvfejv2p09k9v2.apps.googleusercontent.com?authuser=5&project=lateral-pathway-313313
 			
-			//to do above, need real domain
+			//to do above, need both domain & https
 
 		}
 	}
@@ -72,7 +74,7 @@ $msg['Delete']='Are you sure you want to delete?';
 $msg['Display']='Set as "Display"?';	$db['Display']=array('status', '1');
 $msg['Hide']='Set as "Hide"?';			$db['Hide']=array('status', '2');
 $msg['Approve']='Set as "Approve"?';	$db['Approve']=array('status', '1');
-$msg['Reject']='Set as "Reject"?';	$db['Reject']=array('status', '0');
+$msg['Reject']='Set as "Reject"?';		$db['Reject']=array('status', '0');
 $msg['Pending']='Set as "Pending"?';	$db['Pending']=array('status', '2');
 
 
@@ -139,7 +141,7 @@ $type['vehicle_back_view'] = 'image';
 //$type['publish_date'] = 'date';
 //$type['address'] = 'textarea'; $tinymce['address']=false;  $labelFullRow['address']=false; $height['address'] = '80px;'; $width['address'] = '100%;'; 
 $type['group_id'] = 'select'; $option['group_id'] = array('1'=>'Master Admin');//,'2'=>'Admin'
-$type['status'] = 'select'; $option['status'] = array('1'=>'Approved','0'=>'Rejected');$default_option['status'] = '1';
+$type['status'] = 'select'; $option['status'] = array('1'=>'Approved','2'=>'Applying','0'=>'Rejected');$default_option['status'] = '1';
 $type['working_time'] = 'select'; $option['working_time'] = array('full'=>'Full Time','part'=>'Part Time');$default_option['type'] = 'Full Time';
 
 
@@ -200,13 +202,13 @@ label {width:30%;}
 
 <div class="row">
 
-	<?php if($_GET['no_list'] != 'true'){?>
+	<?php /*if($_GET['no_list'] != 'true'){?>
 	<div class="btn btn-secondary ml-3 mb-3" onclick="$('.add_page').slideToggle(); $('.icon_add, .icon_minus').toggle();">
 		Add <?php echo $module_name?>
 		<span class="icon_add" style="font-size:20px;">+</span>
 		<span class="icon_minus collapse" style="font-size:20px;"> - </span>
 	</div>
-	<?php }?>
+	<?php }*/?>
 
 
 	<?php if($add==true || $_GET['id']){?>

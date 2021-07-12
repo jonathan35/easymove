@@ -22,12 +22,27 @@ if($_SESSION['validation'] == 'YES'){//Is admin
 
 if($_GET['i']){
     $oid = $defender->encrypt('decrypt',$_GET['i']);
+
+    if($_POST['cancel'] && $_POST['oid']){
+
+        $data['id'] = $oid;
+        $data['status'] = 'Cancelled';
+        
+        sql_save('orders', $data);
+
+        $_SESSION['session_msg'] = '<div class="alert alert-success">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close" style="position:relative; top:-2px;">×</a>
+        Order cancelled successfully.</div>';
+    }
+
+
     $order = sql_read('select * from orders where id=? limit 1', 's', $oid);
     $branch = sql_read("select * from branch where id=? limit 1", 'i', array($order['branch']));
     $region = sql_read("select * from region where id=? limit 1", 'i', array($order['region']));
     $zone = sql_read("select * from zone where id=? limit 1", 'i', array($order['zone']));
 
 }
+
 
 if(!$auth){
 
@@ -90,8 +105,9 @@ if(!$auth){
                 <div class="row title">
                     <div class="col-6">ORDER</div>
                     <div class="col-6 text-right">
+                    <a href="<?php echo ROOT?>track?i=<?php echo $defender->encrypt('encrypt', $order['id'])?>" target="_blank" style="color:white;">
                         [<?php if($order['status'] =='Ordered') echo 'New'; 
-                        else echo $order['status'];?>]
+                        else echo $order['status'];?>]</a>
                     </div>
                 </div>
                 
@@ -117,6 +133,12 @@ if(!$auth){
                     <span class="text-label2">DESTANCE: </span>
                     <?php echo $order['distance'];?>KM
                 </div>
+                <?php if(!empty($order['proof_of_delivery'])){?>
+                <div class="pt-2">
+                    <span class="text-label2">PROOF OF DELIVERY: </span>
+                    <img src="<?php echo ROOT?>api/<?php echo $order['proof_of_delivery']?>" class="img-fluid">
+                </div>
+                <?php }?>
             </div>
 
             <div class="col-12 col-md-4">
@@ -174,9 +196,38 @@ if(!$auth){
                 </table>
             </div>
             
-
-
         </div>
+
+
+        
+        <div class="row">
+            <div class="d-none d-md-block col-4 header-content"></div>
+            <div class="col-12 col-md-8">
+                <div class="row" >
+                    <div class="col-12 p-3 text-right">
+                        <?php 
+                        $phone = $order['phone'];
+                        if (substr($phone, 0,1) != 6) {
+                            $phone = '6'.$phone;
+                        }
+                        ?>
+                        <a class="btn btn-white" href="https://api.whatsapp.com/send/?phone=<?php echo $phone?>&text=Order <?php echo $mo = sprintf("%08d", $order['id']); ?>. &app_absent=0" style="color:#2cb742" target="_blank">
+                            <?php if(!empty($order['customer_name'])){ echo $order['customer_name'];}else{ echo 'Whatsapp Customer';}?> 
+                            <?php if(!empty($order['phone'])){ echo $phone;}?>
+                            <img src="<?php echo ROOT?>images/whatsapp-16.png" style="position:relative; top:-1px; margin-left:6px;">
+                        </a>
+                        <?php if($order['status'] == 'Ordered'){?>
+                        <form action="" method="post" enctype="multipart/form-data" class="d-inline">
+                            <input type="hidden" name="oid" value="<?php echo $order['id']?>">
+                            <input type="submit" name="cancel" value="CANCEL ORDER" class="btn btn-red">
+                        </form>
+                        <?php }?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
 
 
     </div>

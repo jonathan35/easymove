@@ -7,6 +7,110 @@ if(empty($_SESSION['auth_user']['id'])){
     header("Location: please_login");
 }
 
+
+
+
+if($_POST){
+
+
+    $msg = '';
+    $error = 0;
+    $data = array();
+    //$data['session'] =                  session_id();
+    $data['region'] =                   $_SESSION['auth_user']['region'];
+    $data['zone'] =                     $_POST['zone'];
+    $data['company'] =                  $_SESSION['auth_user']['company'];
+    $data['branch'] =                   $_SESSION['auth_user']['branch'];
+    $data['branch_name'] =              $_SESSION['auth_user']['branch_name'];    
+    $data['merchant'] =                 $_SESSION['auth_user']['id'];
+    $data['customer_name'] =            $_POST['customer_name'];
+    $data['phone'] =                    $_POST['phone'];
+    $data['origin'] =                   $_POST['sendfrom'];
+    $data['destination'] =              $_POST['sendto'];
+    $data['origin_coordinate'] =        $_POST['sendfrom_coordinate'];
+    $data['destination_coordinate'] =   $_POST['sendto_coordinate'];
+    $data['distance'] =                 $_POST['distance'];
+    $data['address'] =                  $_POST['address'];
+    $data['time'] =                     $_POST['time'];
+    $data['zone'] =                     $_POST['zone'];
+    $data['message'] =                  $_POST['message'];
+    $data['requirement'] =              $_POST['requirement'];
+    $data['status'] =                   'Ordered';//Accepted, Collected, Delivering, Delivered
+
+
+    //if(empty($data['session'])){                $msg .= ' No session.'; $error++;}
+    if(empty($data['region'])){                 $msg .= ' No region.'; $error++;}
+    if(empty($data['zone'])){                   $msg .= ' No zone.'; $error++;}
+    if(empty($data['branch'])){                 $msg .= ' No branch.'; $error++;}
+    if(empty($data['merchant'])){               $msg .= ' No merchant.'; $error++;}    
+    if(empty($data['customer_name'])){          $msg .= ' No customer name.'; $error++;}
+    if(empty($data['phone'])){                  $msg .= ' No phone.'; $error++;}
+    if(empty($data['origin'])){                 $msg .= ' No origin.'; $error++;}
+    if(empty($data['destination'])){            $msg .= ' No destination.'; $error++;}
+    if(empty($data['origin_coordinate'])){      $msg .= ' No origin coordinate.'; $error++;}
+    if(empty($data['destination_coordinate'])){ $msg .= ' No destination coordinate.'; $error++;}
+    if(empty($data['distance'])){               $msg .= ' No distance detected.'; $error++;}
+    if(empty($data['address'])){                $msg .= ' No Property number (Lot/Sublot/Unit).'; $error++;}
+    if(empty($data['time'])){                   $msg .= ' No time.'; $error++;}
+
+
+    if($error>0){
+        $_SESSION['session_msg'] = '<div class="alert alert-danger">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close" 
+        style="position:relative; top:-2px;">×</a>
+        Failed to submit error. '.$msg.'</div>';
+
+        header("Location:order");
+
+    }else{
+        $trip = sql_read("select id, trip_balance from trip where trip_balance > ? and branch =? and trip_distance >= ? order by trip_distance asc limit 1", 'iis', array(0, $data['branch'], $data['distance'] ));
+
+        if(empty($trip['id'])){
+            $_SESSION['session_msg'] = '<div class="alert alert-danger">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close" 
+            style="position:relative; top:-2px;">×</a>
+            Your trip credit is not enough, please contact administrator to top-up.</div>';
+        }else{
+            /*-------- Trip - Start --------- */
+            $trip['id'];
+            $trip['trip_balance'] = $trip['trip_balance'] - 1;
+            sql_save('trip', $trip);
+            /*-------- Trip - End --------- */
+
+            $data['trip'] = $trip['id'];//trip source's id
+            sql_save('orders', $data);
+            $_SESSION['session_msg'] = '<div class="alert alert-success">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close" title="close" style="position:relative; top:-2px;">×</a>
+            Order successfully, please wait for a response.</div>';
+
+
+            //-----Notify nearby (<=10km) drivers - Start -----------
+            $earlier = time()-(60*30);//30 minutes early than now
+            $region_id = $data['region'];
+            $nearby_drivers = sql_read('select id from driver where region=? and status=? and location_time>?', 'iii', array($region_id, 1, $earlier));
+            
+            foreach((array)$nearby_drivers as $driver){
+                $title = 'Nearby Order';
+                $body = 'A nearby order, accept delivery order now!';
+                
+                if($driver['id']){
+                    $driver_id = $driver['id'];
+                    include 'api/remote_push.php';
+                    
+                    //sendNotification($driver['id'], $title, $body);
+                }
+            }
+            //-----Notify nearby (<=10km) drivers - End -----------
+
+        }
+        
+        //debug($data);
+    }
+}
+
+
+
+
 $company_id = $_SESSION['auth_user']['company'];
 $branch_id = $_SESSION['auth_user']['branch'];
 $branch_type = $_SESSION['auth_user']['type'];
@@ -85,9 +189,9 @@ Order successfully.</div>';
                                             <select name="status" id="">
                                                 <option value="">All STATUS</option>
                                                 <option value="Ordered" <?php if($_REQUEST['status'] == 'Ordered'){?>selected<?php }?>>Ordered</option>
-                                                <option value="Ordered" <?php if($_REQUEST['status'] == 'Ordered'){?>selected<?php }?>>Accepted</option>
-                                                <option value="Ordered" <?php if($_REQUEST['status'] == 'Ordered'){?>selected<?php }?>>Delivering</option>
-                                                <option value="Ordered" <?php if($_REQUEST['status'] == 'Ordered'){?>selected<?php }?>>Received</option>
+                                                <option value="Accepted" <?php if($_REQUEST['status'] == 'Accepted'){?>selected<?php }?>>Accepted</option>
+                                                <option value="Collected" <?php if($_REQUEST['status'] == 'Collected'){?>selected<?php }?>>Delivering</option>
+                                                <option value="Delivered" <?php if($_REQUEST['status'] == 'Delivered'){?>selected<?php }?>>Received</option>
                                             </select>
                                         </div>
                                         <div class="col-auto p-1 pt-2">
@@ -144,8 +248,8 @@ Order successfully.</div>';
                                 $param_vals[] = $_POST['to'];
                             }
 
-                        
-                            $orders = sql_read("select * from orders where company = ? $branch_query $status_query $from_query $to_query order by id desc", str_repeat('i', $params), $param_vals);                        
+
+                            $orders = sql_read("select * from orders where company = ? $branch_query $status_query $from_query $to_query order by id desc", str_repeat('s', $params), $param_vals);                        
                             ?>
                             
 
@@ -213,5 +317,5 @@ Order successfully.</div>';
 
 
 <script src="js/functions.jquery.js"></script>
-<?php include_once 'config/session_msg.php';?>
+<?php include_once ROOT.'config/session_msg.php';?>
             

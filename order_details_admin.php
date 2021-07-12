@@ -75,7 +75,11 @@ if($oid){
 
         $title = 'Order Assigned';
 		$body = 'Order ' .sprintf("%08d", $oid).' has been assigned to you.';
-		sendNotification($_POST['driver'], $title, $body);
+
+        $driver_id = $order['driver'];
+        include 'api/remote_push.php';
+		
+        //sendNotification($_POST['driver'], $title, $body);
     }
 
     if($_POST['cancel'] && $_POST['oid']){
@@ -94,7 +98,11 @@ if($oid){
         if($order['driver']){
             $title = 'Order Cancelled';
             $body = 'Order ' .sprintf("%08d", $oid).' has been cancelled.';
-            sendNotification($order['driver'], $title, $body);
+
+            $driver_id = $order['driver'];
+            include 'api/remote_push.php';
+            
+            //sendNotification($order['driver'], $title, $body);
         }
     }
 
@@ -167,8 +175,6 @@ if(!empty($order['id'])){?>
                     <?php echo date('d/m/Y', strtotime($order['modified']));?>
                 </div>
 
-                
-                
                 <div class="row title"><div class="col-6">DRIVER</div></div>
                 <div class="pt-2">
                     <span class="text-label2">DRIVER: </span>
@@ -182,6 +188,12 @@ if(!empty($order['id'])){?>
                     <span class="text-label2">DESTANCE: </span>
                     <?php echo $order['distance'];?>KM
                 </div>
+                <?php if(!empty($order['proof_of_delivery'])){?>
+                <div class="pt-2">
+                    <span class="text-label2">PROOF OF DELIVERY: </span>
+                    <img src="<?php echo ROOT?>api/<?php echo $order['proof_of_delivery']?>" class="img-fluid">
+                </div>
+                <?php }?>
             </div>
 
             <div class="col-12 col-md-4">
@@ -249,13 +261,18 @@ if(!empty($order['id'])){?>
             <div class="col-12 col-md-8">
                 <div class="row" >
                     <div class="col-12 p-3 text-right">
-                        <?php if($branch['contact_person']){?>
-                        <a class="btn btn-white" href="https://api.whatsapp.com/send/?phone=<?php echo $order['phone'];?>&text='Sorry to cancel your order <?php echo $mo = sprintf("%08d", $order['id']); ?>.'&app_absent=0" style="color:#2cb742" target="_blank">
-                            <?php echo $branch['contact_person'];?> 
-                            <?php echo $branch['mobile_number'];?>
+                        <?php 
+                        $phone = $order['phone'];
+                        if (substr($phone, 0,1) != 6) {
+                            $phone = '6'.$phone;
+                        }
+                        ?>
+                        <a class="btn btn-white" href="https://api.whatsapp.com/send/?phone=<?php echo $phone;?>&text=Sorry to cancel your order <?php echo $mo = sprintf("%08d", $order['id']); ?>.&app_absent=0" style="color:#2cb742" target="_blank">
+                            
+                            <?php if(!empty($branch['contact_person'])){ echo $branch['contact_person'];}else{ echo 'Whatsapp Customer';}?> 
+                            <?php if(!empty($branch['mobile_number'])){ echo $phone;}?>
                             <img src="<?php echo ROOT?>images/whatsapp-16.png" style="position:relative; top:-1px; margin-left:6px;">
                         </a>
-                        <?php }?>
 
                         <form action="" method="post" enctype="multipart/form-data" class="d-inline">
                             <input type="hidden" name="oid" value="<?php echo $order['id']?>">
@@ -274,72 +291,29 @@ if(!empty($order['id'])){?>
 
 
     <div class="pt-3 mt-5"></div>
-    <h3>Assign Order</h3>
-    <div class="text-muted"><?php echo $region['region']?> driver(s) online within 3 hours. </div>
+
+ 
+    <iframe id="drivers_location" src="../drivers_location.php?i=<?php echo $_GET['i']?>" frameborder="0" height="300px" width="100%"></iframe>
 
     <?php 
-    $drivers = sql_read('select id, name, mobile_number, location, location_time from driver where region=? and status=? and location_time>?', 'iii', array($order['region'], 1, time()-(60*60*2)));//2hrs ago
-
-
-    foreach($drivers as $driver){?>
-        <div class="card" >
-            <div>
-                <img src="../images/car-20.png" style="width:18px; padding-right:4px; top: -3px; position:relative;"> 
-                <?php echo $driver['name'];?>
-            </div>
-            <div>
-                <img src="../images/phone-20.png" style="width:18px; padding-right:4px; top:-3px; position:relative;">
-                <a class="btn btn-white p-0 pl-1 pr-1" href="https://api.whatsapp.com/send/?phone=<?php echo $order['phone'];?>&text='Sorry to cancel your order <?php echo $mo = sprintf("%08d", $order['id']); ?>.'&app_absent=0" style="color:#2cb742" target="_blank">
-                    <?php echo $driver['mobile_number'];?>
-                    <img src="<?php echo ROOT?>images/whatsapp-16.png" style="position:relative; top:-1px;">
-                </a>
-            </div>
-            <div>
-                <img src="../images/distance-20.png" style="width:18px; padding-right:4px; top:-3px; position:relative;">
-                <?php
-                    $driver_lat = get_coor($driver['location'], '"latitude":', ',"speed":');
-                    $driver_lng = get_coor($driver['location'], '"longitude":', ',"accuracy":');
-
-                    $order_coor = explode(',',$order['origin_coordinate']);
-                    $order_lat = $order_coor[0];
-                    $order_lng = $order_coor[1];
-                    $degree_diff = abs($order_lat - $driver_lat) + abs($order_lng - $driver_lng);
-                    $est_distance = round($degree_diff * 111);//1 degree about 111km                    
-                    echo $est_distance.'km ';
-                    echo getTimePass($driver['location_time']);
-
-
-   
-
-                ?>
-            </div>
-            <form action="" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="driver" value="<?php echo $driver['id']?>">
-                <?php if($order['assign'] == $driver['id']){?>
-                    <input value="Assigned" class="btn fwhite float-right">
-                <?php }else{ ?>
-                    <input name="assign" type="submit" value="Assign" class="btn btn-default float-right">
-                <?php }?>
-            </form>
-
-        </div>
-    <?php
-    }
-    ?>
-
-
-    <div class="pt-3 mt-5"></div>
-    <h3>Recent Online Driver(s)</h3>
-    <div class="text-muted">Driver(s) online within 30 minutes.</div>
-    <?php 
-    $_GET['r'] = $defender->encrypt('encrypt', $order['region']);
-    include 'drivers_location.php';
+    //$_GET['r'] = $defender->encrypt('encrypt', $order['region']);
+    
+    //include 'drivers_location.php?r='.$r;
     ?>
 
     <div class="pt-3 mt-5 text-center">------------- END -------------</div>
 
 <body>
 </html>
+
+<script>
+window.setInterval("reloadIFrame();", 20000);
+
+function reloadIFrame() {
+    document.getElementById('drivers_location').contentWindow.location.reload();
+}
+</script>
+
 
 <?php include_once 'config/session_msg.php';?>
 

@@ -3,10 +3,16 @@ require_once 'config/ini.php';
 require_once 'config/security.php';
 require_once 'config/auth.php';
 
+
+if($_GET['i']){
+    $_POST['keyword'] = $defender->encrypt('decrypt', $_GET['i']);
+}
+
+
 if(!empty($_POST['keyword'])){
     $order_id = 0 + $_POST['keyword'];
     if($order_id>0){
-        $order = sql_read("select status from orders where id=? limit 1", 'i', $order_id);
+        $order = sql_read("select status, branch_name, driver_name, proof_of_delivery, company, merchant from orders where id=? limit 1", 'i', $order_id);
     }
 }
 ?>
@@ -99,15 +105,19 @@ if(!empty($_POST['keyword'])){
                         <div class="row" style="width:100%;">
                             <div class="col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3 pt-5 mb-5">
 
-                                <?php if($order['status'] == 'Ordered'){?>
+                                <?php 
+                                if($order['status'] == 'Ordered'){?>
                                     <div class="col-12 pb-3">
                                         <div class="title">Orders in</div>
-                                        order was made by MERCHANT_NAME from BRANCH_NAME
+                                        <?php 
+                                        $company = sql_read("select company_name from company where id=? limit 1", 'i', $order['company']);
+                                        ?>
+                                        Order was made by <?php echo $company['company_name']?> from <?php echo $order['branch_name']?>
                                     </div>
                                 <?php }elseif($order['status'] == 'Accepted'){?>
                                     <div class="col-12 pb-3">
                                         <div class="title">Accepted</div>
-                                        Driver DRIVER_NAME are accepting the job at order and will collect immediately.
+                                        Driver <?php echo $order['driver_name']?> are accepting the job at order and will collect immediately.
                                     </div>
                                 <?php }elseif($order['status'] == 'Collected'){?>
                                     <div class="col-12 pb-12">
@@ -250,7 +260,7 @@ if(!empty($_POST['keyword'])){
                 </div>
                 <div class="login-panel form-rounded">
                     <div class="row">                        
-                        <img src="<?php echo ROOT?>images/proof-of-delivery-form-template.jpg" alt="" style="width:100%;">
+                        <img src="<?php echo ROOT.'api/'.$order['proof_of_delivery']?>" alt="" style="width:100%;">
                     </div>
                 </div>
             </div>

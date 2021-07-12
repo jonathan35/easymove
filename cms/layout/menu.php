@@ -2,9 +2,14 @@
 
   <h4 class="icon-gear">Order</h4>
   <div class="nav lnav" link="../order/orders">Order 
-    <div class="circle_num ml-1">
-      <?php echo sql_count('select id from orders where status=?', 's', 'Ordered');?>
+    
+    <?php $new_order = sql_count('select id from orders where status=?', 's', 'Ordered');
+    
+    if($new_order>0){?>
+    <div class="circle_num ml-1" label="New order ">
+      <?php echo $new_order?>
     </div>
+    <?php }?>
   </div>
   <!--<div class="nav lnav" link="../tour/message?tab=New">Enquiry</div>
   -->
@@ -14,10 +19,28 @@
   <div class="nav lnav" link="../account/company">Company</div>
   <div class="nav lnav" link="../account/branch">Branch</div>
   <div class="nav lnav" link="../account/merchant">Staff Account</div>
-  <div class="nav lnav" link="../account/trip">Trip Topup</div>
+  <div class="nav lnav" link="../account/trip">Trip Topup
+    <?php $low_trip = sql_count('select id from trip where trip_balance < ? and trip_balance != ? and trip_balance is not null', 'ii', array(5, 0));
+    
+    if($low_trip>0){?>
+    <div class="circle_num ml-1" label="Low stock trip count, low stock means trip balance less than 5 trip ">
+      <?php echo $low_trip?>
+    </div>
+    <?php }?>
+  </div>
 
   <h4 class="icon-gear">Driver</h4>
-  <div class="nav lnav" link="../account/driver">Drivers</div>
+  <div class="nav lnav" link="../account/driver">Drivers
+    
+    <?php $pending_driver = sql_count('select id from driver where status=?', 'i', 2);
+    
+    if($pending_driver>0){?>
+    <div class="circle_num ml-1" label="Driver waiting for approval ">
+      <?php echo $pending_driver?>
+    </div>
+    <?php }?>
+    
+  </div>
   
   <div class="nav lnav" link="../account/merit">Merit Ad-Hoc/Withdraw</div>
 
@@ -164,6 +187,8 @@
 
     var p1 = $(location).attr('href').split('/cms/')[1];
     var p2 = p1.split('?')[0];
+    p2 = p2.replace('//', '/');
+    
   
     $('.lnav').each(function(){
       tl = $(this).attr('link').replace('../','');      

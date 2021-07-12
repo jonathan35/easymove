@@ -5,7 +5,6 @@ $driver = array();
 $result = array('result' => false, 'message' => 'Api started.');
 
 
-
 if(!empty($_POST['uid'])){
 
     $result = array('result' => false, 'message' => 'No order');
@@ -48,7 +47,6 @@ if(!empty($_POST['uid'])){
         }
 
         $n= '';
-        
         $orders = array(
             'new_count' => count($news),
             'del_count' => count($delivers),

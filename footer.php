@@ -6,7 +6,7 @@
     <div class="col-12">
        <div class="row" style="background:#222;">
             <div class="col-12 col-md-12 text-muted text-center" style="padding:18px;">
-                <?php echo date('Y')?>. Easy Delivery sdn. bhd. All rights reserved. Powered by Easymove & Quest Marketing.
+                <?php echo date('Y')?>. Powered by Easy Move n’ Pick. Developed by Quest Marketing.
             </div>
         </div>
         

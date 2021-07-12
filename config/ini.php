@@ -4,6 +4,7 @@ date_default_timezone_set('ASIA/KUALA_LUMPUR');
 error_reporting(0);
 
 
+
 //------------------- Database Connection ---------------------
 Class DBConn{
 	var $hostname = "localhost";

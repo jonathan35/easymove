@@ -44,7 +44,9 @@
 
                                     <div id="account-menu" style="z-index:3;">
                                         <div class="account-menu-block">
-                                            <a href="<?php echo ROOT?>orders"><div>Orders</div></a>
+                                        
+                                            <a href="<?php echo ROOT?>order.php"><div>Order Delivery</div></a>
+                                            <a href="<?php echo ROOT?>orders"><div>History Orders</div></a>
                                             <a href="<?php echo ROOT?>staff"><div>Create Account</div></a>
                                             <a href="<?php echo ROOT?>staff_list"><div>List Accounts</div></a>
                                             <a href="<?php echo ROOT?>trip"><div>Trip</div></a>
@@ -105,7 +107,7 @@
                                         </script>
                                         <a href="<?php echo ROOT?>order" style="color:#333;">
                                         <div class="col-12 col-md p-1 hd-menu <?php if(strpos($_SERVER['PHP_SELF'], '/order.php')) echo 'active-hd-menu';?>">
-                                        Delivery Goods
+                                        Order Delivery
                                         </div></a>
 
                                         <a href="<?php echo ROOT?>news" style="color:#333;">

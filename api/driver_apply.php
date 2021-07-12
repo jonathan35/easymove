@@ -17,6 +17,7 @@ if(!empty($_POST['region']) || !empty($_POST['type']) || !empty($_POST['name']) 
     $data['merit'] = 100;
     $data['username'] = $_POST['username'];
     $data['password'] = hash('md5',urldecode($_POST['password']));
+    $data['status'] = 2;
 
     $validate_username = sql_read("select username from driver WHERE username=? limit 1", 's', array($data['username']));
 

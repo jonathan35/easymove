@@ -7,7 +7,7 @@ $result = array('result' => false, 'message' => 'Username or Password is empty.'
 if(!empty($_POST['username']) && !empty($_POST['username'])){
     //$_POST['username'] = 'Q';
     //$_POST['password'] = 'admin';
-    $username = ($_POST['username']);
+    $username = $_POST['username'];
     $password = hash('md5',urldecode($_POST['password']));
     $result = array('result' => false, 'message' => 'Wrong username or Password.');//. username:'.$username.' pass: '.$password
 
