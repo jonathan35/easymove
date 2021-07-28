@@ -33,7 +33,9 @@ if ((hash('md5',$_POST['txtpassword']) == $row_Recordset1['password']) && ($tota
 		$passw=$_POST['txtpassword'];
 		$_SESSION['validation']='YES';
 		$_SESSION['user_id'] = $row_Recordset1['id'];
-		$_SESSION['group_id'] = $row_Recordset1['group_id'];
+		$_SESSION['group_id'] = $row_Recordset1['admin_group'];
+		$_SESSION['region'] = $row_Recordset1['region'];
+		
 		if ($_POST['autoSignin']=='yes')
 		{
 			setcookie ("aspen_password", $subname, time()+604800);

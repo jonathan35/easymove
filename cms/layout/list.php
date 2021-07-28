@@ -37,10 +37,33 @@ include '../layout/list_cond.php';
 echo '---<br>';
 
 echo 'select * from '.$table.' '.$condition.' '.$condition_ext.' '.$sort;
+echo '<br>'; 
+echo str_repeat('s',count($params));
 debug($params);
 
 debug($rows);
 */
+
+
+if($_SESSION['group_id'] == 2){
+	if($table == 'message_contact' || $table == 'driver'){
+		$condition_ext .= ' and region = ? ';
+		$params[] = $_SESSION['region'];
+	}elseif($table == 'merchant'){
+
+		$region_branchs = sql_read("select id from branch where region_id = '".$_SESSION['region']."'");
+		foreach($region_branchs as $b ){
+			foreach($b as $bv ){
+				$branchs[] = $bv;
+			}
+		}
+		if(!empty($branchs)){
+			$branch_ext = " and branch in (".implode(',', (array)$branchs).")";
+			$condition_ext .= $branch_ext;
+		}
+	}
+}
+
 
 $rows = sql_read('select * from '.$table.' '.$condition.' '.$condition_ext.' '.$sort, str_repeat('s',count($params)), $params);
 $count = sql_count('select * from '.$table.' '.$condition.' '.$condition_ext.' '.$sort, str_repeat('s',count($params)), $params);
@@ -153,7 +176,7 @@ if($edit==true){?>
 				$s_count = sql_count('select * from '.$table.' '.$condition.' '.$condition_ext, str_repeat('s',count($params)), $params);
 				?>
 				<a href="?tab=<?php echo $l?>" class="content">
-                <li <?php if((empty($_GET['tab']) && $v == 1) || $_GET['tab'] == $l){?>class="active"<?php }?>>
+                <li <?php if((empty($_GET['tab']) && $v == $default_option['status']) || $_GET['tab'] == $l){?>class="active"<?php }?>>
                 <?php echo $l?> ( <?php echo $s_count;?> )
                 </li></a>
             <?php }?>
@@ -199,7 +222,7 @@ if($edit==true){?>
 				</th>
 			<?php }?>
 			<th>&nbsp;</th>
-			<?php if($table == 'driver'){?><th>&nbsp;</th><?php }?>			
+			<?php if($table == 'driver' || $table == 'branch'){?><th>&nbsp;</th><?php }?>			
 		</tr>
 		<?php }?>
     
@@ -240,7 +263,10 @@ if($edit==true){?>
 				<td>
 					<div class="commission_merit" link="<?php echo base64_encode($val['id'])?>"></div>
 				</td>
-				
+				<?php }elseif($table == 'branch'){?>
+				<td>
+					<div class="trip_history" link="<?php echo base64_encode($val['id'])?>"></div>
+				</td>
 				
 				<?php }?>
 

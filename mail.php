@@ -1,25 +1,22 @@
 <?
-$header = "MIME-Version: 1.0" . "\r\n";
-$header.= "Content-type:text/html;charset=iso-8859-1" . "\r\n";
-$header.= 'From: webmaster@easydelivery.com'. "\r\n";
-//easydelivery.com.my not working
-//fyhonlinestore.com.my not working
 
-if(mail('jonathan.wphp@gmail.com', 'Subject', 'Content here', $header)){
-	echo '111';	
+$to = $_POST['to'];
+$subject = $_POST['subject'];
+$content = $_POST['content'];
+if(!empty($_POST['header'])){
+	$header = $_POST['header'];
 }else{
-	echo '222';		
+	$header = "MIME-Version: 1.0" . "\r\n";
+	$header.= "Content-type:text/html;charset=iso-8859-1" . "\r\n";
+	$header.= 'From: master@easymovenpick.com'. "\r\n";
+	
 }
+$content = $_POST['content'];
 
-/*
 
-if(mail('vivian2001_ice@yahoo.com', 'Subject', 'Content here', $header)){
-	echo 'aaaaaa';	
+if(mail($to, $subject, $content, $header)){
+	echo 'sent';
 }else{
-	echo 'bbbbbb';		
+	echo 'not sent';		
 }
-
-*/
-
-
 ?>

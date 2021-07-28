@@ -75,19 +75,25 @@ if($_SESSION['validation']=='YES'){
       
       
     <?php 
-      $rgs = sql_read('select id, region from region where status=?', 'i', array(1));
+
+      $region_ext = '';
+      if($_SESSION['group_id'] == 2){
+        $region_ext = " and id = '".$_SESSION['region']."'";
+      }
+
+      $rgs = sql_read("select id, region from region where status=? $region_ext", 'i', array(1));
       
       foreach($rgs as $rg){
         
         $ds = sql_read('select id from driver where region = ? and status = ? and location_time > ?', 'iii', array($rg['id'], 1, time()-(60*30)));//30 minutes early than now
 
         if(count((array)$ds)>0){?>
-        <a href="<?php echo ROOT?>drivers_location.php?r=<?php echo $defender->encrypt('encrypt', $rg['id'])?>" target="_blank">
+        <!--<a href="<?php echo ROOT?>drivers_location.php?r=<?php echo $defender->encrypt('encrypt', $rg['id'])?>" target="_blank">-->
           <div style="display:inline-block; border:1px solid #b5bdbc; padding:2px 10px; width:auto; margin-right:20px; background:#c8cfce; border-radius:10px;">
             <img src="<?php echo ROOT?>images/car-20.png">
             <?php echo count($ds).' in '.$rg['region'];?>
           </div>
-        </a>
+        <!--</a>-->
         <?php 
         }
       }

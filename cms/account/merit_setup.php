@@ -155,6 +155,11 @@ $losts = array(
 	),
 	'No pickup compensate' => array(
 		array(
+			'name' => 'no_pickup',			
+			'type' => 'number',
+			'placeholder' => 'Standard time in minutes',
+		),
+		array(
 			'name' => 'no_pickup_point',			
 			'type' => 'number',
 			'remark' => 'No pickup after accepting order',
@@ -220,6 +225,7 @@ if($_POST){
 	$data11['point'] = $_POST['slow_deliver_point'];
 	
 	$data13['id'] = 13;
+	$data13['rule1'] = $_POST['no_pickup'];
 	$data13['point'] = $_POST['no_pickup_point'];
 	
 	$data14['id'] = 14;
@@ -284,7 +290,8 @@ $losts['Slow deliver'][0]['value'] = $value11['rule1'];
 $losts['Slow deliver'][1]['value'] = $value11['rule2'];
 $losts['Slow deliver'][2]['value'] = $value11['point'];
 
-$losts['No pickup compensate'][0]['value'] = $value13['point'];
+$losts['No pickup compensate'][0]['value'] = $value13['rule1'];
+$losts['No pickup compensate'][1]['value'] = $value13['point'];
 
 $losts['Minimum Hour Weekly'][0]['value'] = $value14['rule1'];
 $losts['Minimum Hour Weekly'][1]['value'] = $value14['point'];
@@ -398,8 +405,9 @@ $a++;
 $labels = array(
 	'Duration Standard (Minutes)', 'Merit Point', 
 	'Distance Standard (KM)', 'Time Standard (Minutes)', 'Merit Point', 
+	'Duration Standard (Minutes)',
 	'Merit Point', 
-	'Minimum Hours', 'Merit Point'
+	'Minimum Weekly (Hours)', 'Merit Point'
 );
 $briefs = array(
 	'Driver lost point when pickup within standard duration.',

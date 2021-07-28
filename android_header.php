@@ -15,18 +15,23 @@ box-shadow:2px -2px 10px rgba(0,0,0,.2);">
 box-shadow:0 -2px 10px rgba(0,0,0,.5);">
     <div class="row">
         <div class="col-4 d-flex text-center" style="align-items: center;">
-            <!--<img src="<?php echo ROOT?>images/home.svg" width="22px" style="margin:0 auto;">-->
-            <a href="http://wphp.hopto.org/easymove/android_wallet.php" style="margin:0 auto;">
+            <!--<img src="<?php echo ROOT?>images/home.svg" width="22px" style="margin:0 auto;">
+        
+        http://wphp.hopto.org/easymove/android_wallet.php
+        http://wphp.hopto.org/easymove/android_order.php
+        http://wphp.hopto.org/easymove/android_merchant_registration.php?i=1
+        -->
+            <a href="#" style="margin:0 auto;">
             <img src="<?php echo ROOT?>images/wallet.svg" width="26px"></a>
         </div>
 
         <div class="col-4">
-            <a href="http://wphp.hopto.org/easymove/android_order.php">
+            <a href="#">
             <img src="<?php echo ROOT?>images/logo2.jpg" class="img-fluid d-inline" style="height:50px; "></a>
             </a>
         </div>
         <div class="col-4 d-flex text-center" style="align-items: center;">
-            <a href="http://wphp.hopto.org/easymove/android_merchant_registration.php?i=1" style="margin:0 auto;">
+            <a href="#" style="margin:0 auto;">
             <img src="<?php echo ROOT?>images/user-1.svg" width="23px"></a>
         </div>
 

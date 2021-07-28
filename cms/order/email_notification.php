@@ -14,7 +14,7 @@ if($_SESSION['validation']=='YES'){
 
 
 $table = 'email_notification';
-$module_name = 'Email Notification';
+$module_name = 'Email for Notification';
 $php = 'email_notification';
 $folder = 'order';//auto refresh row once edit modal closed
 $add = true;
@@ -33,10 +33,10 @@ $msg['Hide']='Are you sure you want to hide?';			$db['Hide']=array('status', '2'
 $msg['Activate']='Are you sure you want to activate?';	$db['Activate']=array('status', '1');
 $msg['Suspend']='Are you sure you want to suspend?';	$db['Suspend']=array('status', '0');
 
-$unique_validation=array('username');
+//$unique_validation=array('username');
 
 
-$fields = array('id', 'email', 'notify1');
+$fields = array('id', 'email', 'notify1', 'notify2');
 //, 'notify_when_accepted', 'notify_when_receipt', 'notify_when_delivered'
 
 $value = array();
@@ -46,7 +46,7 @@ $placeholder = array();
 
 #####Design part#######
 $back = false;// "Back to listing" button, true = enable, false = disable
-$fic_1 = array(0=>array('2', '1'));//fic = fiels in column, number of fields by column $fic_1 normally for add or edit template
+$fic_1 = array(0=>array('2', '2'));//fic = fiels in column, number of fields by column $fic_1 normally for add or edit template
 $fic_2 = array('5', '1');//fic = fiels in column, number of fields by column $fic_2 normally for list template
 
 foreach((array)$fields as $field){
@@ -66,11 +66,12 @@ if(!empty($_GET['id'])){
 
 $attributes['email'] = array('required' => 'required');
 $attributes['notify1'] = array('required' => 'required');
+$attributes['notify2'] = array('required' => 'required');
 $placeholder['title'] = 'Title for profile page';
 //$placeholder['post_content'] = 'Description for profile page';
 
-$label['notify1'] = 'APP Driver Application Notification';
-
+$label['notify1'] = 'Driver Application';
+$label['notify2'] = 'Merchant Application';
 
 $type['id'] = 'hidden';
 $type['password'] = 'password';
@@ -106,9 +107,10 @@ echo '</div>';
 */
 
 $cols = $items =array();
-$cols = array('Email' => '3', 'APP Driver Application Notification' => '9');//Column title and width
+$cols = array('Email' => 4, 'Driver Application' => 4, 'Merchant Application' => 4);//Column title and width
 $items['Email'] = array('email');
-$items['APP Driver Application Notification'] = array('notify1');
+$items['Driver Application'] = array('notify1');
+$items['Merchant Application'] = array('notify2');
 
 
 
@@ -116,11 +118,10 @@ if(empty($_POST['get_config_only'])){
 ?>
 
 
-<link href="../css/bootstrap.css" rel="stylesheet">
-<link href="../css/dashboard.css" rel="stylesheet">
-<link href="../css/custom.css" rel="stylesheet">
-<link href="../css/medium.css" rel="stylesheet">
-<link href="../../css/bootstrap-icon.css" rel="stylesheet">
+<link href="<?php echo ROOT?>cms/css/bootstrap.4.5.0.css" rel="stylesheet">
+<link href="<?php echo ROOT?>cms/css/cms.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 <!--For date picker use - start -->
 <link rel="stylesheet" href="<?php echo ROOT?>js/datepicker/jquery-ui.css">
@@ -132,15 +133,10 @@ $( function() {
     $( ".datepicker" ).datepicker({ /*minDate: +7,*/ maxDate: "+10Y +6M +1D", dateFormat: 'dd/mm/yy' });
 } );
 </script>
-
+<!--For date picker use - end -->
 <style>
-label {
-	width:35%;
-	text-transform:capitalize;	
-}
-.div_input {
-	width:60%;
-}
+label {width:30%;}
+.div_input {width:69%;}
 </style>
 
 

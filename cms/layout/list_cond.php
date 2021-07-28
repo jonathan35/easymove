@@ -1,13 +1,15 @@
 <?php
 
-
-if(in_array("status",$fields)){
-	
+if(in_array("status", (array)$fields)){
 	if(!empty($_GET['tab'])){
 		$params[] = array_search($_GET['tab'], $option['status']);
 		$condition = ' where status=? ';
 	}else{
-		$params[] = 1;
+		if(!empty($default_option['status'])){
+			$params[] = $default_option['status'];
+		}else{
+			$params[] = 1;
+		}
 		$condition = ' where status=?';
 	}
 }else{
@@ -33,6 +35,8 @@ if(!empty($_POST['submit']) || $_GET['filter'] == 'reset'){
 	
 	if($_POST['submit'] == 'Search'){
 		
+		clearSearch();
+
 		foreach((array)$_POST as $postname => $postvalue){
 			if(empty($postvalue)){
 				if($postname == 'keyword'){
@@ -50,20 +54,41 @@ if(!empty($_POST['submit']) || $_GET['filter'] == 'reset'){
 		}
 		
 	}elseif($_POST['submit'] == 'Reset' || $_GET['filter'] == 'reset'){
+		clearSearch();
+	}
+}
 
 
-		foreach((array)$_SESSION as $a => $b){
-		
-			if(strpos($a, 'search-keyword')){
-				unset($_SESSION[$a]);
-			}
+
+//Unset non current module search session data
+foreach((array)$_SESSION as $a => $b){		
+	if(strpos($a, '-search-')){
+		$findmodule = explode('-search-', $a);
+		if($findmodule[0] != $module_name){
+			unset($_SESSION[$a]);
+		}	
+	}elseif(strpos($a, '-filter-')){
+		$findmodule = explode('-filter-', $a);
+		if($findmodule[0] != $module_name){
+			unset($_SESSION[$a]);
 		}
+	}
+}
+
+
+function clearSearch(){//Unset current module search session data
+
+	foreach((array)$_SESSION as $a => $b){
 		
-		foreach((array)$_SESSION as $sn => $sv){
-			
-			if(strpos($sn, '-search-') || strpos($sn, '-filter-')){
-				$_SESSION[$sn] = '';
-			}
+		if(strpos($a, 'search-keyword') || strpos($a, '-filter-')){
+			unset($_SESSION[$a]);
+		}
+	}
+	
+	foreach((array)$_SESSION as $sn => $sv){
+		
+		if(strpos($sn, '-search-') || strpos($sn, '-filter-')){
+			$_SESSION[$sn] = '';
 		}
 	}
 }

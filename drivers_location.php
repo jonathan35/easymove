@@ -12,6 +12,27 @@ if($_GET['i']){
 }
 $_GET['r'] = $defender->encrypt('encrypt', $order['region']);
 
+
+if($_POST['assign'] && $_POST['driver']){
+
+    $data['id'] = $oid;
+    $data['assign'] = $_POST['driver'];
+    
+    sql_save('orders', $data);
+
+    $_SESSION['session_msg'] = '<div class="alert alert-success">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close" style="position:relative; top:-2px;">×</a>
+    Assign driver successfully, waiting driver acceptance.</div>';
+
+    $title = 'Order Assigned';
+    $body = 'Order ' .sprintf("%08d", $oid).' has been assigned to you.';
+
+    //$driver_id = $order['driver'];
+    //include 'api/remote_push.php';
+    
+    sendNotification($_POST['driver'], $title, $body);
+}
+
 $order = sql_read('select * from orders where id=? limit 1', 's', $oid);
 $branch = sql_read("select * from branch where id=? limit 1", 'i', array($order['branch']));
 $region = sql_read("select * from region where id=? limit 1", 'i', array($order['region']));
@@ -28,11 +49,12 @@ function get_string_between($string, $start, $end){
 }
 
 $earlier = time()-(60*30);//30 minutes early than now
-$region_id = $defender->encrypt('decrypt', $_GET['r']);
+//$region_id = $defender->encrypt('decrypt', $_GET['r']);
 
-$region = sql_read('select latitude, longitude from region where id=? limit 1', 'i', array($region_id));
+$region = sql_read('select latitude, longitude from region where id=? limit 1', 'i', array($order['region']));
 $ds = sql_read('select name, merit, location from driver where region=? and status = ? and location_time > ?', 'iii', array($region_id, 1, $earlier));
 $drivers = array();
+
 
 
 foreach((array)$ds as $d){
@@ -50,6 +72,36 @@ foreach((array)$ds as $d){
     );
 
 }
+
+
+
+function getTimePass($time){
+
+    $return = '';
+
+    $minutes = round((time()-$time)/60);//convert $time in second to minute
+    if($minutes>0) $return .= '(';
+
+    $hr = round($minutes/60);
+    if($hr>0){
+        $minutes = $minutes - ($hr*60);
+        $return .= $hr.'h';
+    }
+    if($minutes>0)  $return .= $minutes.'m';
+    $return .= ' ago)';
+    return $return;
+}
+
+
+function get_coor($string, $start, $end){
+    $string = ' ' . $string;
+    $ini = strpos($string, $start);
+    if ($ini == 0) return '';
+    $ini += strlen($start);
+    $len = strpos($string, $end, $ini) - $ini;
+    return substr($string, $ini, $len);
+}
+
 ?>
 
 
@@ -133,10 +185,7 @@ foreach((array)$ds as $d){
         
     </script>
 </head>
-<body>
-
-
-
+<body style="padding:20px;">
 
     <h3>Assign Order</h3>
     <div class="text-muted"><?php echo $region['region']?> driver(s) online within 3 hours. </div>
@@ -178,9 +227,6 @@ foreach((array)$ds as $d){
                     echo $est_distance.'km ';
                     echo getTimePass($driver['location_time']);
 
-
-   
-
                 ?>
             </div>
             <form action="" method="post" enctype="multipart/form-data">
@@ -199,9 +245,7 @@ foreach((array)$ds as $d){
 
 
 
-
-
-
+<?php /*
 
     <div class="pt-3 mt-5"></div>
     <h3>Recent Online Driver(s)</h3>
@@ -226,5 +270,38 @@ foreach((array)$ds as $d){
             
 
     <?php }?>
+
+*/?>
+
 </body>
 </html>
+
+<style>
+.card {
+    border: 1px solid #ccc;
+    box-shadow: 1px 1px 3px rgba(0,0,0,.2);
+    padding:10px;
+    display:inline-block;
+    min-width: 200px;
+    background-image: linear-gradient(#FFF, #EFEFEF, #CFCFEF);
+}
+.fwhite {
+    border: 1px solid #ccc;
+    background:#EFEFEF;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    width:100px;
+    border-radius: 6px;
+}
+
+</style>
+
+
+<script>
+window.setInterval("reloadIFrame();", 5000);
+
+function reloadIFrame() {
+    window.history.replaceState( null, null, window.location.href );
+    location.reload();
+}
+</script>

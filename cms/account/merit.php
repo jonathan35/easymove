@@ -12,8 +12,29 @@ if($_SESSION['validation']=='YES'){
 	header("Location:../authentication/login.php");
 }
 
+if(!empty($_POST['action'])){
+	if($_POST['action'] == 'Delete'){
+		foreach($_POST['productIdList'] as $item){
+			$merit = sql_read("select driver, points from merit where id=? limit 1", 'i', $item);
+			$driver = sql_read('select id, merit from driver where id=? limit 1', 'i', $merit['driver']);
+			
+			if($driver['id']){
+				if($merit['points'] > 0){
+					$driver['merit'] = $driver['merit'] - $merit['points'];
+				}else{
+					$driver['merit'] = $driver['merit'] + abs($merit['points']);
+				}
+				sql_save('driver', $driver);
+			}
+		}
+	}
+}
+
 
 if($_POST['driver']){
+
+	$_POST['admin'] = $_SESSION['user_id'];
+
 	$d_data['id'] = $_POST['driver'];
 	$r_driver = sql_read('select id, merit from driver where id=? limit 1', 'i', $d_data['id']);
 	
@@ -24,11 +45,13 @@ if($_POST['driver']){
 }
 
 
+
 $table = 'merit';
 $module_name = 'Merit Ad-Hoc';
 $php = 'merit';
 $folder = 'account';//auto refresh row once edit modal closed
 $add = true;
+$add_confirm = 'Confirm ad-hoc merit?';
 $edit = true;
 $list = true;
 $list_method = 'list';
@@ -41,7 +64,7 @@ $filter = true;
 $filFields = array('driver');
 
 
-$actions=array('Delete', 'Activate', 'Suspend');//, 'Display', 'Hide'
+$actions=array('Delete');//, 'Display', 'Hide'
 $msg['Delete']='Are you sure you want to delete?';
 $msg['Display']='Are you sure you want to display?';	$db['Display']=array('status', '1');
 $msg['Hide']='Are you sure you want to hide?';			$db['Hide']=array('status', '2');
@@ -50,7 +73,7 @@ $msg['Suspend']='Are you sure you want to suspend?';	$db['Suspend']=array('statu
 
 
 
-$fields = array('id', 'driver', 'points', 'note');
+$fields = array('id', 'admin', 'driver', 'points', 'note');
 $value = array();
 $type = array();
 $width = array();//width for input field
@@ -58,7 +81,7 @@ $placeholder = array();
 
 #####Design part#######
 $back = false;// "Back to listing" button, true = enable, false = disable
-$fic_1 = array(0=>array('4'));//fic = fiels in column, number of fields by column $fic_1 normally for add or edit template
+$fic_1 = array(0=>array('5'));//fic = fiels in column, number of fields by column $fic_1 normally for add or edit template
 
 foreach((array)$fields as $field){
 	$value[$field] = '';
@@ -66,7 +89,7 @@ foreach((array)$fields as $field){
 	$placeholder[$field] = '';
 	$required[$field] = '';
 }
-
+$type['admin'] = 'hidden';
 $type['points'] = 'number';
 $type['topup_merit'] = 'number';
 
@@ -79,14 +102,26 @@ if(!empty($_GET['id'])){
 	$_SESSION['module_row_id']=base64_decode($_GET['id']);
 }
 
+$driver_ext = '';
+if($_SESSION['group_id'] == 2){
+	$driver_ext .= ' and region = ? '.$_SESSION['region'];
+}
 
 $type['driver'] = 'select'; $option['driver'] = array();
-$results = sql_read('select * from driver where status =1 order by name ASC');
+$results = sql_read("select * from driver where status =1 $driver_ext order by name ASC");
 foreach((array)$results as $a){
 	$option['driver'][$a['id']] = ucwords($a['name'] .' ('. $a['merit'].'p)');
 }
 
+$type['admin'] = 'select'; $option['admin'] = array();
+$results = sql_read("select * from login where status =1 order by name ASC");
+foreach((array)$results as $a){
+	$option['admin'][$a['id']] = ucwords($a['name']);
+}
+
 $placeholder['title'] = 'Title for profile page';
+$attributes['driver'] = array('required' => 'required');
+$attributes['points'] = array('required' => 'required');
 $attributes['note'] = array('required' => 'required');
 
 $type['id'] = 'hidden';
@@ -101,7 +136,8 @@ $required['title'] = 'required';
 
 
 $cols = $items =array();
-$cols = array('Driver' => '5', 'Points' => '2', 'Reason' => '3', 'Date' => '2');//Column title and width
+$cols = array('Admin' => 2, 'Driver' => 3, 'Points' => 2, 'Reason' => 3, 'Date' => 2);//Column title and width
+$items['Admin'] = array('admin');
 $items['Driver'] = array('driver');
 $items['Points'] = array('points');
 $items['Reason'] = array('note');
@@ -170,7 +206,7 @@ label {width:30%;}
 </div>
 <div class="row">
 	<div class="col-12">
-		<?php //if(!$_GET['no_list']) include '../layout/list.php';?>
+		<?php if(!$_GET['no_list']) include '../layout/list.php';?>
 	</div>
 </div>
 

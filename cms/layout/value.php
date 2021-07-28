@@ -23,13 +23,26 @@ foreach((array)$cols as $colName => $colWidth){
 		
 		foreach((array)$items[$colName] as $fieldName){?>		
 		<div class="col-12" style="padding:0;">
-			<?php if($type[$fieldName]=='text' || $type[$fieldName]=='number' || $type[$fieldName]=='date' || $type[$fieldName]=='email' || $type[$fieldName] == 'map' || $type[$fieldName] == 'coordinate'){?>
+		
+			<?php if($type[$fieldName]=='text' || $type[$fieldName]=='number' || $type[$fieldName]=='email' || $type[$fieldName] == 'map' || $type[$fieldName] == 'coordinate'){?>
 				<div class="blockInList">
 					<?php if(!isset($list_sort)){?>
 					<span class="span_label"><?php echo $str_convert->field_to_label($fieldName)?></span>
 					<?php }
 					echo $str_convert->field_to_label($val[$fieldName])?>
 				</div>
+
+			<?php }elseif($type[$fieldName]=='date'){?>
+				<div class="blockInList">
+					<?php if(!isset($list_sort)){?>
+					<span class="span_label"><?php echo $str_convert->field_to_label($fieldName)?></span>
+					<?php }
+					echo substr($val[$fieldName],8,2).'/'.substr($val[$fieldName],5,2).'/'.substr($val[$fieldName],0,4);
+					?>
+				</div>
+
+
+				
 			<?php 
 			$c++;
 			}elseif($type[$fieldName]=='money'){?>
@@ -89,7 +102,13 @@ foreach((array)$cols as $colName => $colWidth){
 					<?php if(!isset($list_sort)){?>
 					<span class="span_label"><?php echo $str_convert->field_to_label($fieldName)?></span>
 					<?php }?>
-					<?php echo $option[$fieldName][$val[$fieldName]];?>
+					<?php 
+					if($table == 'merit'){
+						echo $option[$fieldName][$val[$fieldName]] ?? 'System';
+					}else{
+						echo $option[$fieldName][$val[$fieldName]];
+					}
+					?>
 				</div>
 			
 			<?php }?>

@@ -25,6 +25,8 @@ RewriteRule ^contact_us?$ contact_us.php [QSA,L]
 RewriteRule ^news?$ news.php [QSA,L]
 RewriteRule ^news_details?$ news_details.php [QSA,L]
 RewriteRule ^signup?$ merchant_signup.php [QSA,L]
+RewriteRule ^change_email?$ change_email.php [QSA,L]
+
 RewriteRule ^signout?$ logout.php [QSA,L]
 RewriteRule ^order?$ order.php [QSA,L]
 RewriteRule ^orders?$ orders.php [QSA,L]

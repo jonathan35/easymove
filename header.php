@@ -47,8 +47,11 @@
                                         
                                             <a href="<?php echo ROOT?>order.php"><div>Order Delivery</div></a>
                                             <a href="<?php echo ROOT?>orders"><div>History Orders</div></a>
-                                            <a href="<?php echo ROOT?>staff"><div>Create Account</div></a>
-                                            <a href="<?php echo ROOT?>staff_list"><div>List Accounts</div></a>
+                                            <?php if($_SESSION['auth_user']['branch'] == 1){?>
+                                                <a href="<?php echo ROOT?>staff"><div>Create Account</div></a>
+                                                <a href="<?php echo ROOT?>staff_list"><div>List Accounts</div></a>
+                                            <?php }?>
+                                            <a href="<?php echo ROOT?>change_email"><div>Email & Password</div></a>
                                             <a href="<?php echo ROOT?>trip"><div>Trip</div></a>
                                             <br>
                                             <a href="<?php echo ROOT?>signout"><div>Sign Out</div></a>

@@ -3,6 +3,12 @@ require_once 'config/ini.php';
 require_once 'config/security.php';
 require_once 'config/auth.php';
 
+
+if($_SESSION['auth_user']['branch'] != 1){
+    header('Location:please_login');
+}
+
+
 if(!empty($_GET['i'])){
     $id = $defender->encrypt('decrypt', $_GET['i']);
 }
@@ -27,7 +33,7 @@ if($_POST && (!empty($id) || (empty($id) && !empty($_POST['password'])))){
         if(!empty($_POST['branch']))        $data['branch'] = $defender->encrypt('decrypt', $_POST['branch']);
         $data['status'] = $_POST['status'];
         if(!empty($_POST['username']))      $data['username'] = $_POST['username'];
-        if(!empty($_POST['password']))      $data['password'] = $_POST['password'];
+        if(!empty($_POST['password']))      $data['password'] = hash('md5',$_POST['password']);
         
         sql_save('merchant', $data);
 

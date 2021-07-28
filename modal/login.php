@@ -37,15 +37,15 @@
                             <form action="" method="post" enctype="multipart/form-data" style="width:100%;">
                                 <input type="hidden" name="action" value="signin">
                                 <div class="col-12 text-center form-group">
-                                    <input class="login-input form-control p-3" name="username" id="username"
-                                        placeholder="Email Address"><!--type="email" -->
+                                    <input class="login-input form-control p-3" name="username" id="username" placeholder="Email Address"><!--type="email" -->
                                 </div>
                                 <div class="col-12 text-center form-group mb-5">
                                     <input type="password" class="login-input form-control p-3" id="password"
                                         name="password" placeholder="Password">
-                                    <!--<small id="forget-password" class="form-text text-muted text-right">
+                                    <small id="forget-password" class="form-text text-muted text-right">
                                         <div class="hyperlink" data-toggle="modal" data-target="#forgetPasswordModal" data-dismiss="modal" style="cursor:pointer;">Forget Password</div>
-                                    </small>-->
+                                    </small>
+                                    <!--
                                     <small class="form-text text-muted text-right">
                                         <a href="https://wa.me/60168653947" target="_blank">
                                             <div class="d-inline" style="position:relative; top:3px;">
@@ -53,7 +53,7 @@
                                             </div>
                                             <img src="<?php echo ROOT?>images/whatsapp-lightorange.svg" width="18px" style="margin-left:10px;"> 
                                         </a>
-                                    </small>
+                                    </small>-->
 
                                 </div>
                                 <div class="col-12 text-center form-group">

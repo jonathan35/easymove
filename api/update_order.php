@@ -31,19 +31,33 @@ if(!empty($order_id) && !empty($_POST['action'])){
 
     }elseif($_POST['action'] == 'accept'){
 
-        $driver = sql_read('select name, mobile_number from driver where id=? limit 1', 's', $driver_id);
-
-        $data['driver_name'] = $driver['name'];
-        $data['driver_phone'] = $driver['mobile_number'];
-
-        $data['status'] = 'Accepted';
-        $data['accepted_datetime'] = date('Y-m-d H:i:s');
+        $taken = sql_read('select id from orders where id=? limit 1', 'i', $driver_id);
         $deadline = getFastPickDeadline($order['id']);
+
+        if(!empty($taken['id'])){
+            $result = array('result' => false, 'message' => 'Taken', 'deadline' => $deadline);
+        }else{
+            $driver = sql_read('select driver, name, mobile_number from driver where id=? limit 1', 's', $driver_id);
+            $data['driver_name'] = $driver['name'];
+            $data['driver_phone'] = $driver['mobile_number'];
+            $data['status'] = 'Accepted';
+            $data['accepted_datetime'] = date('Y-m-d H:i:s');
+            $data['id'] = $order_id;
+            $data['driver'] =$driver_id;
+            sql_save('orders', $data);
+            $result = array('result' => true, 'message' => 'Accepted', 'deadline' => $deadline);
+        }
+
+        
 
     }elseif($_POST['action'] == 'collect'){//wating client permit on qr scan component.
 
         $data['status'] = 'Collected';
         $data['collected_datetime'] = date('Y-m-d H:i:s');
+        $data['id'] = $order_id;
+        $data['driver'] =$driver_id;
+        sql_save('orders', $data);
+        $result = array('result' => true, 'message' => 'Collected', 'deadline' => $deadline);
 
     }elseif($_POST['action'] == 'pod'){
 
@@ -83,18 +97,17 @@ if(!empty($order_id) && !empty($_POST['action'])){
             sql_save('commission', $commission);
         }
 
-
-        
+        $data['id'] = $order_id;
+        $data['driver'] =$driver_id;
+        sql_save('orders', $data);
+        $result = array('result' => true, 'message' => 'POD', 'deadline' => $deadline);
         //------- Create Commission - End -----------
 
     }
 
-    $data['id'] = $order_id;
-    $data['driver'] =$driver_id;
     
-    sql_save('orders', $data);
     
-    $result = array('result' => true, 'message' => 'Accepted', 'deadline' => $deadline);
+    
 
 
 }else{

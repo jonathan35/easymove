@@ -3,7 +3,15 @@
   <h4 class="icon-gear">Order</h4>
   <div class="nav lnav" link="../order/orders">Order 
     
-    <?php $new_order = sql_count('select id from orders where status=?', 's', 'Ordered');
+    <?php 
+    
+    if($_SESSION['group_id'] == 2){
+      $new_order = sql_count('select id from orders where status=? and region = ? ', 'ss', array('Ordered', $_SESSION['region']));
+    }else{
+      $new_order = sql_count('select id from orders where status=?', 's', 'Ordered');
+    }
+
+    
     
     if($new_order>0){?>
     <div class="circle_num ml-1" label="New order ">
@@ -15,7 +23,16 @@
   -->
 
   <h4 class="icon-gear">Merchant</h4>
-  <div class="nav lnav" link="../content/message_contact?tab=New">Application</div>
+  <div class="nav lnav" link="../content/message_contact?tab=New">Application
+    <?php $message_contact = sql_count('select id from message_contact where status=?', 's', 'New');
+    
+    if($message_contact>0){?>
+    <div class="circle_num ml-1" label="Driver waiting for approval ">
+      <?php echo $message_contact?>
+    </div>
+    <?php }?>
+
+  </div>
   <div class="nav lnav" link="../account/company">Company</div>
   <div class="nav lnav" link="../account/branch">Branch</div>
   <div class="nav lnav" link="../account/merchant">Staff Account</div>
@@ -44,24 +61,21 @@
   
   <div class="nav lnav" link="../account/merit">Merit Ad-Hoc/Withdraw</div>
 
+  <?php if($_SESSION['group_id'] == 1){?>
   <div class="nav lnav" link="../account/merit_setup">Merit Rules</div>
   <div class="nav lnav" link="../order/basic_commission">Commission Rules</div>
   <div class="nav lnav" link="../order/bonus">Bonus Rules</div>
-
   <div class="nav lnav" link="../account/vehicle_type">Vehicle Type</div>
-
-
-  
-
+   
   <h4 class="icon-gear">Report</h4>
   <div class="nav lnav" link="../account/sales_by_zone">Sales by Zone/Merchant</div>
   <div class="nav lnav" link="../account/driver_by_region">Driver by Region</div>
-
-
+  <div class="nav lnav" link="../account/peak_time">Peak Time Report</div>
 
   <h4 class="icon-gear">Administrator</h4>
+  
   <div class="nav lnav" link="../account/login">Admin Account</div>  
-  <div class="nav lnav" link="../order/email_notification">Email Notification</div>
+  <!--<div class="nav lnav" link="../order/email_notification">Email Notification</div>-->
   
   <h4 class="icon-gear">Geographical</h4>
   <div class="nav lnav" link="../geographical/region">Region</div>
@@ -73,7 +87,7 @@
   <!--<div class="nav lnav" link="../content/content?id=MQ==&no_list=true">Contact Us</div>  -->
   <div class="nav lnav" link="../content/pages">Free-formated Pages</div>
   <div class="nav lnav" link="../content/news">Announcement</div>
-  
+  <?php }?>
 
 
 

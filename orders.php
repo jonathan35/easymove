@@ -2,15 +2,15 @@
 require_once 'config/ini.php';
 require_once 'config/security.php';
 require_once 'config/auth.php';
+require_once 'api/send_notification.php';
+
 
 if(empty($_SESSION['auth_user']['id'])){
     header("Location: please_login");
 }
 
 
-
-
-if($_POST){
+if($_POST['customer_name']){
 
 
     $msg = '';
@@ -63,6 +63,9 @@ if($_POST){
         header("Location:order");
 
     }else{
+
+        
+
         $trip = sql_read("select id, trip_balance from trip where trip_balance > ? and branch =? and trip_distance >= ? order by trip_distance asc limit 1", 'iis', array(0, $data['branch'], $data['distance'] ));
 
         if(empty($trip['id'])){
@@ -71,6 +74,7 @@ if($_POST){
             style="position:relative; top:-2px;">×</a>
             Your trip credit is not enough, please contact administrator to top-up.</div>';
         }else{
+            
             /*-------- Trip - Start --------- */
             $trip['id'];
             $trip['trip_balance'] = $trip['trip_balance'] - 1;
@@ -83,12 +87,13 @@ if($_POST){
 			<a href="#" class="close" data-dismiss="alert" aria-label="close" title="close" style="position:relative; top:-2px;">×</a>
             Order successfully, please wait for a response.</div>';
 
-
+            
             //-----Notify nearby (<=10km) drivers - Start -----------
             $earlier = time()-(60*30);//30 minutes early than now
             $region_id = $data['region'];
             $nearby_drivers = sql_read('select id from driver where region=? and status=? and location_time>?', 'iii', array($region_id, 1, $earlier));
             
+
             foreach((array)$nearby_drivers as $driver){
                 $title = 'Nearby Order';
                 $body = 'A nearby order, accept delivery order now!';
@@ -100,6 +105,8 @@ if($_POST){
                     sendNotification($driver['id'], $title, $body);
                 }
             }
+            
+           
             //-----Notify nearby (<=10km) drivers - End -----------
 
         }
@@ -159,7 +166,7 @@ Order successfully.</div>';
                     <div class="col-12 pb-5" style="min-height:60vh;">
                         <div class="row">
                             <div class="col-12 pl-4 p-md-auto">
-                                <form action="" method="post">
+                                <form action="orders" method="post">
                                     <div class="row">
                                         <div class="col-auto p-1 pt-2">
                                             <div class="text-muted">DATE FROM</div>
@@ -248,48 +255,60 @@ Order successfully.</div>';
                                 $param_vals[] = $_POST['to'];
                             }
 
-
-                            $orders = sql_read("select * from orders where company = ? $branch_query $status_query $from_query $to_query order by id desc", str_repeat('s', $params), $param_vals);                        
-                            ?>
+                            if($_SESSION['auth_user']['branch'] != 1){
+                                $region_ext = ' and region=? ';
+                                $params++;
+                                $param_vals[] = $_SESSION['auth_user']['region'];
+                            }
                             
 
-                            <tr>
-                                <th>No.</th>
-                                <th>ORDER</th>
-                                <?php if($branch_type == 'Headquarter'){?>
-                                    <th>BRANCH</th>
-                                <?php }?>
-                                <th>CUSTOMER</th>
-                                <th>PHONE</th>
-                                <th>STATUS</th>
-                            </tr>
-
-                            <?php 
-                            $itemCount=1;
-                            $maxPerPage=10;
+                            $orders = sql_read("select * from orders where company = ? $region_ext $branch_query $status_query $from_query $to_query order by id desc", str_repeat('s', $params), $param_vals); 
                             
-                            foreach((array)$orders as $order){?>
-                            <tr class="page page<?php echo $itemCount?>" style=" <?php if($itemCount>$maxPerPage){?> display:none;<?php }?>">
-                                <td><?php echo $itemCount?></td>
-                                <td style="font-weight:bold;">
-                                    <a href="<?php echo ROOT?>the_order/<?php echo $defender->encrypt('encrypt', $order['id'])?>" target="_blank" style="font-size:130%;"><?php echo sprintf("%08d", $order['id']);?></a>
-                                </td>
-                                <?php if($branch_type == 'Headquarter'){?>
-                                    <td><?php echo $order['branch_name']?></td>
-                                <?php }?>
-                                <td>
-                                    <?php echo $order['customer_name']?>
-                                </td>
-                                <td>
-                                    <?php echo $order['phone']?>
-                                </td>
-                                <td>
-                                    <?php echo $order['status']?>
-                                </td>
-                            </tr>
-                        
-                            <?php 
-                            $itemCount++;
+                            $order_count = count((array)$orders);
+                            if($order_count<1){
+                                echo '<tr><td colspan="5">No order found</td></tr>';
+                            }else{
+                                ?>
+                                
+
+                                <tr>
+                                    <th>No.</th>
+                                    <th>ORDER</th>
+                                    <?php if($branch_type == 'Headquarter'){?>
+                                        <th>BRANCH</th>
+                                    <?php }?>
+                                    <th>CUSTOMER</th>
+                                    <th>PHONE</th>
+                                    <th>STATUS</th>
+                                </tr>
+                                
+                                <?php 
+                                $itemCount=1;
+                                $maxPerPage=10;
+                            
+                                foreach((array)$orders as $order){?>
+                                <tr class="page page<?php echo $itemCount?>" style=" <?php if($itemCount>$maxPerPage){?> display:none;<?php }?>">
+                                    <td><?php echo $itemCount?></td>
+                                    <td style="font-weight:bold;">
+                                        <a href="<?php echo ROOT?>the_order/<?php echo $defender->encrypt('encrypt', $order['id'])?>" target="_blank" style="font-size:130%;"><?php echo sprintf("%08d", $order['id']);?></a>
+                                    </td>
+                                    <?php if($branch_type == 'Headquarter'){?>
+                                        <td><?php echo $order['branch_name']?></td>
+                                    <?php }?>
+                                    <td>
+                                        <?php echo $order['customer_name']?>
+                                    </td>
+                                    <td>
+                                        <?php echo $order['phone']?>
+                                    </td>
+                                    <td>
+                                        <?php echo $order['status']?>
+                                    </td>
+                                </tr>
+                            
+                                <?php 
+                                $itemCount++;
+                                }
                             }?>
                             
                         </table>

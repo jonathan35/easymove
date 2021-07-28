@@ -48,7 +48,7 @@ if(!empty($_POST['region']) || !empty($_POST['type']) || !empty($_POST['name']) 
         </html>';
         
         $targets = sql_read("select email from email_notification where notify1 =? and email !=''" ,'s', 'Yes');
-        foreach($targets as $target){
+        foreach((array)$targets as $target){
             $to = $target['email'];
             mail($to, $subject, $message, implode("\r\n", $headers));
         }

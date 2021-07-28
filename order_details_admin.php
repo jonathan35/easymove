@@ -62,32 +62,26 @@ if($_GET['i']){
 
 if($oid){
 
-    if($_POST['assign'] && $_POST['driver']){
-
-        $data['id'] = $oid;
-        $data['assign'] = $_POST['driver'];
-        
-        sql_save('orders', $data);
-
-        $_SESSION['session_msg'] = '<div class="alert alert-success">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close" style="position:relative; top:-2px;">×</a>
-        Assign driver successfully, waiting driver acceptance.</div>';
-
-        $title = 'Order Assigned';
-		$body = 'Order ' .sprintf("%08d", $oid).' has been assigned to you.';
-
-        //$driver_id = $order['driver'];
-        //include 'api/remote_push.php';
-		
-        sendNotification($_POST['driver'], $title, $body);
-    }
+    
 
     if($_POST['cancel'] && $_POST['oid']){
 
         $data['id'] = $oid;
         $data['status'] = 'Cancelled';
         
+        //Revert Order
         sql_save('orders', $data);
+
+        //Revert Merit
+        sql_exec("delete from merit where order_id=?", 'i', $oid);
+        
+        //Revert Trip
+        $order = sql_read('select trip from orders where id=? limit 1', 'i', $oid);
+        if(!empty($order['trip'])){
+            $trip = sql_read('select id, trip_balance from trip where id=? limit 1', 'i', $order['trip']);
+            $trip['trip_balance'] = $trip['trip_balance'] + 1;
+            sql_save('trip', $trip);
+        }
 
         $_SESSION['session_msg'] = '<div class="alert alert-success">
         <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close" style="position:relative; top:-2px;">×</a>
@@ -276,7 +270,9 @@ if(!empty($order['id'])){?>
 
                         <form action="" method="post" enctype="multipart/form-data" class="d-inline">
                             <input type="hidden" name="oid" value="<?php echo $order['id']?>">
+                            <?php if($order['status'] == 'Ordered'){?>
                             <input type="submit" name="cancel" value="CANCEL ORDER" class="btn btn-red">
+                            <?php }?>
                         </form>
                     </div>
                 </div>    
@@ -293,7 +289,7 @@ if(!empty($order['id'])){?>
     <div class="pt-3 mt-5"></div>
 
  
-    <iframe id="drivers_location" src="../drivers_location.php?i=<?php echo $_GET['i']?>" frameborder="0" height="300px" width="100%"></iframe>
+    <iframe src="../drivers_location.php?i=<?php echo $_GET['i']?>" frameborder="0" height="300px" width="100%" style="border:3px solid gray; "></iframe>
 
     <?php 
     //$_GET['r'] = $defender->encrypt('encrypt', $order['region']);
@@ -306,33 +302,7 @@ if(!empty($order['id'])){?>
 <body>
 </html>
 
-<script>
-window.setInterval("reloadIFrame();", 20000);
 
-function reloadIFrame() {
-    document.getElementById('drivers_location').contentWindow.location.reload();
-}
-</script>
 
 
 <?php include_once 'config/session_msg.php';?>
-
-<style>
-.card {
-    border: 1px solid #ccc;
-    box-shadow: 1px 1px 3px rgba(0,0,0,.2);
-    padding:10px;
-    display:inline-block;
-    min-width: 200px;
-    background-image: linear-gradient(#FFF, #EFEFEF, #CFCFEF);
-}
-.fwhite {
-    border: 1px solid #ccc;
-    background:#EFEFEF;
-    padding: .375rem .75rem;
-    font-size: 1rem;
-    width:100px;
-    border-radius: 6px;
-}
-
-</style>

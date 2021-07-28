@@ -13,10 +13,10 @@ if($_SESSION['validation']=='YES'){
 }
 
 $table = 'orders';
-$module_name = 'Orders';
+$module_name = 'Trip History';
 $php = 'orders';
 $folder = 'order';//auto refresh row once edit modal closed
-$add = true;
+$add = false;
 $edit = true;
 $list = true;
 $list_method = 'list';
@@ -25,16 +25,22 @@ $sort = 'order by id DESC';
 $keyword = false;//Component to search by keyword
 $keywordMustFullWord=false;
 $keywordFields=array();
-$filter = true;
-$filFields = array('company', 'branch', 'driver');
+$filter = false;
+$filFields = array('driver');
 
+
+
+if($_GET['id']){
+    $id = base64_decode($_GET['id']);
+    $the_branch = sql_read('select * from branch where id=? limit 1', 'i', $id);
+}
 
 if($_POST['add2020'] == 'Add'){
 	$_POST['orders_balance'] = $_POST['topup_orders'];
 }
 
 
-$fields = array('id', 'branch');
+$fields = array('id', 'branch', 'trip');
 $value = array();
 $type = array();
 $width = array();//width for input field
@@ -79,10 +85,10 @@ $results = sql_read('select id, zone from zone where status =1 order by region A
 foreach((array)$results as $a){
 	$option['zone'][$a['id']] = ucwords($a['zone']);
 }
-$type['company'] = 'select'; $option['company'] = array();
-$results = sql_read('select id, company_name from company where status=1 order by company_name ASC');
+$type['trip'] = 'select'; $option['trip'] = array();
+$results = sql_read('select id, trip_distance from trip');
 foreach((array)$results as $a){
-	$option['company'][$a['id']] = ucwords($a['company_name']);
+	$option['trip'][$a['id']] = ucwords($a['trip_distance']);
 }
 
 $branch_ext = '';
@@ -128,7 +134,7 @@ $type['type'] = 'select'; $option['type'] = array('Headquarter'=>'Headquarter','
 $required['title'] = 'required';
 
 $cols = $items =array();
-$cols = array('DISTANCE' => 1, 'DRIVER' => 2, 'ASSIGN' => 2, 'ORDER' => 1, 'TIME' => 2, 'REGION & ZONE' => 2, 'COMPANY BRANCH' => 2);
+$cols = array('ORDER DISTANCE' => 2, 'TRIP MAX. DISTANCE' => 3, 'ORDER' => 2, 'TIME' => 2, 'REGION & ZONE' => 2);
 
 
 if(empty($_POST['get_config_only'])){
@@ -196,11 +202,6 @@ if($_POST['action']=="Delete"){
 include '../layout/list_cond.php';
 
 
-if($_GET['tab'] == 'New' || $_GET['tab'] ==''){
-	$tab = " and status='Ordered' ";
-}elseif($_GET['tab']){
-	$tab = " and status='".$_GET['tab']."' ";
-}
 
 if($_SESSION['group_id'] == 2){
 	$condition_ext .= ' and region = ? ';
@@ -208,7 +209,13 @@ if($_SESSION['group_id'] == 2){
 }
 
 
-$rows = sql_read('select id, region, zone, company, branch, branch_name, assign, driver, distance, time, status, created from '.$table.' '.$condition.' '.$tab.' '.$condition_ext.' '.$sort, str_repeat('s',count($params)), $params);
+if($_GET['id']){
+    $condition_ext .= ' and branch = ? ';
+	$params[] = base64_decode($_GET['id']);
+}
+
+
+$rows = sql_read('select id, trip, region, zone, company, branch, branch_name, assign, driver, distance, time, status, created from '.$table.' '.$condition.' '.$tab.' '.$condition_ext.' '.$sort, str_repeat('s',count($params)), $params);
 $count = sql_count("select id from ".$table.' '.$condition.' '.$condition_ext.' '.$sort, str_repeat('s',count($params)), $params);
 
 ?>
@@ -231,8 +238,30 @@ if($edit==true){?>
 }?> 
 </style>
 <div class="row">
-<div class="col-12">
-    <h3>Orders</h3>
+<div class="col-12 pl-5 pr-5 pt-1">
+    <div class="row no-print">
+        <div class="col">
+            <button class="btn btn-sm float-right" onclick="window.print()" style=" float: right; border:1px solid gray;">
+                <img src="<?php echo ROOT?>cms/images/print_64.png" alt="" style="width:20px;">PRINT
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 pb-5" style="font-size:120%;">
+            <h3 style="text-transform: capitalize;">
+                <?php echo $the_branch['branch_name']?> (<?php echo $the_branch['type']?>)
+            </h3>
+            <div class="row">
+                <div class="col-8"><?php echo $the_branch['contact_person']?> (<?php echo $the_branch['mobile_number']?>)</div>
+            </div>
+            <div class="row">
+                <div class="col-8"><?php echo $the_branch['branch_location']?> (<?php echo $the_branch['address']?>)</div>
+            </div>
+        </div>
+    </div>
+    
+    <h3>Trip History</h3>
 	<?php if($keyword==true || $filter==true){?>
 		<div class="row" style="margin:10px 0;">
 			<form class="col-12 pb-4" action="" method="post" enctype="multipart/form-data" target="_self">
@@ -298,32 +327,11 @@ if($edit==true){?>
     
 	<form class="" action="" method="post" enctype="multipart/form-data" target="_self">
 	
-	<div class="col">
-		<div id="tab" class="row">
-			<ul class="nav nav-tabs" style="">
-				<?php 
-				$v = 1;
-				foreach((array)$option['status'] as $v => $l){
-					
-					$params[0] = $v;
-					
-					$s_count = sql_count("select * from $table where status=? $condition_ext", str_repeat('s', count($params)), $params);
-					?>
-					<a href="?tab=<?php echo $l?>" class="content">
-					<li <?php if((empty($_GET['tab']) && $v == 'Ordered') || $_GET['tab'] == $l){?>class="active"<?php }?>>
-					<?php echo $l?> <div class="circle_num"><?php echo $s_count;?></div>
-					</li></a>
-				<?php }?>
-			</ul>
-		</div>
-	</div>
-    
 
 	<table class="table table-striped" width="100%" id="item_list" style="position:relative; top: -4px; ">
 	<thead>    
 		<?php if($list_method=='list'){?>
 		<tr>
-			<th style="width:2% !important; background-color: #868f96;"></th>
 			<?php 
 			if($edit==true){	$usable_width = 88/12;	}else{	$usable_width = 96/12;}
 			$c=2;
@@ -331,7 +339,7 @@ if($edit==true){?>
 				<th style="
 					width:<?php echo $usable_width*$colWidth;?>%; 
 					<?php if($list_sort){?>cursor:pointer;<?php }?>
-					background-color: #868f96; color:white;
+					
 				" 
 				<?php if($list_sort){?> onClick="sortTable('#item_list', '<?php echo $c;?>')" <?php }?>
 				>
@@ -350,13 +358,9 @@ if($edit==true){?>
 	if($count>0){
 		
 	$itemCount=1;
-	$maxPerPage=20;
+	$maxPerPage=100;
 		if($list_method=='list'){
         foreach((array)$rows as $val){
-
-			if(!empty($val['date'])){
-				$val['date'] = substr($val['date'],8,2).'/'.substr($val['date'],5,2).'/'.substr($val['date'],0,4);
-			}
 
 			$c=1;
 			
@@ -364,24 +368,16 @@ if($edit==true){?>
 
 			?>
             <tr class="page page<?php echo $itemCount?> <?php echo 'tr'.$refresher?>" style=" <?php if($itemCount>$maxPerPage){?> display:none;<?php }?>" id="row<?php echo $val['id']?>">
-			
-                <td style="width:2% !important;">
-					<?php if(!empty($actions)){?>
-                    	<input type="checkbox" value="<?php echo $val['id']; ?>" name="productIdList[]">
-					<?php }?>
-                    <input type="hidden" name="id" value="<?php echo $val['id'];?>" />
-                </td>
+			    
+             
 				<td>
 					<?php echo $val['distance'].'KM' ?: '-';?>
                 </td>
 				<td>
-					<?php echo $option['driver'][$val['driver']] ?: '-';?>
+					<?php echo $option['trip'][$val['trip']].'KM' ?: '-';?>
                 </td>
 				<td>
-					<?php echo $option['driver'][$val['assign']] ?: '-';?>
-                </td>
-				<td>
-					<div link="<?php echo ROOT?>admin_order/<?php echo $defender->encrypt('encrypt', $val['id'])?>" target="_blank" class="mymodal-btn btn list-edit" style="font-size:16px; width:90px !important; height:28px; padding-top:2px;"><?php echo sprintf("%08d", $val['id']);?></div>
+					<?php echo sprintf("%08d", $val['id']);?>
                 </td>
 				<td>
 					<?php echo date('d/m/y, g:i a', strtotime(substr($val['created'],0,10).' '.$val['time'].':00'));?>
@@ -390,10 +386,7 @@ if($edit==true){?>
 					<?php echo $option['region'][$val['region']] ?: '-'; ?> > 
 					<?php echo $option['zone'][$val['zone']] ?: '-'; ?>
                 </td>
-				<td>
-					<?php echo $val['branch_name'] ?: '-'; ?>
-                </td>
-				
+			
 				
 
             </tr>

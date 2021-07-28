@@ -125,7 +125,8 @@ class auth{
 			//--------------last login date----------------
 			$data = array();
 			$data['id'] = $auth_user['id'];
-			$data['last_login'] = date('Y-m-d');
+			//$data['last_login'] = date('Y-m-d');
+			$data['temp_password'] = '';
 			
 			sql_save('merchant', $data);
 
@@ -148,12 +149,12 @@ class auth{
 		global $conn;
 
 		$_SESSION['session_msg'] = '<div class="alert alert-danger">
-		<a href="#" class="close" data-dismiss="alert" aria-label="close" title="close" style="position:relative; top:-2px;">×</a>Failed to send username, please try later.</div>';
+		<a href="#" class="close" data-dismiss="alert" aria-label="close" title="close" style="position:relative; top:-2px;">×</a>Failed to send email, please try later.</div>';
 
-		if(!empty($_POST['username'])){
+		if(!empty($_POST['email'])){
 		
-			$username = mysqli_real_escape_string($conn, $_POST['username']);
-			$account = sql_read('select * from merchant where username=? limit 1', 's', $username);
+			$email = mysqli_real_escape_string($conn, $_POST['email']);
+			$account = sql_read('select * from merchant where username=? limit 1', 's', $email);
 			
 			if(!empty($account['id'])){
 			
@@ -164,10 +165,10 @@ class auth{
 				
 				sql_save('merchant', $data);
 
-				$name = $account['name'];					
-				$to = $username;
-				$subject = 'Forget and Reset Password';
-				$header = "From: Grocere" . "\r\n";
+				//$name = $account['email'];
+				$to = $email;
+				$subject = 'Forget Password';
+				$header = "From: ".$_SERVER['SERVER_NAME']."\r\n";
 				$header .= "MIME-Version: 1.0" . "\r\n";
 				$header .= "Content-type:text/html;charset=iso-8859-1" . "\r\n";
 				$content = '
@@ -176,26 +177,30 @@ class auth{
 					<head>
 						<meta charset="UTF-8">
 						<meta name="viewport" content="width=device-width, initial-scale=1.0">
-						<title>Forget and Reset Password</title>
+						<title>Forget Password</title>
 					</head>
 					<body>
-						Dear Valued Grocere Customer,<br><br>
-
-						You have requested a new temporary password. You may use this temporary password for your next login.<br><br>
-						
-						Email : '.$account['username'].'<br>
+						Dear Valued Customer,<br><br>
+						You have requested a new temporary password. You may use this temporary password for one time only. Please change your password after login.<br><br>
 						Password : '.$tmp_password.'<br><br>
-						
 						Please ignore this message if you manage to login.<br><br>
-						
-						**This is automate username, do not reply to this username.
+						**This is automate email, do not reply to this email.
 					</body>
 					</html>';
 	
-				if(mail($to, $subject, $content, $header)){
+				$post = ['to' => $to, 'subject' => $subject, 'content' => $content, 'header' => $header];
+
+				$ch = curl_init('http://ihosting360.com/lps/mail.php');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+				$response = curl_exec($ch);
+				curl_close($ch);
+
+
+				//if(mail($to, $subject, $content, $header)){
 					$_SESSION['session_msg'] = '<div class="alert alert-success">
-					<a href="#" class="close" data-dismiss="alert" aria-label="close" title="close" style="position:relative; top:-2px;">×</a>Reset username sent to your mail box successfully, please check your inbox/spam box.</div>';
-				}
+					<a href="#" class="close" data-dismiss="alert" aria-label="close" title="close" style="position:relative; top:-2px;">×</a>Temporary password sent to your mail box successfully, please check your inbox/spam box.</div>';
+				//}
 			}
 		}
 	}

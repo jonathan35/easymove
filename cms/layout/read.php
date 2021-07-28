@@ -22,10 +22,33 @@ sql_save($read_table, $data);
 <link href="<?php echo ROOT?>cms/css/bootstrap.4.5.0.css" rel="stylesheet">
 <link href="<?php echo ROOT?>cms/css/cms.css" rel="stylesheet">
 
-<?php 
-foreach((array)$the_reads as $l => $v){?>
+
 <div class="row">
-    <div class="col-1 text-capitalize text-muted"><?php echo $l;?></div>
-    <div class="col-11"><?php echo $v;?></div>
+    <div class="col p-4">
+        <?php 
+
+        $rs = sql_read('select id, region from region order by region asc');
+        foreach($rs as $r){
+            $regions[$r['id']] = $r['region'];
+        }
+        $zs = sql_read('select id, zone from zone order by zone asc');
+        foreach($zs as $z){
+            $zones[$z['id']] = $z['zone'];
+        }
+        
+
+        foreach((array)$the_reads as $l => $v){?>
+            <div class="row p-1">
+                <div class="col-2 text-capitalize text-muted">
+                    <?php echo str_replace('_',' ',$l);?>
+                </div>
+                <div class="col-10">
+                    <?php if($l == 'region') echo $regions[$v]; elseif($l == 'zone') echo $zones[$v]; else echo $v;?>
+                </div>
+            </div>
+        <?php }?>
+
+
+    </div>
 </div>
-<?php }?>
+

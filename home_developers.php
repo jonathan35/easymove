@@ -1,5 +1,5 @@
 <?php 
-$devs = sql_read("select * from developer where status=?" , 'i', 1);
+$devs = sql_read("select * from developer where status=? order by position asc" , 'i', 1);
 
 $n = $c = 0;
 $developers = array();

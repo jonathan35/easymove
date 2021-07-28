@@ -189,7 +189,7 @@ $('.add-trigger').click(function(){
 <div class="row">
     <div class="col-12">
     
-        <form action="" method="post" enctype="multipart/form-data" class="dropzone" id="my-awesome-dropzone" target="_self">
+        <form action="" method="post" enctype="multipart/form-data" class="dropzone" id="my-awesome-dropzone" target="_self" <?php if(!empty($add_confirm)){?>onsubmit="return confirm('<?php echo $add_confirm?>');"<?php }?>>
 
             <?php 
             $rowEnd = $rowStart = $colEnd = $colStart = $colCount = array();
@@ -385,8 +385,8 @@ $('.add-trigger').click(function(){
                                         <?php if($type[$field] == 'image'){?>
                                         
                                             <div class="def_img_bg" id="preview<?php echo $field?>" style="overflow:show;">
-                                                <img src="../../<?php echo $value[$field]?>" class="img-fluid" alt="" >
-                                                                <?php if(!empty($value[$field])){?>
+                                                <img src="../../<?php if($table=='driver') echo 'api/';?><?php echo $value[$field]?>" class="img-fluid" alt="" >
+                                                <?php if(!empty($value[$field])){?>
                                                     <div class="btn btn-xs btn-danger" onclick="removeImg('<?php echo $table?>','<?php echo $id?>', '<?php echo $field?>')" 
                                                     style="margin:10px 0 20px 0;">
                                                         <span class="glyphicon glyphicon-remove" style="color:white;" ></span>Remove
@@ -549,7 +549,7 @@ $('.add-trigger').click(function(){
                         <input type="submit" name="duplicate2020" value="Duplicate" class="btn" >
                     <?php }?>
                 <?php }else{?>
-                    <input type="submit" name="add2020" value="Add" class="btn" >
+                    <input type="submit" name="add2020" value="Add" class="btn">
                 <?php }
                 //}?>
                 <?php if($save){echo $save;}?>

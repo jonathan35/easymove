@@ -99,7 +99,7 @@ if(empty($_SESSION['auth_user']['id'])){
                                         </div>
                                         <div class="row">
                                             <div class="col-12">
-                                                Time<br>
+                                                Time <span style="color:red; font-size:90%;">(Driver Collection)</span><br>
                                                 <input name="time" type="time" value="<?php echo date('H:i')?>" class="form-group" required>
                                             </div>
                                         </div>
@@ -110,7 +110,8 @@ if(empty($_SESSION['auth_user']['id'])){
                                                     //debug($zones);
                                                 ?>
                                                 Zone <span style="color:red; font-size:90%;">(Choose your nearby location)</span>
-                                                <select name="zone" class="form-group">
+                                                <select name="zone" class="form-group" required="required">
+                                                    <option value="">Select Zone</option>
                                                     <?php foreach((array)$zones as $zone){?>
                                                     <option value="<?php echo $zone['id']?>">
                                                         <?php echo $zone['zone']?><?php echo $zone['id']?>

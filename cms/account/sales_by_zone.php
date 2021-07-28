@@ -82,7 +82,7 @@ foreach((array)$results as $a){
 }
 
 $type['branch'] = 'select'; $option['branch'] = array();
-$results = sql_read('select * from branch where status=1 order by branch_name ASC');
+$results = sql_read('select * from branch order by branch_name ASC');
 foreach((array)$results as $a){
 	$option['branch'][$a['id']] = ucwords($a['branch_name']);
 }
@@ -280,7 +280,7 @@ if($edit==true){?>
 				<div class="col-2">
 					<select name="year" id="">
 						<option value="">All years</option>
-						<?php for($y=2020; $y<=$max_year; $y++){?>
+						<?php for($y=2021; $y<=$max_year; $y++){?>
 						<option value="<?php echo $y?>" <?php if($y==$_SESSION['Sales by Zone/Merchant-filter-year']){?>selected<?php }?>><?php echo $y?></option>
 						<?php }?>
 					</select>

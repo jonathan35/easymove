@@ -2,6 +2,12 @@
 require_once 'config/ini.php';
 require_once 'config/security.php';
 require_once 'config/auth.php';
+
+
+if($_SESSION['auth_user']['branch'] != 1){
+    header('Location:please_login');
+}
+
 ?>
 
 <script src="js/jquery-3.4.1.js"></script>

@@ -73,18 +73,23 @@ if(!empty($_GET['id'])){
 	$_SESSION['module_row_id']=base64_decode($_GET['id']);
 }
 
+$subcond = '';
+if($_SESSION['group_id'] == 2){
+	$region_ext = " and id = '".$_SESSION['region']."'";
+}
 
 $type['region_id'] = 'select'; $option['region_id'] = array();
-$results = sql_read('select * from region where status=1 order by region ASC');
+$results = sql_read("select * from region where status=1 $region_ext order by region ASC");
 foreach((array)$results as $a){
 	$option['region_id'][$a['id']] = ucwords($a['region']);
 }
 
 $type['company_id'] = 'select'; $option['company_id'] = array();
-$results = sql_read('select * from company where status=1 order by company_name ASC');
+$results = sql_read("select * from company where status=1 order by company_name ASC");
 foreach((array)$results as $a){
 	$option['company_id'][$a['id']] = ucwords($a['company_name']);
 }
+
 
 $placeholder['title'] = 'Title for profile page';
 //$placeholder['post_content'] = 'Description for profile page';
@@ -186,6 +191,14 @@ function chkAll(frm, arr, mark){
    } catch(er) {}
   }
 }
+
+
+$(".trip_history").each(function( index ) {
+	var i = $(this).attr('link');
+	$(this).after('<a href="../order/orders_trip.php?id='+i+'" target="_blank" ><div class="triphistory">Trip</div></a>');
+	//<a href="merit_statement.php?id='+i+'" target="_blank" class="btn btn-xs btn-default list-edit ref-btn" style="margin-left:5px;">Merit</a>
+});
+
 </script>
 
 
@@ -194,7 +207,18 @@ function chkAll(frm, arr, mark){
 <script type="text/javascript" src="<?php echo ROOT?>js/functions.jquery.js"></script>
 <?php include '../../config/session_msg.php';?>
 
+<style>
+.triphistory {
+	color:white;
+	font-weight:bold;
+	
+	background-color: #999;
+	padding: 5px 6px ;
+	border-radius:4px;
+	transition: background-color .4s;
+}
 
+</style>
 
 </html>
 <?php }?>

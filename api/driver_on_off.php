@@ -10,7 +10,7 @@ $now = time();//time() is in second not millisecond
 
 
 
-function getTodayDuration($uid){    
+function getTodayDuration($uid){
     //Today's total online duration
     global $now, $conn, $today;
 
@@ -69,11 +69,7 @@ function offSession($uid){
 
         sql_save('driver_on_off', $data);
 
-       $result = array(
-            'result' => 'ended', 
-            'message' => 'Off successfully.',
-            'duration' => getTodayDuration($uid)
-        );
+
     }
 }
 
@@ -100,6 +96,7 @@ function removeShortSession(){
 
 
 if(!empty($_POST['uid']) && !empty($_POST['onoff'])){
+
 
     $uid = $_POST['uid'];
 
@@ -134,11 +131,8 @@ if(!empty($_POST['uid']) && !empty($_POST['onoff'])){
         
 
             //$last['id'] = $on_exist['id'];
-           // $last['note'] = 'xxxx'.$on_exist['id'];
+            // $last['note'] = 'xxxx'.$on_exist['id'];
             //sql_save('driver_on_off', $last);
-       
-    
-
 
         $result = array(
             'result' => 'started', 
@@ -146,13 +140,18 @@ if(!empty($_POST['uid']) && !empty($_POST['onoff'])){
             'duration' => getTodayDuration($uid)
         );
 
-        //
-
-
 
     }elseif($_POST['onoff'] == 'off'){
+
         offSession($uid);
         removeShortSession();
+
+        $result = array(
+            'result' => 'ended', 
+            'message' => 'Off successfully.',
+            'duration' => getTodayDuration($uid)
+        );
+
     }
 
 }else{

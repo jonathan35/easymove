@@ -12,6 +12,8 @@ if($_SESSION['validation']=='YES'){
 	header("Location:../authentication/login.php");
 }
 
+
+
 $table = 'bonus';
 $module_name = 'Merit Bonus';
 $php = 'bonus';
@@ -25,8 +27,8 @@ $sort = 'order by min_point asc, max_distance asc, commission asc, id DESC';
 $keyword = false;//Component to search by keyword
 $keywordMustFullWord=false;
 $keywordFields=array();
-$filter = false;
-$filFields = array('branch');
+$filter = true;
+$filFields = array('driver_type');
 
 
 $actions=array('Delete');//, 'Activate', 'Suspend'//, 'Display', 'Hide'
@@ -37,7 +39,7 @@ $msg['Activate']='Are you sure you want to activate?';	$db['Activate']=array('st
 $msg['Suspend']='Are you sure you want to suspend?';	$db['Suspend']=array('status', '0');
 
 
-$fields = array('id', 'min_point', 'max_distance', 'commission');
+$fields = array('id', 'driver_type', 'min_point', 'max_distance', 'commission');
 $value = array();
 $type = array();
 $width = array();//width for input field
@@ -47,7 +49,7 @@ $placeholder = array();
 
 #####Design part#######
 $back = false;// "Back to listing" button, true = enable, false = disable
-$fic_1 = array(0=>array('4'));//fic = fiels in column, number of fields by column $fic_1 normally for add or edit template
+$fic_1 = array(0=>array('5'));//fic = fiels in column, number of fields by column $fic_1 normally for add or edit template
 $fic_2 = array('5', '1');//fic = fiels in column, number of fields by column $fic_2 normally for list template
 
 foreach((array)$fields as $field){
@@ -65,6 +67,7 @@ $label['max_distance'] = 'Max. Distance (KM)';
 $label['min_point'] = 'Min. Point';
 $label['commission'] = 'Commission (RM)';
 $attributes['commission'] = array('step' => '.01');
+$attributes['driver_type'] = array('required' => 'required');
 
 /* Tag module uses session*/
 $type['tag'] = 'tag';
@@ -82,6 +85,9 @@ foreach((array)$results as $a){
 	$option['branch'][$a['id']] = ucwords($a['branch_name']);
 }
 
+
+
+
 $placeholder['title'] = 'Title for profile page';
 //$placeholder['post_content'] = 'Description for profile page';
 
@@ -94,8 +100,7 @@ $type['created'] = 'date';
 //$type['address'] = 'textarea'; $tinymce['address']=false;  $labelFullRow['address']=false; $height['address'] = '80px;'; $width['address'] = '100%;'; 
 $type['group_id'] = 'select'; $option['group_id'] = array('1'=>'Master Admin');//,'2'=>'Admin'
 //$type['status'] = 'select'; $option['status'] = array('1'=>'Activated','0'=>'Suspended');$default_option['status'] = '1';
-$type['type'] = 'select'; $option['type'] = array('Headquarter'=>'Headquarter','Branch'=>'Branch');$default_option['type'] = 'Branch';
-
+$type['driver_type'] = 'select'; $option['driver_type'] = array('full'=>'Full Time','part'=>'Part Time');$default_option['type'] = 'full';
 
 //$type['thumbnail_align'] = 'select'; $option['thumbnail_align'] = array('left'=>'Image align left','right'=>'Image align right');
 //$type['thumbnail_photo'] = 'image';
@@ -118,7 +123,8 @@ echo '</div>';
 */
 
 $cols = $items =array();
-$cols = array('Min. Point' => 2, 'Max. Distance (KM)' => 2, 'Commission (RM)' => 8);//Column title and width
+$cols = array('Driver Type' => 4, 'Min. Point' => 2, 'Max. Distance (KM)' => 2, 'Commission (RM)' => 4);//Column title and width
+$items['Driver Type'] = array('driver_type');
 $items['Min. Point'] = array('min_point');
 $items['Max. Distance (KM)'] = array('max_distance');
 $items['Commission (RM)'] = array('commission');
@@ -159,8 +165,7 @@ label {width:30%;}
 		<div class="tips_box" style="">
 			<h4>Tips<img src="<?php echo ROOT?>cms/images/idea-32.png" style="display:inline-block; width:30px;"></h4>
 			<div class="p-1">
-            Merit Bonus is for part time drive only. Bonus given base on the trip distance. <br>
-			Example configuration:
+            Bonus given base on the trip distance. Example configuration:
 			</div>
 			<div class="p-1">
 				<table class="table table-dark">

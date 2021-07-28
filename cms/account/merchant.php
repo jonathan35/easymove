@@ -66,22 +66,29 @@ if(!empty($_GET['id'])){
 	$_SESSION['module_row_id']=base64_decode($_GET['id']);
 }
 
+$branch_ext = '';
+if($_SESSION['group_id'] == 2){
+	$branch_ext = " where region_id = '".$_SESSION['region']."'";
+}
+
 
 $type['company'] = 'select'; $option['company'] = array();
-$results = sql_read('select * from company where status=1 order by company_name ASC');
+$results = sql_read("select * from company where status=1 order by company_name ASC");
 foreach((array)$results as $a){
 	$option['company'][$a['id']] = ucwords($a['company_name']);
 }
 
 $type['branch'] = 'select'; $option['branch'] = array();
-$results = sql_read('select * from branch order by branch_name ASC');
+$results = sql_read("select * from branch $branch_ext order by branch_name ASC");
 foreach((array)$results as $a){
 	$option['branch'][$a['id']] = ucwords($a['branch_name']);
 }
 
+
 $placeholder['title'] = 'Title for profile page';
 //$placeholder['post_content'] = 'Description for profile page';
 
+$attributes['branch'] = array('required' => 'required');
 
 $type['id'] = 'hidden';
 $type['password'] = 'password';

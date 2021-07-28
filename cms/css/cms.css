@@ -40,7 +40,11 @@ body {font-family: 'Noto Sans', sans-serif; font-size:13px; padding:0; margin:0;
 /*nav {box-shadow:2px 2px 2px rgba(0,0,0,.2);}*/
 a {color:#5c97b8;/*#88b369;*/ transition:color .4s;}
 a:hover { text-decoration:none; color:#00a1e6/*#a2c253;*/}
-
+@media print{    
+    .no-print{
+        display: none !important;
+    }
+}
 
 /*---------------------- Bootstrap Correction -------------------- */
 .navbar-collapse.collapse.in {

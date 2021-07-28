@@ -41,6 +41,12 @@ function peakCollect($driver_id, $order_id, $perform_time){
                         $driver['merit'] = $driver['merit'] + $rule['point'];
                         sql_save('driver', $driver);
                         $result = true;
+
+                        sendNotification(
+                            $driver_id,
+                            'Peak Pick Reward',
+                            'You have gain merit due to peak time pick for order '.sprintf("%08d", $order_id).'!'
+                        );
                     }
                 }
             }
@@ -64,10 +70,11 @@ function fastDelivery($driver_id, $order_id, $perform_time){//During POD, valida
             $rule = sql_read('select rule1, rule2, point from merit_setup where id=? limit 1', 'i', 7);
 
             if(!empty($rule['rule1']) && !empty($rule['rule2']) && !empty($rule['point'])){
-                
-                $standard = strtotime(substr($order['created'],0,10).' '.$order['time']) + ($rule['rule2'] * 60);
 
-                if($order['distance'] > $rule['rule1'] && $perform_time < $standard){//Qualified fast delivery merit 
+                $limit = ceil($order['distance']/$rule['rule1']) * $rule['rule2'];
+                $standard = strtotime(substr($order['created'],0,10).' '.$order['time']) + ($limit * 60);
+
+                if($perform_time < $standard){//Qualified fast delivery merit 
                     //Update Driver's Merit Statement --------------
                     $statement = array();
                     $statement['driver'] = $driver_id;
@@ -81,6 +88,12 @@ function fastDelivery($driver_id, $order_id, $perform_time){//During POD, valida
                     $driver['merit'] = $driver['merit'] + $rule['point'];
                     sql_save('driver', $driver);
                     $result = true;
+
+                    sendNotification(
+                        $driver_id,
+                        'Fast Delivery Reward',
+                        'You have gain merit due to fast delivery for order '.sprintf("%08d", $order_id).'!'
+                    );
                 }
             }
         }
@@ -128,6 +141,12 @@ function fastCollect($driver_id, $order_id, $perform_time){//During POD, validat
                         $driver['merit'] = $driver['merit'] + $rule['point'];
                         sql_save('driver', $driver);
                         $result = true;
+
+                        sendNotification(
+                            $driver_id,
+                            'Fast Pick Reward',
+                            'You have gain merit due to fast pick for order '.sprintf("%08d", $order_id).'!'
+                        );
                     }
                 }
             }
@@ -170,6 +189,12 @@ function season($driver_id, $order_id, $perform_time){//During POD, validate per
                     $driver['merit'] = $driver['merit'] + $rule['point'];
                     sql_save('driver', $driver);
                     $result = true;
+
+                    sendNotification(
+                        $driver_id,
+                        'Season Reward',
+                        'You have gain merit due to season reward for order '.sprintf("%08d", $order_id).'!'
+                    );
                 }
             }
         }
@@ -185,6 +210,7 @@ function slowDelivery($driver_id, $order_id, $perform_time){//During POD, valida
     $result = false;
     $note = 'slow delivery';
 
+
     if(!empty($driver_id) && !empty($order_id) && !empty($perform_time)){
         
         $exist = sql_read('select id from merit where order_id=? and note=? limit 1', 'is', array($order_id, $note));
@@ -196,9 +222,11 @@ function slowDelivery($driver_id, $order_id, $perform_time){//During POD, valida
 
             if(!empty($rule['rule1']) && !empty($rule['rule2']) && !empty($rule['point'])){
                 
-                $standard = strtotime(substr($order['created'],0,10).' '.$order['time']) + ($rule['rule2'] * 60);
+                $limit = ceil($order['distance']/$rule['rule1']) * $rule['rule2'];
+                $standard = strtotime(substr($order['created'],0,10).' '.$order['time']) + ($limit * 60);
 
-                if($order['distance'] < $rule['rule1'] && $perform_time > $standard){//Qualified slow delivery demerit 
+                if($perform_time > $standard){//Qualified slow delivery demerit 
+
                     //Update Driver's Merit Statement --------------
                     $statement = array();
                     $statement['driver'] = $driver_id;
@@ -212,6 +240,12 @@ function slowDelivery($driver_id, $order_id, $perform_time){//During POD, valida
                     $driver['merit'] = $driver['merit'] - $rule['point'];
                     sql_save('driver', $driver);
                     $result = true;
+
+                    sendNotification(
+                        $driver_id,
+                        'Slow Delivery Demerit',
+                        'You have been demerit due to slow delivery for order '.sprintf("%08d", $order_id).'!'
+                    );
                 }
             }
         }
@@ -259,6 +293,12 @@ function slowCollect($driver_id, $order_id, $perform_time){//During POD, validat
                         $driver['merit'] = $driver['merit'] - $rule['point'];
                         sql_save('driver', $driver);
                         $result = true;
+
+                        sendNotification(
+                            $driver_id,
+                            'Slow Pick Demerit',
+                            'You have been demerit due to slow pick for order '.sprintf("%08d", $order_id).'!'
+                        );
                     }
                 }
             }

@@ -20,7 +20,7 @@ if($_POST['action'] == 'signup'){
         Please fill in captcha.</div>';
     }else{
         
-        $to      = 'jonathan.wphp@gmail.com';
+        //$to      = 'jonathan.wphp@gmail.com';
         $subject = 'Merchant Application';
         $headers[] = 'From: Easy Delivery Sdn. Bhd.';
         $headers[] = 'MIME-Version: 1.0';
@@ -37,6 +37,7 @@ if($_POST['action'] == 'signup'){
             '.$_POST['company_name'].' sent a message to you from website merchant application form. Please find application details in CMS.<br><br>
             Company Name: '.$_POST['company_name'].'<br><br>
             Business Field: '.$_POST['business_field'].'<br><br>
+            Email: '.$_POST['email'].'<br><br>
             Mobile Number: '.$_POST['mobile_number'].'<br><br>
             Region: '.$_POST['region'].'<br><br>
             Zone: '.$_POST['zone'].'<br><br>
@@ -59,8 +60,12 @@ if($_POST['action'] == 'signup'){
             <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close" 
             style="position:relative; top:-2px;">×</a>
             Thank you for your application, we will contact you soon.</div>';
-
-            mail($to, $subject, $message, implode("\r\n", $headers));
+            
+            $targets = sql_read("select email from email_notification where notify2 =? and email !=''" ,'s', 'Yes');
+            foreach((array)$targets as $target){
+                $to = $target['email'];
+                mail($to, $subject, $message, implode("\r\n", $headers));
+            }
         }
         
     }
@@ -108,6 +113,10 @@ if($_POST['action'] == 'signup'){
                                         <div class="col-12">
                                             Company Name
                                             <input name="company_name" type="text" class="form-group" required>
+                                        </div>
+                                        <div class="col-12">
+                                            Email
+                                            <input name="email" type="email" class="form-group" required>
                                         </div>
                                         <div class="col-12">
                                             Business Field

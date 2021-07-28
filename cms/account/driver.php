@@ -34,12 +34,27 @@ if($_POST['update2020']){
 	unset($_POST['merit']);
 }
 
+if($_POST['action']){
+
+	foreach($_POST['productIdList'] as $item){
+		//debug($item);
+		echo $d_driver['id'] = $item;
+		echo '<br>';
+		echo $d_driver['admin'] = $_SESSION['user_id'];
+		sql_save('driver', $d_driver);
+	}
+}
+
 
 if($_POST['action'] == 'Approve' || $_POST['action'] == 'Reject'){
 
 	if($_POST['productIdList']){
 		
 		foreach($_POST['productIdList'] as $driver_id){
+
+			$driver['id'] = $driver_id;
+			$driver['admin'] = $_SESSION['user_id'];
+			sql_save('driver', $driver);
 
 			if($_POST['action'] == 'Approve'){
 				$title = 'Account Approved';
@@ -78,7 +93,7 @@ $msg['Reject']='Set as "Reject"?';		$db['Reject']=array('status', '0');
 $msg['Pending']='Set as "Pending"?';	$db['Pending']=array('status', '2');
 
 
-$fields = array('id', 'name', 'working_time', 'mobile_number', 'emergency_contact_number', 'vehicle_type', 'region', 'plate_number', 'vehicle_belonging', 'photo_of_ic', 'photo_of_driving_license', 'vehicle_front_view', 'vehicle_back_view', 'merit');
+$fields = array('id', 'name', 'working_time', 'mobile_number', 'emergency_contact_number', 'vehicle_type', 'region', 'plate_number', 'vehicle_belonging', 'photo_of_ic', 'photo_of_driving_license', 'vehicle_front_view', 'vehicle_back_view', 'merit', 'modified');
 $value = array();
 $type = array();
 $width = array();//width for input field
@@ -125,6 +140,12 @@ foreach((array)$results as $a){
 	$option['region'][$a['id']] = ucwords($a['region']);
 }
 
+$type['admin'] = 'select'; $option['admin'] = array();
+$results = sql_read("select * from login where status =1 order by name ASC");
+foreach((array)$results as $a){
+	$option['admin'][$a['id']] = ucwords($a['name']);
+}
+
 $placeholder['title'] = 'Title for profile page';
 //$placeholder['post_content'] = 'Description for profile page';
 
@@ -135,13 +156,14 @@ $type['photo_of_ic'] = 'image';
 $type['photo_of_driving_license'] = 'image';
 $type['vehicle_front_view'] = 'image';
 $type['vehicle_back_view'] = 'image';
+$type['modified'] = 'date';
 
 
 //$type['position'] = 'number';
 //$type['publish_date'] = 'date';
 //$type['address'] = 'textarea'; $tinymce['address']=false;  $labelFullRow['address']=false; $height['address'] = '80px;'; $width['address'] = '100%;'; 
 $type['group_id'] = 'select'; $option['group_id'] = array('1'=>'Master Admin');//,'2'=>'Admin'
-$type['status'] = 'select'; $option['status'] = array('1'=>'Approved','2'=>'Applying','0'=>'Rejected');$default_option['status'] = '1';
+$type['status'] = 'select'; $option['status'] = array('2'=>'Applying','1'=>'Approved','0'=>'Rejected');$default_option['status'] = '2';
 $type['working_time'] = 'select'; $option['working_time'] = array('full'=>'Full Time','part'=>'Part Time');$default_option['type'] = 'Full Time';
 
 
@@ -166,7 +188,8 @@ echo '</div>';
 */
 
 $cols = $items =array();
-$cols = array('Region' => '2', 'Driver' => '3', 'Contact' => '2', 'Emergency Contact' => '2', 'Vehicle' => '1', 'Merit' => '1', 'Plate No.' => 1);//Column title and width
+$cols = array('Driver' => 2, 'Admin' => 2, 'Region' => 2, 'Contact' => 2, 'Emergency Contact' => 1, 'Vehicle' => 1, 'Merit' => 1, 'Plate No.' => 1);//Column title and width
+$items['Admin'] = array('admin', 'modified');
 $items['Region'] = array('region');
 $items['Driver'] = array('name', 'working_time');
 $items['Contact'] = array('mobile_number');
@@ -198,7 +221,13 @@ $( function() {
 label {width:30%;}
 .div_input {width:69%;}
 </style>
-
+<div class="row no-print">
+	<div class="col-12 p-2">
+		<button class="btn btn-sm float-right" onclick="window.print()" style=" float: right; border:1px solid gray;">
+			<img src="<?php echo ROOT?>cms/images/print_64.png" alt="" style="width:20px;">PRINT
+		</button>
+	</div>
+</div>
 
 <div class="row">
 
@@ -245,7 +274,7 @@ function chkAll(frm, arr, mark){
 
 $(".commission_merit").each(function( index ) {
 	var i = $(this).attr('link');
-	$(this).after('<a href="commission.php?id='+i+'" target="_blank" style="text-align:center;">Commission & Merit</a>');
+	$(this).after('<a href="commission.php?id='+i+'" target="_blank" ><div class="commerit">Commission & Merit</div></a>');
 	//<a href="merit_statement.php?id='+i+'" target="_blank" class="btn btn-xs btn-default list-edit ref-btn" style="margin-left:5px;">Merit</a>
 });
 
@@ -258,7 +287,13 @@ $(".commission_merit").each(function( index ) {
 <script type="text/javascript" src="<?php echo ROOT?>js/functions.jquery.js"></script>
 <?php include '../../config/session_msg.php';?>
 
+<style>
+.commerit {
+	text-align: center;
+	border:2px solid lightblue; padding:2px 10px; border-radius:6px; display:inline-block; background:black;
+}
 
+</style>
 
 </html>
 <?php }?>

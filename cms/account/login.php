@@ -5,11 +5,13 @@ require_once '../../config/str_convert.php';
 require_once '../../config/image.php';
 //include '../layout/savelog.php';
 
+
 session_start();
-if($_SESSION['validation']=='YES' && (@$_SESSION[group_id] == '1' || @$_SESSION[group_id] == '2')){
+if($_SESSION['validation']=='YES' && (@$_SESSION['group_id'] == '1' || @$_SESSION['group_id'] == '2')){
 }else{
 	@header("Location:../authentication/login.php");
 }
+
 
 
 $table = 'login';
