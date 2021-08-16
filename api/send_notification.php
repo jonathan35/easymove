@@ -44,7 +44,13 @@ function sendNotification($driver_id, $title, $body){
     
     if($title && $body){
 
-        $driver = sql_read('select push_token from driver where id=? limit 1', 'i', $driver_id);
+        $driver = sql_read('select id, push_token from driver where id=? limit 1', 'i', $driver_id);
+
+
+        $msg['driver'] = $driver['id'];
+        $msg['title'] = $title;
+        $msg['message'] = $body;
+        sql_save('app_notification', $msg);
 
         if($driver['push_token']){
 

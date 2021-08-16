@@ -37,10 +37,8 @@ if($_POST['update2020']){
 if($_POST['action']){
 
 	foreach($_POST['productIdList'] as $item){
-		//debug($item);
-		echo $d_driver['id'] = $item;
-		echo '<br>';
-		echo $d_driver['admin'] = $_SESSION['user_id'];
+		$d_driver['id'] = $item;
+		$d_driver['admin'] = $_SESSION['user_id'];
 		sql_save('driver', $d_driver);
 	}
 }
@@ -93,7 +91,7 @@ $msg['Reject']='Set as "Reject"?';		$db['Reject']=array('status', '0');
 $msg['Pending']='Set as "Pending"?';	$db['Pending']=array('status', '2');
 
 
-$fields = array('id', 'name', 'working_time', 'mobile_number', 'emergency_contact_number', 'vehicle_type', 'region', 'plate_number', 'vehicle_belonging', 'photo_of_ic', 'photo_of_driving_license', 'vehicle_front_view', 'vehicle_back_view', 'merit', 'modified');
+$fields = array('id', 'name', 'working_time', 'mobile_number', 'emergency_contact_number', 'vehicle_type', 'region', 'plate_number', 'vehicle_belonging', 'photo_of_ic', 'photo_of_driving_license', 'vehicle_front_view', 'vehicle_back_view', 'merit');
 $value = array();
 $type = array();
 $width = array();//width for input field
@@ -222,7 +220,7 @@ label {width:30%;}
 .div_input {width:69%;}
 </style>
 <div class="row no-print">
-	<div class="col-12 p-2">
+	<div class="col-12 p-2 pr-4">
 		<button class="btn btn-sm float-right" onclick="window.print()" style=" float: right; border:1px solid gray;">
 			<img src="<?php echo ROOT?>cms/images/print_64.png" alt="" style="width:20px;">PRINT
 		</button>
@@ -250,8 +248,9 @@ label {width:30%;}
 	<div class="col-12">
 		<?php 
 	
-		$fields = array('id', 'name', 'working_time', 'mobile_number', 'emergency_contact_number', 'vehicle_type', 'region', 'plate_number', 'vehicle_belonging', 'status', 'photo_of_ic', 'photo_of_driving_license', 'vehicle_front_view', 'vehicle_back_view', 'merit');
-		
+		$fields = array('id', 'name', 'working_time', 'mobile_number', 'emergency_contact_number', 'vehicle_type', 'region', 'plate_number', 'vehicle_belonging', 'photo_of_ic', 'photo_of_driving_license', 'vehicle_front_view', 'vehicle_back_view', 'merit', 'modified', 'status');
+
+
 		$type['merit'] = 'text';
 
 		if(!$_GET['no_list']) include '../layout/list.php';?>

@@ -21,13 +21,15 @@ if(!empty($_POST['uid'])){
 
     }else{
         
-        $sql = " select id, distance as dis, created as date, assign, status from orders where (assign is null or assign=? or assign = '0') and region=? and ";//WHERE
+        $sql = " select id, distance as dis, created as date, assign, status from orders where (assign is null or assign=? or assign = '0') and region=? and created like ? and ";//WHERE
         $order = " order by id desc";//distance asc, created desc
 
 
-        $news = sql_read("$sql status = ? and driver is null $order", 'iis', array($uid, $driver['region'], 'Ordered'));
-        $delivers = sql_read("$sql driver=? and (status=? OR status=? OR status=?) $order", 'iiisss', array($uid, $driver['region'], $uid, 'Accepted', 'Collected', 'Delivering'));
-        $delivereds = sql_read("$sql created like ? and (driver is null or driver=?) and status=? $order", 'iisis', array($uid, $driver['region'], date('Y-m-').'%', $uid, 'Delivered'));
+        $news = sql_read("$sql status = ? and driver is null $order", 'iiss', array($uid, $driver['region'], date('Y-m-').'%', 'Ordered'));
+        
+        $delivers = sql_read("$sql driver=? and (status=? OR status=? OR status=?) $order", 'iisisss', array($uid, $driver['region'], date('Y-m-').'%', $uid, 'Accepted', 'Collected', 'Delivering'));
+        
+        $delivereds = sql_read("$sql (driver is null or driver=?) and status=? $order", 'iisis', array($uid, $driver['region'], date('Y-m-').'%', $uid, 'Delivered'));
 
         //$new_count = $del_count = $his_count = 0;
 

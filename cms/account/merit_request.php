@@ -12,23 +12,26 @@ if($_SESSION['validation']=='YES'){
 	header("Location:../authentication/login.php");
 }
 
-$table = 'branch';
-$module_name = 'Merchant Branch';
-$php = 'branch';
+
+$table = 'withdraw_request';
+$module_name = 'Withdraw Request';
+$php = 'withdraw_request';
 $folder = 'account';//auto refresh row once edit modal closed
-$add = true;
-$edit = true;
+$add = false;
+$add_confirm = 'Confirm ad-hoc withdraw_request?';
+$edit = false;
 $list = true;
 $list_method = 'list';
 $sort = 'order by id DESC';
 
-$keyword = true;//Component to search by keyword
+$keyword = false;//Component to search by keyword
 $keywordMustFullWord=false;
-$keywordFields=array('branch', 'contact_person');
+$keywordFields=array();
 $filter = true;
-$filFields = array('company', 'type');
+$filFields = array('driver');
 
-$actions=array('Delete');//, 'Display', 'Hide', 'Activate', 'Suspend'
+
+$actions=array('Delete');//, 'Display', 'Hide'
 $msg['Delete']='Are you sure you want to delete?';
 $msg['Display']='Are you sure you want to display?';	$db['Display']=array('status', '1');
 $msg['Hide']='Are you sure you want to hide?';			$db['Hide']=array('status', '2');
@@ -36,7 +39,8 @@ $msg['Activate']='Are you sure you want to activate?';	$db['Activate']=array('st
 $msg['Suspend']='Are you sure you want to suspend?';	$db['Suspend']=array('status', '0');
 
 
-$fields = array('id', 'region_id', 'company_id', 'type', 'branch_name', 'contact_person', 'mobile_number', 'address', 'no_internet', 'branch_location', 'branch_location_coordinate');
+
+$fields = array('id', 'withdraw', 'driver');
 $value = array();
 $type = array();
 $width = array();//width for input field
@@ -44,8 +48,7 @@ $placeholder = array();
 
 #####Design part#######
 $back = false;// "Back to listing" button, true = enable, false = disable
-$fic_1 = array(0=>array('9', '2'));//fic = fiels in column, number of fields by column $fic_1 normally for add or edit template
-$fic_2 = array('5', '1');//fic = fiels in column, number of fields by column $fic_2 normally for list template
+$fic_1 = array(0=>array('5'));//fic = fiels in column, number of fields by column $fic_1 normally for add or edit template
 
 foreach((array)$fields as $field){
 	$value[$field] = '';
@@ -53,16 +56,9 @@ foreach((array)$fields as $field){
 	$placeholder[$field] = '';
 	$required[$field] = '';
 }
-
-$type['branch_location'] = 'map';
-$type['branch_location_coordinate'] = 'coordinate';
-
-$label['region_id'] = 'Region';
-$label['company_id'] = 'Company';
-
-$label['no_internet'] = 'Collection area no internet';
-
-$labelFullRow['branch_location'] = true;
+$type['admin'] = 'hidden';
+$type['points'] = 'number';
+$type['topup_withdraw_request'] = 'number';
 
 /* Tag module uses session*/
 $type['tag'] = 'tag';
@@ -73,65 +69,44 @@ if(!empty($_GET['id'])){
 	$_SESSION['module_row_id']=base64_decode($_GET['id']);
 }
 
-$subcond = '';
+$driver_ext = '';
 if($_SESSION['group_id'] == 2){
-	$region_ext = " and id = '".$_SESSION['region']."'";
+	$driver_ext .= ' and region = ? '.$_SESSION['region'];
 }
 
-$type['region_id'] = 'select'; $option['region_id'] = array();
-$results = sql_read("select * from region where status=1 $region_ext order by region ASC");
+$type['driver'] = 'select'; $option['driver'] = array();
+$results = sql_read("select * from driver where status =1 $driver_ext order by name ASC");
 foreach((array)$results as $a){
-	$option['region_id'][$a['id']] = ucwords($a['region']);
+	$option['driver'][$a['id']] = ucwords($a['name'] .' ('. $a['merit'].'p)');
 }
 
-$type['company_id'] = 'select'; $option['company_id'] = array();
-$results = sql_read("select * from company where status=1 order by company_name ASC");
+$type['admin'] = 'select'; $option['admin'] = array();
+$results = sql_read("select * from login where status =1 order by name ASC");
 foreach((array)$results as $a){
-	$option['company_id'][$a['id']] = ucwords($a['company_name']);
+	$option['admin'][$a['id']] = ucwords($a['name']);
 }
-
 
 $placeholder['title'] = 'Title for profile page';
-//$placeholder['post_content'] = 'Description for profile page';
-
+$attributes['driver'] = array('required' => 'required');
+$attributes['points'] = array('required' => 'required');
+$attributes['note'] = array('required' => 'required');
 
 $type['id'] = 'hidden';
 $type['password'] = 'password';
-$type['address'] = 'textarea';
-//$type['position'] = 'number';
-//$type['publish_date'] = 'date';
+$type['note'] = 'textarea';
+$type['created'] = 'date';
 //$type['address'] = 'textarea'; $tinymce['address']=false;  $labelFullRow['address']=false; $height['address'] = '80px;'; $width['address'] = '100%;'; 
 $type['group_id'] = 'select'; $option['group_id'] = array('1'=>'Master Admin');//,'2'=>'Admin'
 //$type['status'] = 'select'; $option['status'] = array('1'=>'Activated','0'=>'Suspended');$default_option['status'] = '1';
-$type['type'] = 'select'; $option['type'] = array('Headquarter'=>'Headquarter','Branch'=>'Branch');$default_option['type'] = 'Branch';
-$type['no_internet'] = 'select'; $option['no_internet'] = array('with internet'=>'With Internet','no internet'=>'No Internet');$default_option['no_internet'] = 'Branch';
-
-
-//$type['thumbnail_align'] = 'select'; $option['thumbnail_align'] = array('left'=>'Image align left','right'=>'Image align right');
-//$type['thumbnail_photo'] = 'image';
 
 $required['title'] = 'required';
 
-
-/*if(empty($id)){
-	$required['photo01'] = 'required';
-}*/
-/*
-echo '<div style="margin-left:20%;">';
-foreach((array)$fields as $field){
-	echo $field;
-	echo $width[$field];
-	echo '<br>';
-	print_r($fic_1);
-}
-echo '</div>';
-*/
-
 $cols = $items =array();
-$cols = array('Company & Branch' => '4', 'Contact' => '3', 'Address' => '5');//Column title and width
-$items['Company & Branch'] = array('company', 'branch_name', 'type');
-$items['Contact'] = array('contact_person', 'mobile_number');
-$items['Address'] = array('address', 'branch_location');
+$cols = array('Driver' => 3, 'Request Date' => 2, 'Request to Consume Merit (points)' => 7);//Column title and width
+$items['Driver'] = array('driver');
+$items['Request Date'] = array('created');
+$items['Request to Consume Merit (points)'] = array('withdraw');
+
 
 if(empty($_POST['get_config_only'])){
 ?>
@@ -160,20 +135,36 @@ label {width:30%;}
 
 <div class="row">
 
-	<?php if($_GET['no_list'] != 'true'){?>
+	<?php /*if($_GET['no_list'] != 'true'){?>
 	<div class="btn btn-secondary ml-3 mb-3" onclick="$('.add_page').slideToggle(); $('.icon_add, .icon_minus').toggle();">
 		Add <?php echo $module_name?>
 		<span class="icon_add" style="font-size:20px;">+</span>
 		<span class="icon_minus collapse" style="font-size:20px;"> - </span>
 	</div>
-	<?php }?>
+	<?php }*/?>
 
 
 	<?php if($add==true || $_GET['id']){?>
-	<div class="col-12 add_panel <?php if($_GET['no_list'] != 'true'){?>collapse add_page<?php }?>">
-		<?php include '../layout/add.php';?>
+	<div class="col-12 "><?php /*if($_GET['no_list'] != 'true'){?>collapse add_page<?php }*/?><!--add_panel-->
+		<div class="row">
+			<div class="col-6">
+				<?php include '../layout/add.php';?>
+			</div>
+			<div class="offset-1 col-5">
+				<div class="tips_box">
+				<h4>Tips<img src="<?php echo ROOT?>cms/images/idea-32.png" style="display:inline-block; width:30px;"></h4>
+					<div class="p-1">Points number for withdraw_request.</div>
+					<div class="p-1">Negative points number for dewithdraw_request.</div>
+					<div class="p-1">Can use for ad-hoc or withdraw purpose.</div>
+				</div>
+			</div>
+			
+
+		</div>
 	</div>
 	<?php }?>
+	
+	
 </div>
 <div class="row">
 	<div class="col-12">
@@ -191,14 +182,6 @@ function chkAll(frm, arr, mark){
    } catch(er) {}
   }
 }
-
-
-$(".trip_history").each(function( index ) {
-	var i = $(this).attr('link');
-	$(this).after('<a href="../order/orders_trip.php?id='+i+'" target="_blank" ><div class="triphistory">Trip</div></a>');
-	//<a href="merit_statement.php?id='+i+'" target="_blank" class="btn btn-xs btn-default list-edit ref-btn" style="margin-left:5px;">Merit</a>
-});
-
 </script>
 
 
@@ -207,18 +190,7 @@ $(".trip_history").each(function( index ) {
 <script type="text/javascript" src="<?php echo ROOT?>js/functions.jquery.js"></script>
 <?php include '../../config/session_msg.php';?>
 
-<style>
-.triphistory {
-	color:white;
-	font-weight:bold;
-	
-	background-color: #999;
-	padding: 5px 6px ;
-	border-radius:4px;
-	transition: background-color .4s;
-}
 
-</style>
 
 </html>
 <?php }?>

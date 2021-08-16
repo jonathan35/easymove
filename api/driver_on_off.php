@@ -1,13 +1,11 @@
 <?php 
 require_once '../config/ini.php';
 
-
-$result = array('result' => false, 'message' => 'Api initial.');
+$uid = $_POST['uid'];
+$driver = sql_read("select merit from driver where id=? limit 1", 'i', $uid);
+$result = array('result' => false, 'message' => 'Api initial.', 'merit' => $driver['merit']);
 $today = date('Y-m-d');
 $now = time();//time() is in second not millisecond
-
-
-
 
 
 function getTodayDuration($uid){
@@ -90,8 +88,8 @@ function onSession($uid){
 
 
 function removeShortSession(){
- //Delete sessions with less than 60sec duration
- sql_exec("delete from driver_on_off where duration <?", 'i', array(60));
+    //Delete sessions with less than 60sec duration
+    sql_exec("delete from driver_on_off where duration <?", 'i', array(60));
 }
 
 
@@ -128,18 +126,16 @@ if(!empty($_POST['uid']) && !empty($_POST['onoff'])){
             onSession($uid);
         }
 
-        
-
-            //$last['id'] = $on_exist['id'];
-            // $last['note'] = 'xxxx'.$on_exist['id'];
-            //sql_save('driver_on_off', $last);
+        //$last['id'] = $on_exist['id'];
+        // $last['note'] = 'xxxx'.$on_exist['id'];
+        //sql_save('driver_on_off', $last);
 
         $result = array(
             'result' => 'started', 
             'message' => 'On successfully.',
-            'duration' => getTodayDuration($uid)
+            'duration' => getTodayDuration($uid),
+            'merit' => $driver['merit']
         );
-
 
     }elseif($_POST['onoff'] == 'off'){
 
@@ -149,13 +145,14 @@ if(!empty($_POST['uid']) && !empty($_POST['onoff'])){
         $result = array(
             'result' => 'ended', 
             'message' => 'Off successfully.',
-            'duration' => getTodayDuration($uid)
+            'duration' => getTodayDuration($uid),
+            'merit' => $driver['merit']
         );
 
     }
 
 }else{
-    $result = array('result' => false, 'message' => 'Not enough input.');
+    $result = array('result' => false, 'message' => 'Not enough input.', 'merit' => $driver['merit']);
 }
 
 $data = json_encode($result);

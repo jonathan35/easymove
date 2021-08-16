@@ -54,6 +54,8 @@ foreach((array)$fields as $field){
 
 $type['branch_location'] = 'map';
 $type['branch_location_coordinate'] = 'coordinate';
+$type['username'] = 'email';
+
 
 $labelFullRow['branch_location'] = true;
 
@@ -71,21 +73,27 @@ if($_SESSION['group_id'] == 2){
 	$branch_ext = " where region_id = '".$_SESSION['region']."'";
 }
 
-
+$child['company'] = true;
 $type['company'] = 'select'; $option['company'] = array();
 $results = sql_read("select * from company where status=1 order by company_name ASC");
+$option['company'][] = 'Select a Company';
 foreach((array)$results as $a){
 	$option['company'][$a['id']] = ucwords($a['company_name']);
 }
 
+$child['branch'] = true;
+$parent['branch'] = 'company'; $parent_val['branch'] = array();
 $type['branch'] = 'select'; $option['branch'] = array();
 $results = sql_read("select * from branch $branch_ext order by branch_name ASC");
+$option['branch'][] = 'Select a Branch';
 foreach((array)$results as $a){
 	$option['branch'][$a['id']] = ucwords($a['branch_name']);
+	if(!empty($parent['branch'])){
+		$parent_val['branch'][$a['id']] = $a['company_id'];
+	}
 }
 
-
-$placeholder['title'] = 'Title for profile page';
+$label['username'] = 'Username (email)';
 //$placeholder['post_content'] = 'Description for profile page';
 
 $attributes['branch'] = array('required' => 'required');

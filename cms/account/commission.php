@@ -111,6 +111,8 @@ remark { color: #999;}
 				<div>Merit: <b><?php echo $driver['merit']?>p</b></div>
 				<?php 
 				//--Total-----
+				echo $conditions;
+				
 				$online = sql_read("select SUM(duration) as total from driver_on_off where driver=? $conditions limit 1", 'i', array($id));
 				?>
 				<div>Online: about <b><?php echo round($online['total']/60/60)?>hrs</b></div>

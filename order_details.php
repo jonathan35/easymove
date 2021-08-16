@@ -181,10 +181,15 @@ if(!$auth){
                     <span style="font-size:90%;">(Floor/Lot/Sublit/Unit)</span>
                 </div>
                 <div class="pb-3"><?php echo $order['address'];?></div>
-                                
-            
-                <div class="text-label pr-2">TIME</div>
+                
+
+                <div class="text-label pr-2">COLLECTION TIME</div>
                 <div class="pb-3"><?php echo date('h:ia', strtotime($order['time']));?></div>
+                
+                <?php if($order['time_to_delivery']){?>
+                <div class="text-label pr-2">DELIVERY TIME</div>
+                <div class="pb-3"><?php echo date('h:ia', strtotime($order['time_to_delivery']));?></div>
+                <?php }?>
                                 
                 <div class="text-label pr-2">MESSAGE</div>
                 <div class="pb-3"><?php echo $order['message'];?></div>

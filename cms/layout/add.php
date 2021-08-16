@@ -164,405 +164,437 @@ $('.add-trigger').click(function(){
 */?>
 
 <div id="addbody" class="row p-2 pb-1 mb-5"><!--style="border-bottom:1px solid #DDD;"-->
+
+<style>
+.result-msg {
+    animation: fadeOut 2s forwards; 
+    animation-delay: 4s;
+    display:flex; 
+    align-items: center; 
+    justify-content: center; 
+    border:2px solid #CCC; 
+    border-radius:20px; 
+    margin-bottom:30px; 
+    padding:6px;
+    background: rgb(235,235,235);
+    background: linear-gradient(180deg, rgba(235,235,235,1) 0%, rgba(212,212,212,1) 100%);
+}
+@keyframes fadeOut {
+    from {opacity: 1;}
+    to {opacity: 0;}
+}
+</style>
+
 <div class="col">
-<div class="row">
     <div class="col-12">
-        <h3 class="pl-3">
-            <?php if($id){?>Edit<?php }else{?>Create<?php }?> <?php echo $module_name;?>
-            
-            <?php if(!empty($_SESSION['proj_name'])){
-                if($table == 'packages' || $table == 'project_details' || $table == 'project_photos' || $table == 'project_pdfs' || $table == 'causes_of_delay' || $table == 'contractual_issues'){ 
-                    echo '<div style="padding-top:20px; font-size:16px; color:orange; line-height:1.5;">'.$_SESSION['proj_name'].'</div>';
-                }
-            }?>
-            <?php /*if($add==true && $id){?><a href="<?php echo $php?>?tab=<?php echo $_GET['tab']?>" class="btn btn-link" >Add new</a><?php }*/?>
-        </h3>
+        <?php if($save){?>
+            <div class="result-msg">
+            <img src="<?php echo ROOT?>cms/images/alert-20.png" >
+            <div style="position:relative; top:2px;">
+                <?php echo $save?>
+            </div>
+        </div>
+         <?php }?>
     </div>
-    <?php if($back){?>
-    <div class="col-2" style="text-align:right;">
-        <a class="btn btn-sm" href="cases.php">Back to listing</a>
+
+    <div class="row">
+        <div class="col-12">
+            <h3 class="pl-3">
+                <?php if($id){?>Edit<?php }else{?>Create<?php }?> <?php echo $module_name;?>
+                
+                <?php if(!empty($_SESSION['proj_name'])){
+                    if($table == 'packages' || $table == 'project_details' || $table == 'project_photos' || $table == 'project_pdfs' || $table == 'causes_of_delay' || $table == 'contractual_issues'){ 
+                        echo '<div style="padding-top:20px; font-size:16px; color:orange; line-height:1.5;">'.$_SESSION['proj_name'].'</div>';
+                    }
+                }?>
+                <?php /*if($add==true && $id){?><a href="<?php echo $php?>?tab=<?php echo $_GET['tab']?>" class="btn btn-link" >Add new</a><?php }*/?>
+            </h3>
+        </div>
+        <?php if($back){?>
+        <div class="col-2" style="text-align:right;">
+            <a class="btn btn-sm" href="cases.php">Back to listing</a>
+        </div>
+        <?php }?>
     </div>
-    <?php }?>
-</div>
 
 
-<div class="row">
-    <div class="col-12">
-    
-        <form action="" method="post" enctype="multipart/form-data" class="dropzone" id="my-awesome-dropzone" target="_self" <?php if(!empty($add_confirm)){?>onsubmit="return confirm('<?php echo $add_confirm?>');"<?php }?>>
+    <div class="row">
+        <div class="col-12">
+        
+            <form action="" method="post" enctype="multipart/form-data" class="dropzone" id="my-awesome-dropzone" target="_self" <?php if(!empty($add_confirm)){?>onsubmit="return confirm('<?php echo $add_confirm?>');"<?php }?>>
 
-            <?php 
-            $rowEnd = $rowStart = $colEnd = $colStart = $colCount = array();
-            
-            $rowItems = 0;
-            foreach((array)$fic_1 as $fic_r => $fic_i){
-                foreach((array)$fic_i as $a => $b){
-                    $rowItems += $b;
-                }
-                $rowEnd[$fic_r] = $rowItems;
-                $colCount[$fic_r] = count($fic_i);
-            }
-            foreach((array)$rowEnd as $bEnd => $bEndV){
-                $rowStartByRow = $bEndV - ($rowEnd[$bEnd]-$rowEnd[$bEnd-1])+1;
-                $rowStart[$bEnd] = $rowStartByRow;
-            }
-            $bb = $c = 0;
-            foreach((array)$fic_1 as $cStart){
-                foreach((array)$cStart as $a => $b){
-                    $bb += $b;
-                    $colEnd[$c] = $bb;
-                    $colStart[$c] = ($colEnd[$c]-$b)+1;
-                    $c++;
-                }
-            }
-
-            
-            $item = 1;
-            $i = $col = $rowCount = 0;
-            foreach((array)$fields as $field){
+                <?php 
+                $rowEnd = $rowStart = $colEnd = $colStart = $colCount = array();
                 
-                if(empty($attributes[$field])) $attributes[$field] = '';
-                if(empty($style[$field])) $style[$field] = '';
-                if(empty($type[$field])) $type[$field] = '';
-                if(empty($value[$field])) $value[$field] = '';
-                if(empty($remark[$field])) $remark[$field] = '';
-                if(empty($multiple[$field])) $multiple[$field] = '';
-                if(empty($tinymce[$field])) $tinymce[$field] = '';
-                if(empty($height[$field])) $height[$field] = '';
-                if(empty($width[$field])) $width[$field] = '';              
-
-                
-                $attrs = '';
-                if($attributes[$field] == true){
-                    foreach((array)$attributes[$field] as $att_l => $att_v){
-                        $attrs .= ' '.$att_l.'="'.$att_v.'"';
+                $rowItems = 0;
+                foreach((array)$fic_1 as $fic_r => $fic_i){
+                    foreach((array)$fic_i as $a => $b){
+                        $rowItems += $b;
+                    }
+                    $rowEnd[$fic_r] = $rowItems;
+                    $colCount[$fic_r] = count($fic_i);
+                }
+                foreach((array)$rowEnd as $bEnd => $bEndV){
+                    $rowStartByRow = $bEndV - ($rowEnd[$bEnd]-$rowEnd[$bEnd-1])+1;
+                    $rowStart[$bEnd] = $rowStartByRow;
+                }
+                $bb = $c = 0;
+                foreach((array)$fic_1 as $cStart){
+                    foreach((array)$cStart as $a => $b){
+                        $bb += $b;
+                        $colEnd[$c] = $bb;
+                        $colStart[$c] = ($colEnd[$c]-$b)+1;
+                        $c++;
                     }
                 }
-                $styles = '';
-                if(!empty($style[$field])){
-                    if($style[$field] == true){
-                        foreach((array)$style[$field] as $att_l => $att_v){
-                            $styles .= ' '.$att_l.':'.$att_v.'; ';
+
+                
+                $item = 1;
+                $i = $col = $rowCount = 0;
+                foreach((array)$fields as $field){
+                    
+                    if(empty($attributes[$field])) $attributes[$field] = '';
+                    if(empty($style[$field])) $style[$field] = '';
+                    if(empty($type[$field])) $type[$field] = '';
+                    if(empty($value[$field])) $value[$field] = '';
+                    if(empty($remark[$field])) $remark[$field] = '';
+                    if(empty($multiple[$field])) $multiple[$field] = '';
+                    if(empty($tinymce[$field])) $tinymce[$field] = '';
+                    if(empty($height[$field])) $height[$field] = '';
+                    if(empty($width[$field])) $width[$field] = '';              
+
+                    
+                    $attrs = '';
+                    if($attributes[$field] == true){
+                        foreach((array)$attributes[$field] as $att_l => $att_v){
+                            $attrs .= ' '.$att_l.'="'.$att_v.'"';
                         }
                     }
-                }
+                    $styles = '';
+                    if(!empty($style[$field])){
+                        if($style[$field] == true){
+                            foreach((array)$style[$field] as $att_l => $att_v){
+                                $styles .= ' '.$att_l.':'.$att_v.'; ';
+                            }
+                        }
+                    }
 
-                if(in_array($item, $rowStart)){?>
-                <div class="row p-0">
-                <?php }?>
-                
-                <?php 
-                $column_code = ' display:inline-block; float: left; position: relative; min-height: 1px; padding-left: 15px; box-sizing: border-box;';
-                if($colCount[$rowCount]>=2){
-                    $d = 100/$colCount[$rowCount]-3;
-                    $column_code .= 'width:'.$d.'%; padding-right:3%;';
-                }else{
-                    $column_code .= 'width:100%;';
-                }
-                //echo $column_code; 
-                if(in_array($item, $colStart)){?>
-                    <div style=" <?php echo $column_code?>">
-                <?php }?>
-
-
-
-
-                
-    
-                    <div class="col-12 <?php echo $field?>" style="margin-top:12px; <?php if($type[$field]=='hidden'){?> display:none;<?php }?>">
+                    if(in_array($item, $rowStart)){?>
+                    <div class="row p-0">
+                    <?php }?>
                     
-                            <?php if(($type[$field] != 'hidden' || ($type[$field] == 'photos' && $_GET['id'])) &&  $type[$field] != 'coordinate'){ ?>
-                                <label <?php echo $attrs?> style=" <?php if($labelFullRow[$field]==true){?>width:100%; <?php }?> ;">
-                                    <?php if(!empty($label[$field])){ echo $str_convert->field_to_label($label[$field]);}else{echo $str_convert->field_to_label($field);}?>
-                                </label>
-                            <?php }?>
-                            <?php if($type[$field] != 'hidden'){?><div class="div_input" style="<?php if($labelFullRow[$field]) echo 'width:100%;';?>"><?php }?>
-                            
-                            <?php if($type[$field] == 'tag'){?>
-                                <div id="tag_module"><?php include("../layout/tag_input.php");?></div>
-                            <?php }elseif($type[$field] == 'photos'){?>
-                                    <?php if(!empty($_GET['id'])){?>
-                                        <div id="photos_module"><?php include("../layout/photos.php");?></div>
-                                    <?php }?>
-                            <?php }elseif($type[$field] == 'select'){
+                    <?php 
+                    $column_code = ' display:inline-block; float: left; position: relative; min-height: 1px; padding-left: 15px; box-sizing: border-box;';
+                    if($colCount[$rowCount]>=2){
+                        $d = 100/$colCount[$rowCount]-3;
+                        $column_code .= 'width:'.$d.'%; padding-right:3%;';
+                    }else{
+                        $column_code .= 'width:100%;';
+                    }
+                    //echo $column_code; 
+                    if(in_array($item, $colStart)){?>
+                        <div style=" <?php echo $column_code?>">
+                    <?php }?>
 
 
-                                if(isset($value[$field])){
-                                    $checked=$value[$field];               
-                                }else{
-                                    $checked=$default_value[$field];
-                                }?>
-                                <select name="<?php echo $field?>" <?php echo $attrs?> style=" <?php echo $styles?>" class="<?php if($child[$field]){?> parent-filter-child<?php }?>">
-                                    <?php foreach((array)$option[$field] as $option_v => $option_name){?>
-                                    <option value="<?php echo $option_v?>" <?php if($checked == $option_v){?> selected <?php }?> 
-                                    
-                                    <?php 
-                                    if(!empty($parent[$field])){?>
-                                        parent-name="<?php echo $parent[$field]?>" parent-value="<?php echo $parent_val[$field][$option_v]?>" 
-                                    <?php }?>
-                                    ><?php echo $option_name?></option>
-                                    <?php }?>
-                                </select>   
-                            <?php }elseif($type[$field] == 'radio'){
-                                if(!empty($value[$field])){
-                                    $checked=$value[$field];
-                                }else{
-                                    $checked=$default_value[$field];
-                                }
-                                
-                                foreach((array)$option[$field] as $option_v => $option_name){?>
-                                <label style="width:auto; padding-right:20px;">
-                                    <input name="<?php echo $field?>" value="<?php echo $option_v?>" type="radio" <?php if($checked==$option_v){?>checked<?php }?> <?php echo $attrs?> style=" <?php echo $styles?>; width:20px;"> 
-                                    <span style="position:relative; top:-2px;"><?php echo $option_name?></span>
-                                </label>
-                                <?php }?>                 
-
-                            <?php }elseif($type[$field] == 'datalist'){
-                                if(!empty($value[$field])){
-                                    $checked=$value[$field];                            
-                                }else{
-                                    $checked=$default_value[$field];
-                                }?>
-                                <input type="text" list="list<?php echo $field?>" value="<?php echo $option[$field][$value[$field]]?>" id="autoselect<?php echo $field?>" var 
-                                data-table="packages" data-sfield="package_name" data-order="package_name ASC" data-display="package_name"/>
-                                <datalist id="list<?php echo $field?>">
-                                    <?php foreach((array)$option[$field] as $option_v => $option_name){?>
-                                        <option value="<?php echo $option_name?>" <?php if($checked == $option_v){?> selected <?php }?> 
-                                        data-value="<?php echo $option_v?>"><?php echo $option_name?></option>
-                                    <?php }?>
-                                </datalist>                           
-                                <input type="hidden" name="<?php echo $field?>" id="autoselect<?php echo $field?>-hidden" value="<?php echo $value[$field]?>" >
-                            <?php }elseif($type[$field] == 'autosuggest'){                           
-                                
-                                if(empty($value[$field]) && !empty($_SESSION[$field])){
-                                $value[$field]=$_SESSION[$field];////Last Selected value
-                                }elseif($field == 'hidden-package' && !empty($_SESSION['pack_id'])){
-                                    $value[$field] = $_SESSION['pack_id'];//Global Search value
-                                }?>
-                                <input type="text" value="<?php echo $option[$field][$value[$field]]?>" class="search_input" id="search-input-<?php echo $field?>"
-                                autocomplete="off" data-input="<?php echo $field?>" data-table="<?php echo $foreign_table[$field]?>" data-field="<?php echo $foreign_field[$field]?>"/>
-                                <div class="search_output output<?php echo $field?>">
-                                <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
-                                </div>
-                                <input type="hidden" name="<?php echo $field?>" id="hidden-<?php echo $field?>" value="<?php echo $value[$field]?>" >
 
 
-                            <?php }elseif($type[$field] == 'checkbox'){
-                        $v = unserialize($value[$field]);
-                                ?>
-                                    <?php foreach((array)$option[$field] as $option_v => $option_name){?>
-                                    <label style="padding-left:0; width:auto; padding-right:30px;">
-                                        <input type="checkbox" value="<?php echo $option_v?>" <?php if(in_array($option_v, $v)){?> checked="checked" <?php }?> name="<?php echo $field?>[]" <?php echo $attrs?> style=" float:left; width:30px; position:relative; top:-2px; <?php echo $styles?>">
-                                        <?php echo $option_name;?>
+                    
+        
+                        <div class="col-12 <?php echo $field?>" style="margin-top:12px; <?php if($type[$field]=='hidden'){?> display:none;<?php }?>">
+                        
+                                <?php if(($type[$field] != 'hidden' || ($type[$field] == 'photos' && $_GET['id'])) &&  $type[$field] != 'coordinate'){ ?>
+                                    <label <?php echo $attrs?> style=" <?php if($labelFullRow[$field]==true){?>width:100%; <?php }?> ;">
+                                        <?php if(!empty($label[$field])){ echo $str_convert->field_to_label($label[$field]);}else{echo $str_convert->field_to_label($field);}?>
                                     </label>
-                                    <?php }?>
+                                <?php }?>
+                                <?php if($type[$field] != 'hidden'){?><div class="div_input" style="<?php if($labelFullRow[$field]) echo 'width:100%;';?>"><?php }?>
                                 
-                            <?php }elseif($type[$field] == 'parent'){
-                                $ps=sql_read('select * from '.$p_table[$field].' where status=1 order by position ASC');
-                                ?>
-                                
-                                <select name="<?php echo $field?>" <?php echo $attrs?> style=" <?php echo $styles?>">
-                                    <?php foreach((array)$ps as $p){?>
-                                    <option value="<?php echo $p[$p_value[$field]]?>" <?php if($value[$field] == $p[$p_value[$field]]){?> selected <?php }?>><?php echo $p[$p_title[$field]]?></option>
-                                    <?php }?>
-                                </select>
-                            <?php }elseif($type[$field] == 'date'){?>
-                                <input name="<?php echo $field?>" type="text" class="datepicker" value="<?php echo $value[$field]?>" <?php echo $attrs?> style="width:<?php echo $width[$field]?> <?php echo $styles?>"> 
-                            <?php }elseif($type[$field] == 'image' || $type[$field] == 'video'){?>
-                                <div class="col-12" style="margin-bottom:10px; text-align:left;">
-                                
-                                
-                                    <?php $i++;
-                                    if($i ==1){
-                                        if(!empty($remark[$field])){
-                                            echo $remark[$field];
-                                        }else{
-                                            echo '<div><small class="text-muted" >Recommanded size: 800 x 400 pixel</small></div>';
-                                        }
+                                <?php if($type[$field] == 'tag'){?>
+                                    <div id="tag_module"><?php include("../layout/tag_input.php");?></div>
+                                <?php }elseif($type[$field] == 'photos'){?>
+                                        <?php if(!empty($_GET['id'])){?>
+                                            <div id="photos_module"><?php include("../layout/photos.php");?></div>
+                                        <?php }?>
+                                <?php }elseif($type[$field] == 'select'){
+
+
+                                    if(isset($value[$field])){
+                                        $checked=$value[$field];               
+                                    }else{
+                                        $checked=$default_value[$field];
                                     }?>
-                                <?php if($_GET['id']){//Remove feature only available when edit mode?>
-                                    <div class="col" style=" padding:0;">
-                                        <?php if($type[$field] == 'image'){?>
+                                    <select name="<?php echo $field?>" <?php echo $attrs?> style=" <?php echo $styles?>" class="<?php if($child[$field]){?> parent-filter-child<?php }?>">
+                                        <?php foreach((array)$option[$field] as $option_v => $option_name){?>
+                                        <option value="<?php echo $option_v?>" <?php if($checked == $option_v){?> selected <?php }?> 
                                         
-                                            <div class="def_img_bg" id="preview<?php echo $field?>" style="overflow:show;">
-                                                <img src="../../<?php if($table=='driver') echo 'api/';?><?php echo $value[$field]?>" class="img-fluid" alt="" >
-                                                <?php if(!empty($value[$field])){?>
-                                                    <div class="btn btn-xs btn-danger" onclick="removeImg('<?php echo $table?>','<?php echo $id?>', '<?php echo $field?>')" 
-                                                    style="margin:10px 0 20px 0;">
+                                        <?php 
+                                        if(!empty($parent[$field])){?>
+                                            parent-name="<?php echo $parent[$field]?>" parent-value="<?php echo $parent_val[$field][$option_v]?>" 
+                                        <?php }?>
+                                        ><?php echo $option_name?></option>
+                                        <?php }?>
+                                    </select>   
+                                <?php }elseif($type[$field] == 'radio'){
+                                    if(!empty($value[$field])){
+                                        $checked=$value[$field];
+                                    }else{
+                                        $checked=$default_value[$field];
+                                    }
+                                    
+                                    foreach((array)$option[$field] as $option_v => $option_name){?>
+                                    <label style="width:auto; padding-right:20px;">
+                                        <input name="<?php echo $field?>" value="<?php echo $option_v?>" type="radio" <?php if($checked==$option_v){?>checked<?php }?> <?php echo $attrs?> style=" <?php echo $styles?>; width:20px;"> 
+                                        <span style="position:relative; top:-2px;"><?php echo $option_name?></span>
+                                    </label>
+                                    <?php }?>                 
+
+                                <?php }elseif($type[$field] == 'datalist'){
+                                    if(!empty($value[$field])){
+                                        $checked=$value[$field];                            
+                                    }else{
+                                        $checked=$default_value[$field];
+                                    }?>
+                                    <input type="text" list="list<?php echo $field?>" value="<?php echo $option[$field][$value[$field]]?>" id="autoselect<?php echo $field?>" var 
+                                    data-table="packages" data-sfield="package_name" data-order="package_name ASC" data-display="package_name"/>
+                                    <datalist id="list<?php echo $field?>">
+                                        <?php foreach((array)$option[$field] as $option_v => $option_name){?>
+                                            <option value="<?php echo $option_name?>" <?php if($checked == $option_v){?> selected <?php }?> 
+                                            data-value="<?php echo $option_v?>"><?php echo $option_name?></option>
+                                        <?php }?>
+                                    </datalist>                           
+                                    <input type="hidden" name="<?php echo $field?>" id="autoselect<?php echo $field?>-hidden" value="<?php echo $value[$field]?>" >
+                                <?php }elseif($type[$field] == 'autosuggest'){                           
+                                    
+                                    if(empty($value[$field]) && !empty($_SESSION[$field])){
+                                    $value[$field]=$_SESSION[$field];////Last Selected value
+                                    }elseif($field == 'hidden-package' && !empty($_SESSION['pack_id'])){
+                                        $value[$field] = $_SESSION['pack_id'];//Global Search value
+                                    }?>
+                                    <input type="text" value="<?php echo $option[$field][$value[$field]]?>" class="search_input" id="search-input-<?php echo $field?>"
+                                    autocomplete="off" data-input="<?php echo $field?>" data-table="<?php echo $foreign_table[$field]?>" data-field="<?php echo $foreign_field[$field]?>"/>
+                                    <div class="search_output output<?php echo $field?>">
+                                    <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+                                    </div>
+                                    <input type="hidden" name="<?php echo $field?>" id="hidden-<?php echo $field?>" value="<?php echo $value[$field]?>" >
+
+
+                                <?php }elseif($type[$field] == 'checkbox'){
+                            $v = unserialize($value[$field]);
+                                    ?>
+                                        <?php foreach((array)$option[$field] as $option_v => $option_name){?>
+                                        <label style="padding-left:0; width:auto; padding-right:30px;">
+                                            <input type="checkbox" value="<?php echo $option_v?>" <?php if(in_array($option_v, $v)){?> checked="checked" <?php }?> name="<?php echo $field?>[]" <?php echo $attrs?> style=" float:left; width:30px; position:relative; top:-2px; <?php echo $styles?>">
+                                            <?php echo $option_name;?>
+                                        </label>
+                                        <?php }?>
+                                    
+                                <?php }elseif($type[$field] == 'parent'){
+                                    $ps=sql_read('select * from '.$p_table[$field].' where status=1 order by position ASC');
+                                    ?>
+                                    
+                                    <select name="<?php echo $field?>" <?php echo $attrs?> style=" <?php echo $styles?>">
+                                        <?php foreach((array)$ps as $p){?>
+                                        <option value="<?php echo $p[$p_value[$field]]?>" <?php if($value[$field] == $p[$p_value[$field]]){?> selected <?php }?>><?php echo $p[$p_title[$field]]?></option>
+                                        <?php }?>
+                                    </select>
+                                <?php }elseif($type[$field] == 'date'){?>
+                                    <input name="<?php echo $field?>" type="text" class="datepicker" value="<?php echo $value[$field]?>" <?php echo $attrs?> style="width:<?php echo $width[$field]?> <?php echo $styles?>"> 
+                                <?php }elseif($type[$field] == 'image' || $type[$field] == 'video'){?>
+                                    <div class="col-12" style="margin-bottom:10px; text-align:left;">
+                                    
+                                    
+                                        <?php $i++;
+                                        if($i ==1){
+                                            if(!empty($remark[$field])){
+                                                echo $remark[$field];
+                                            }else{
+                                                echo '<div><small class="text-muted" >Recommanded size: 800 x 400 pixel</small></div>';
+                                            }
+                                        }?>
+                                    <?php if($_GET['id']){//Remove feature only available when edit mode?>
+                                        <div class="col" style=" padding:0;">
+                                            <?php if($type[$field] == 'image'){?>
+                                            
+                                                <div class="def_img_bg" id="preview<?php echo $field?>" style="overflow:show;">
+                                                    <img src="../../<?php if($table=='driver') echo 'api/';?><?php echo $value[$field]?>" class="img-fluid" alt="" >
+                                                    <?php if(!empty($value[$field])){?>
+                                                        <div class="btn btn-xs btn-danger" onclick="removeImg('<?php echo $table?>','<?php echo $id?>', '<?php echo $field?>')" 
+                                                        style="margin:10px 0 20px 0;">
+                                                            <span class="glyphicon glyphicon-remove" style="color:white;" ></span>Remove
+                                                        </div>
+                                                    <?php }?>
+                                                </div>                                     
+                                            <?php }elseif($type[$field] == 'video'){
+                                                    if(!empty($value[$field])){
+                                                    ?>
+                                                <div class="col-12" id="preview<?php echo $field?>">
+                                                    <div class="col-12" style="z-index:1; background:black;">
+                                                        <div class="item text-center" style="background:black; ">
+                                                            <video width="100%" controls>
+                                                            <?php if(!empty($value[$field])){?>
+                                                                <source src="<?php echo ROOT.$value[$field]?>" type="video/mp4">
+                                                                <?php }?>
+                                                                Your browser does not support the video tag.
+                                                            </video>
+                                                        </div>
+                                                        <span class=""></span>
+                                                    </div>
+                                                    <div class="col-12" style="margin:10px 0 20px 0;">
+                                                        <div class="btn btn-xs btn-danger" onclick="removeImg('<?php echo $table?>','<?php echo $id?>', '<?php echo $field?>')">
                                                         <span class="glyphicon glyphicon-remove" style="color:white;" ></span>Remove
+                                                        </div>
+                                                        <div class="btn btn-xs btn-warning" onclick="removeImg('<?php echo $table?>','<?php echo $id?>', '<?php echo $field?>')">
+                                                        <span class="glyphicon glyphicon-remove" style="color:white;" ></span>Unlink
+                                                        </div>
                                                     </div>
+                                                </div>
+                                                <?php }else{?>
+                                            
+                                                <div style="border:1px solid red; padding:6px 18px 8px 12px; width:43px; border-radius:4px; border:1px solid #D9686B;">
+                                                    <span class="glyphicon glyphicon-play" style="color:#D9686B; font-size:20px;"></span>
+                                                </div>
                                                 <?php }?>
-                                            </div>                                     
-                                        <?php }elseif($type[$field] == 'video'){
-                                                if(!empty($value[$field])){
-                                                ?>
-                                            <div class="col-12" id="preview<?php echo $field?>">
-                                                <div class="col-12" style="z-index:1; background:black;">
-                                                    <div class="item text-center" style="background:black; ">
-                                                        <video width="100%" controls>
-                                                        <?php if(!empty($value[$field])){?>
-                                                            <source src="<?php echo ROOT.$value[$field]?>" type="video/mp4">
-                                                            <?php }?>
-                                                            Your browser does not support the video tag.
-                                                        </video>
-                                                    </div>
-                                                    <span class=""></span>
-                                                </div>
-                                                <div class="col-12" style="margin:10px 0 20px 0;">
-                                                    <div class="btn btn-xs btn-danger" onclick="removeImg('<?php echo $table?>','<?php echo $id?>', '<?php echo $field?>')">
-                                                    <span class="glyphicon glyphicon-remove" style="color:white;" ></span>Remove
-                                                    </div>
-                                                    <div class="btn btn-xs btn-warning" onclick="removeImg('<?php echo $table?>','<?php echo $id?>', '<?php echo $field?>')">
-                                                    <span class="glyphicon glyphicon-remove" style="color:white;" ></span>Unlink
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <?php }else{?>
-                                        
-                                            <div style="border:1px solid red; padding:6px 18px 8px 12px; width:43px; border-radius:4px; border:1px solid #D9686B;">
-                                                <span class="glyphicon glyphicon-play" style="color:#D9686B; font-size:20px;"></span>
-                                            </div>
-                                            <?php }?>
-                                        <?php }?>
-                                    </div>
-                                    
-                                    <div class="col">
-                                    <script>
-                                    function removeImg(table, id, field){
-                                        
-                                        $.post( "../layout/remove_img.php", {table:table, id:id, field:field}, function( result ) {
-                                            $("#preview"+field).fadeOut();
-                                        });
-                                    }
-                                    function unlink_video(table, id, field){
-                                        $.post( "../layout/unlink_img.php", {table:table, id:id, field:field}, function( result ) {
-                                            $("#preview"+field).fadeOut();
-                                        });
-                                    }
-                                    </script>
-                                    </div>
-                                    <?php }else{?>
-                                        <?php if($type[$field] != 'image'){?>
-                                            <div style="border:1px solid red; padding:6px 18px 8px 12px; width:43px; border-radius:4px; border:1px solid #D9686B;">
-                                                <span class="glyphicon glyphicon-play" style="color:#D9686B; font-size:20px;"></span>
-                                            </div>
-                                        <?php }?>
-                                    <?php }?>
-                                    <div class="col" style="padding:0;">
-                                        <input name="<?php echo $field?>[]" type="file" value="<?php echo $value[$field]?>" <?php if(empty($_GET['id'])){ echo $required[$field]; }?>
-                                        accept="
-                                        <?php if($type[$field] == 'image'){?>
-                                            .png,.gif,.jpg,.jpeg
-                                        <?php }elseif($type[$field] == 'video'){?>
-                                            .webm,.mkv,.flv,.vob,.avi,.wmv,.mov,.rmvb,.mp4,.mpg
-                                        <?php }?>" style=" <?php echo $styles?>; 
-                                        <?php if($multiple[$field] == true){?>
-                                            border:1px dashed #CCC; text-align:center; width:100%; 
-                                            padding-top:40px; padding-bottom:20px; background-color:rgba(200,200,200,.2); margin-left:0; left:0; position:relative;
-                                        <?php }?>"
-                                        <?php if($multiple[$field] == true){?>
-                                            multiple="multiple"
-                                        <?php }?>
-                                        onchange="readURL(this);"
-                                        >
-                                        <!--<img id="blah" src="#" alt="your image" />-->
-                                        <?php if($multiple[$field] == true){?>
-                                        <span style="position:relative; top:-70px; height:0; overflow:visible; left:6px; width:100%; font-size:14px; color:#999;">
-                                            <span class="glyphicon glyphicon-picture" style="color:#ccc; font-size:18px;"></span>
-                                            Drop files to upload
-                                        </span>
-                                        <?php }?>
-                                    </div>
-                                    
-                                </div>
-                            <?php }elseif($type[$field] == 'textarea'){?>
-                                <?php if($tinymce[$field]==true){?>
-                                    <div>
-                                        <div style="text-align: right;">
-                                            <?php if($tinymce_photo){?>
-                                                <div class="mymodal-btn btn btn-xs btn-default list-edit" link="../layout/photos.php?parent_table=<?php echo $table?>&parent_id=0" style="padding-right:6px; color:white;">
-                                                    <img src="../../cms/images/photo.png" style="margin-right:3px;">
-                                                    Upload Photos
-                                                </div>
                                             <?php }?>
                                         </div>
-                                        <textarea name="<?php echo $field?>" class="tinymce" style="height:<?php echo $height[$field]?>; width:<?php echo $width[$field]?>; <?php echo $styles?>"
-                                        <?php echo $attrs?>><?php echo $value[$field]?></textarea>
+                                        
+                                        <div class="col">
+                                        <script>
+                                        function removeImg(table, id, field){
+                                            
+                                            $.post( "../layout/remove_img.php", {table:table, id:id, field:field}, function( result ) {
+                                                $("#preview"+field).fadeOut();
+                                            });
+                                        }
+                                        function unlink_video(table, id, field){
+                                            $.post( "../layout/unlink_img.php", {table:table, id:id, field:field}, function( result ) {
+                                                $("#preview"+field).fadeOut();
+                                            });
+                                        }
+                                        </script>
+                                        </div>
+                                        <?php }else{?>
+                                            <?php if($type[$field] != 'image'){?>
+                                                <div style="border:1px solid red; padding:6px 18px 8px 12px; width:43px; border-radius:4px; border:1px solid #D9686B;">
+                                                    <span class="glyphicon glyphicon-play" style="color:#D9686B; font-size:20px;"></span>
+                                                </div>
+                                            <?php }?>
+                                        <?php }?>
+                                        <div class="col" style="padding:0;">
+                                            <input name="<?php echo $field?>[]" type="file" value="<?php echo $value[$field]?>" <?php if(empty($_GET['id'])){ echo $required[$field]; }?>
+                                            accept="
+                                            <?php if($type[$field] == 'image'){?>
+                                                .png,.gif,.jpg,.jpeg
+                                            <?php }elseif($type[$field] == 'video'){?>
+                                                .webm,.mkv,.flv,.vob,.avi,.wmv,.mov,.rmvb,.mp4,.mpg
+                                            <?php }?>" style=" <?php echo $styles?>; 
+                                            <?php if($multiple[$field] == true){?>
+                                                border:1px dashed #CCC; text-align:center; width:100%; 
+                                                padding-top:40px; padding-bottom:20px; background-color:rgba(200,200,200,.2); margin-left:0; left:0; position:relative;
+                                            <?php }?>"
+                                            <?php if($multiple[$field] == true){?>
+                                                multiple="multiple"
+                                            <?php }?>
+                                            onchange="readURL(this);"
+                                            >
+                                            <!--<img id="blah" src="#" alt="your image" />-->
+                                            <?php if($multiple[$field] == true){?>
+                                            <span style="position:relative; top:-70px; height:0; overflow:visible; left:6px; width:100%; font-size:14px; color:#999;">
+                                                <span class="glyphicon glyphicon-picture" style="color:#ccc; font-size:18px;"></span>
+                                                Drop files to upload
+                                            </span>
+                                            <?php }?>
+                                        </div>
+                                        
                                     </div>
+                                <?php }elseif($type[$field] == 'textarea'){?>
+                                    <?php if($tinymce[$field]==true){?>
+                                        <div>
+                                            <div style="text-align: right;">
+                                                <?php if($tinymce_photo){?>
+                                                    <div class="mymodal-btn btn btn-xs btn-default list-edit" link="../layout/photos.php?parent_table=<?php echo $table?>&parent_id=0" style="padding-right:6px; color:white;">
+                                                        <img src="../../cms/images/photo.png" style="margin-right:3px;">
+                                                        Upload Photos
+                                                    </div>
+                                                <?php }?>
+                                            </div>
+                                            <textarea name="<?php echo $field?>" class="tinymce" style="height:<?php echo $height[$field]?>; width:<?php echo $width[$field]?>; <?php echo $styles?>"
+                                            <?php echo $attrs?>><?php echo $value[$field]?></textarea>
+                                        </div>
+                                    <?php }else{?>
+                                        <div>
+                                            <textarea name="<?php echo $field?>" <?php echo $attrs?> 
+                                            style="height:<?php echo $height[$field]?>; width:<?php echo $width[$field]?>;"><?php echo $value[$field]?></textarea>
+                                        </div>
+                                    <?php }?>
+                                <?php }elseif($type[$field] == 'file' || $type[$field] == 'pdf'){?>
+                                    <div style="width:<?php echo $width[$field]?>">
+                                    <?php if($_GET['id']){?>
+                                        <a href="../../<?php echo $value[$field]?>" target="_blank" style="display:inline-block; width:8%;">
+                                        <span class="glyphicon glyphicon-file"></span>
+                                        </a>
+                                    <?php }?>
+                                    <input type="file" name="<?php echo $field?>[]" value="<?php echo $value[$field]?>" <?php echo $attrs?> style=" display:inline-block; width:84%; <?php echo $styles?>">
+                                    </div>
+                                    
+                                <?php }elseif($type[$field] == 'password'){?>
+                                    <input type="<?php echo $type[$field]?>" name="<?php echo $field?>" id="<?php echo $field?>" value="" <?php echo $attrs?> minlength="5" style="width:<?php echo $width[$field]?> <?php echo $styles?>" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}">
+                                    <div class="password-eyedrop">
+                                        <img src="<?php echo ROOT?>cms/images/remove_red_eye-black-18dp.svg" alt="" onclick="switch_password('<?php echo $field?>')">
+                                    </div>
+                                    <div class="text-muted">
+                                        Must contain number, uppercase, one lowercase & minimum 6 characters.
+                                    </div>
+
+                                <?php }elseif($type[$field] == 'map'){?>
+                                    <div style="height:300px;">
+                                    <style>
+                                    #map {border:1px solid #999; margin-top:10px;}
+                                    </style>
+                                        <?php include ROOT.'google_map_search.php';?>
+                                    </div>
+
+                                <?php }elseif($type[$field] == 'coordinate'){?>
+                                    <!--No need do any here, it will be in google_map_search.php-->
                                 <?php }else{?>
-                                    <div>
-                                        <textarea name="<?php echo $field?>" <?php echo $attrs?> 
-                                        style="height:<?php echo $height[$field]?>; width:<?php echo $width[$field]?>;"><?php echo $value[$field]?></textarea>
-                                    </div>
+                                    <input type="<?php echo $type[$field]?>" name="<?php echo $field?>" value="<?php echo $value[$field]?>" <?php echo $attrs?> style="width:<?php echo $width[$field]?> <?php echo $styles?>">
                                 <?php }?>
-                            <?php }elseif($type[$field] == 'file' || $type[$field] == 'pdf'){?>
-                                <div style="width:<?php echo $width[$field]?>">
-                                <?php if($_GET['id']){?>
-                                    <a href="../../<?php echo $value[$field]?>" target="_blank" style="display:inline-block; width:8%;">
-                                    <span class="glyphicon glyphicon-file"></span>
-                                    </a>
-                                <?php }?>
-                                <input type="file" name="<?php echo $field?>[]" value="<?php echo $value[$field]?>" <?php echo $attrs?> style=" display:inline-block; width:84%; <?php echo $styles?>">
-                                </div>
-                                
-                            <?php }elseif($type[$field] == 'password'){?>
-                                <input type="<?php echo $type[$field]?>" name="<?php echo $field?>" id="<?php echo $field?>" value="" <?php echo $attrs?> minlength="5" style="width:<?php echo $width[$field]?> <?php echo $styles?>" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}">
-                                <div class="password-eyedrop">
-                                    <img src="<?php echo ROOT?>cms/images/remove_red_eye-black-18dp.svg" alt="" onclick="switch_password('<?php echo $field?>')">
-                                </div>
-                                <div class="text-muted">
-                                    Must contain number, uppercase, one lowercase & minimum 6 characters.
-                                </div>
-
-                            <?php }elseif($type[$field] == 'map'){?>
-                                <div style="height:300px;">
-                                <style>
-                                #map {border:1px solid #999; margin-top:10px;}
-                                </style>
-                                    <?php include ROOT.'google_map_search.php';?>
-                                </div>
-
-                            <?php }elseif($type[$field] == 'coordinate'){?>
-                                <!--No need do any here, it will be in google_map_search.php-->
-                            <?php }else{?>
-                                <input type="<?php echo $type[$field]?>" name="<?php echo $field?>" value="<?php echo $value[$field]?>" <?php echo $attrs?> style="width:<?php echo $width[$field]?> <?php echo $styles?>">
-                            <?php }?>
-                            <?php if($type[$field] != 'hidden'){?></div><?php }?>
-                        </div>
-                
-                    <?php if(in_array($item, $colEnd)){?>
-                    </div>
-                    <?php }?>
+                                <?php if($type[$field] != 'hidden'){?></div><?php }?>
+                            </div>
                     
-                <?php if(in_array($item, $rowEnd)){ $rowCount++;?>
-                </div>
-                <?php }?> 
-            <?php 
-            $item++;
-            }?>
-            <div class="col-12" style="text-align:center; padding:30px;">
+                        <?php if(in_array($item, $colEnd)){?>
+                        </div>
+                        <?php }?>
+                        
+                    <?php if(in_array($item, $rowEnd)){ $rowCount++;?>
+                    </div>
+                    <?php }?> 
                 <?php 
-                //if($_SESSION['group_id'] == '1' || $table == 'product'){
-                if(!empty($id)){?>
-                    <input type="submit" name="update2020" value="Update" class="btn" >
-                    <?php if($duplicate == true){?>
-                        <input type="submit" name="duplicate2020" value="Duplicate" class="btn" >
-                    <?php }?>
-                <?php }else{?>
-                    <input type="submit" name="add2020" value="Add" class="btn">
-                <?php }
-                //}?>
-                <?php if($save){echo $save;}?>
-            </div>
-            
+                $item++;
+                }?>
+                <div class="col-12" style="text-align:center; padding:30px;">
+                    <?php 
+                    //if($_SESSION['group_id'] == '1' || $table == 'product'){
+                    if(!empty($id)){?>
+                        <input type="submit" name="update2020" value="Update" class="btn" >
+                        <?php if($duplicate == true){?>
+                            <input type="submit" name="duplicate2020" value="Duplicate" class="btn" >
+                        <?php }?>
+                    <?php }else{?>
+                        <input type="submit" name="add2020" value="Add" class="btn">
+                    <?php }
+                    //}?>
+                    <?php if($save){echo $save;}?>
+                </div>
+                
 
 
-            
-            <?php //include("multiple_photo.php");?>                                   
-            
-        </form>
+                
+                <?php //include("multiple_photo.php");?>                                   
+                
+            </form>
+        </div>
     </div>
-</div>
 </div>
 </div>
 

@@ -32,6 +32,7 @@ if($_POST['customer_name']){
     $data['distance'] =                 $_POST['distance'];
     $data['address'] =                  $_POST['address'];
     $data['time'] =                     $_POST['time'];
+    $data['time_to_delivery'] =         $_POST['time_to_delivery'];
     $data['zone'] =                     $_POST['zone'];
     $data['message'] =                  $_POST['message'];
     $data['requirement'] =              $_POST['requirement'];
@@ -51,7 +52,8 @@ if($_POST['customer_name']){
     if(empty($data['destination_coordinate'])){ $msg .= ' No destination coordinate.'; $error++;}
     if(empty($data['distance'])){               $msg .= ' No distance detected.'; $error++;}
     if(empty($data['address'])){                $msg .= ' No Property number (Lot/Sublot/Unit).'; $error++;}
-    if(empty($data['time'])){                   $msg .= ' No time.'; $error++;}
+    if(empty($data['time'])){                   $msg .= ' No collection time.'; $error++;}
+    if(empty($data['time_to_delivery'])){       $msg .= ' No delivery time.'; $error++;}
 
 
     if($error>0){

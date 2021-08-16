@@ -99,8 +99,14 @@ if(empty($_SESSION['auth_user']['id'])){
                                         </div>
                                         <div class="row">
                                             <div class="col-12">
-                                                Time <span style="color:red; font-size:90%;">(Driver Collection)</span><br>
+                                                Collection Time <br>
                                                 <input name="time" type="time" value="<?php echo date('H:i')?>" class="form-group" required>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                Delivery Time <br>
+                                                <input name="time_to_delivery" type="time" value="<?php echo date("H:i", strtotime('+1 hour'))?>" class="form-group" required>
                                             </div>
                                         </div>
                                         <div class="row">

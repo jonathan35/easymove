@@ -47,7 +47,8 @@
                                         
                                             <a href="<?php echo ROOT?>order.php"><div>Order Delivery</div></a>
                                             <a href="<?php echo ROOT?>orders"><div>History Orders</div></a>
-                                            <?php if($_SESSION['auth_user']['branch'] == 1){?>
+                                            <?php 
+                                            if($_SESSION['auth_user']['type'] == 'Headquarter'){?>
                                                 <a href="<?php echo ROOT?>staff"><div>Create Account</div></a>
                                                 <a href="<?php echo ROOT?>staff_list"><div>List Accounts</div></a>
                                             <?php }?>

@@ -61,7 +61,7 @@ if(!empty($_SESSION['auth_user']['id'])){
                 <div class="row">
 
                     <div class="col-12 col-md-10 offset-md-2">
-                        <h1>Email & Password</h1>
+                        <h1>Reset Email & Password</h1>
                         <div class="pb-4">
                         Change your account's email & password.
                         </div>

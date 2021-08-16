@@ -58,7 +58,14 @@
     <?php }?>
     
   </div>
-  
+  <div class="nav lnav" link="../account/merit_request">Request Withdraw
+    <?php $request = sql_count("select id from withdraw_request where created like '".date('Y-m-d')."%'");
+    if($request>0){?>
+    <div class="circle_num ml-1" label="Driver waiting for approval ">
+      <?php echo $request?>
+    </div>
+    <?php }?>
+</div>
   <div class="nav lnav" link="../account/merit">Merit Ad-Hoc/Withdraw</div>
 
   <?php if($_SESSION['group_id'] == 1){?>

@@ -62,8 +62,6 @@ if($_GET['i']){
 
 if($oid){
 
-    
-
     if($_POST['cancel'] && $_POST['oid']){
 
         $data['id'] = $oid;
@@ -233,11 +231,18 @@ if(!empty($order['id'])){?>
                 </div>
                 <div class="pb-3"><?php echo $order['address'];?></div>
             
-                <div class="text-label pr-2">TIME</div>
+                <div class="text-label pr-2">COLLECTION TIME</div>
                 <div class="pb-3">
                     <?php echo date('h:ia', strtotime($order['time']));?>
+                </div>
+
+                <?php if($order['time_to_delivery']){?>
+                <div class="text-label pr-2">DELIVERY TIME</div>
+                <div class="pb-3">
+                    <?php echo date('h:ia', strtotime($order['time_to_delivery']));?>
                     <?php echo getTimePass(strtotime(substr($order['created'],0,10).' '.$order['time']))?>
                 </div>
+                <?php }?>
                 
                 <?php if($order['message']){?>
                     <div class="text-label pr-2">MESSAGE</div>

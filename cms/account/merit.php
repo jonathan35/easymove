@@ -73,7 +73,7 @@ $msg['Suspend']='Are you sure you want to suspend?';	$db['Suspend']=array('statu
 
 
 
-$fields = array('id', 'admin', 'driver', 'points', 'note');
+$fields = array('id', 'driver', 'points', 'note');
 $value = array();
 $type = array();
 $width = array();//width for input field
@@ -81,7 +81,7 @@ $placeholder = array();
 
 #####Design part#######
 $back = false;// "Back to listing" button, true = enable, false = disable
-$fic_1 = array(0=>array('5'));//fic = fiels in column, number of fields by column $fic_1 normally for add or edit template
+$fic_1 = array(0=>array('4'));//fic = fiels in column, number of fields by column $fic_1 normally for add or edit template
 
 foreach((array)$fields as $field){
 	$value[$field] = '';

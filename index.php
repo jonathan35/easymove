@@ -3,6 +3,7 @@ require_once 'config/ini.php';
 require_once 'config/security.php';
 include_once 'head.php';
 
+
 ?>
 
 <html lang="en">

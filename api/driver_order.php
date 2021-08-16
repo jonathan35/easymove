@@ -18,7 +18,7 @@ if(!empty($_POST['oid'])){
     $result = array('result' => false, 'message' => 'No order');
     $oid = $_POST['oid'];
 
-    $order = sql_read("select id, zone, branch_name, customer_name, phone, origin, destination,origin_coordinate as o_coor, destination_coordinate as d_coor, distance, address, time, message, requirement, status, proof_of_delivery as pod, accepted_datetime as accepted, collected_datetime as collected, delivered_datetime as delivery, created , report , decline, assign from orders where id=? limit 1", 'i', $oid);
+    $order = sql_read("select id, zone, branch_name, customer_name, phone, origin, destination,origin_coordinate as o_coor, destination_coordinate as d_coor, distance, address, time, message, requirement, status, proof_of_delivery as pod, accepted_datetime as accepted, collected_datetime as collected, delivered_datetime as delivery, created , report , decline, assign, time_to_delivery from orders where id=? limit 1", 'i', $oid);
     
 
     if(empty($order['origin']) || empty($order['destination']) || empty($order['o_coor']) || empty($order['d_coor']) || empty($order['distance'])){
@@ -51,24 +51,47 @@ if(!empty($_POST['oid'])){
         
 
         $order['sid'] = sprintf("%08d", $order['id']);
-        $order['created'] = date_format(date_create($order['created']), 'd/m/y, g:i a');
-        $order['accepted'] = date_format(date_create($order['accepted']), 'd/m/y, g:i a');
-        $order['collected'] = date_format(date_create($order['collected']), 'd/m/y, g:i a');
-        $order['delivery'] = date_format(date_create($order['delivery']), 'd/m/y, g:i a');
-        $order['time'] = date_format(date_create($order['time']), 'g:i a');
+        
+        if(empty($order['created'])){
+            $order['created'] = '-';
+        }else{
+            $order['created'] = date('d/m/y, h:ia', strtotime($order['created']));
+        }
+        if(empty($order['accepted'])){
+            $order['accepted'] = '-';
+        }else{
+            $order['accepted'] = date('d/m/y, h:ia', strtotime($order['accepted']));
+        }
+        if(empty($order['collected'])){
+            $order['collected'] = '-';
+        }else{
+            $order['collected'] = date('d/m/y, h:ia', strtotime($order['collected']));
+        }
+        if(empty($order['delivery'])){
+            $order['delivery'] = '-';
+        }else{
+            $order['delivery'] = date('d/m/y, h:ia', strtotime($order['delivery']));
+        }
+        if(empty($order['time'])){
+            $order['time'] = '-';
+        }else{
+            $order['time'] = date('h:ia', strtotime($order['time']));
+        }
+        if(empty($order['time_to_delivery'])){
+            $order['time_to_delivery'] = '-';
+        }else{
+            $order['time_to_delivery'] = date('h:ia', strtotime($order['time_to_delivery']));
+        }
 
         if(empty($order['zone'])) $order['zone'] = '-';
         if(empty($order['branch_name'])) $order['branch_name'] = '-';
         if(empty($order['customer_name'])) $order['customer_name'] = '-';
         if(empty($order['phone'])) $order['phone'] = '-';
         if(empty($order['address'])) $order['address'] = '-';
-        if(empty($order['time'])) $order['time'] = '-';
+        
         if(empty($order['message'])) $order['message'] = '-';
         if(empty($order['requirement'])) $order['requirement'] = '-';
         if(empty($order['pod'])) $order['pod'] = '-';
-        if(empty($order['accepted'])) $order['accepted'] = '-';
-        if(empty($order['collected'])) $order['collected'] = '-';
-        if(empty($order['delivery'])) $order['delivery'] = '-';
         
 
 
