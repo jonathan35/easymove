@@ -27,8 +27,20 @@ if($_GET['i']){
 
         $data['id'] = $oid;
         $data['status'] = 'Cancelled';
-        
+      
+        //Revert Order
         sql_save('orders', $data);
+
+        //Revert Merit
+        sql_exec("delete from merit where order_id=?", 'i', $oid);
+        
+        //Revert Trip
+        $order = sql_read('select trip from orders where id=? limit 1', 'i', $oid);
+        if(!empty($order['trip'])){
+            $trip = sql_read('select id, trip_balance from trip where id=? limit 1', 'i', $order['trip']);
+            $trip['trip_balance'] = $trip['trip_balance'] + 1;
+            sql_save('trip', $trip);
+        }
 
         $_SESSION['session_msg'] = '<div class="alert alert-success">
         <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close" style="position:relative; top:-2px;">×</a>
@@ -105,9 +117,9 @@ if(!$auth){
                 <div class="row title">
                     <div class="col-6">ORDER</div>
                     <div class="col-6 text-right">
-                    <a href="<?php echo ROOT?>track?i=<?php echo $defender->encrypt('encrypt', $order['id'])?>" target="_blank" style="color:white;">
+                        <a href="<?php echo ROOT?>track?i=<?php echo $defender->encrypt('encrypt', $order['id'])?>" target="_blank" style="border:2px solid white; display:inline-block; padding:0 8px 3px 8px; line-height:1; border-radius:20px; "><img src="<?php echo ROOT?>images/timeline.png"></a>
                         [<?php if($order['status'] =='Ordered') echo 'New'; 
-                        else echo $order['status'];?>]</a>
+                        else echo $order['status'];?>]
                     </div>
                 </div>
                 

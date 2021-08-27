@@ -273,7 +273,7 @@ function chkAll(frm, arr, mark){
 
 $(".commission_merit").each(function( index ) {
 	var i = $(this).attr('link');
-	$(this).after('<a href="commission.php?id='+i+'" target="_blank" ><div class="commerit">Commission & Merit</div></a>');
+	$(this).after('<a href="commission.php?id='+i+'" target="_blank" ><div class="commerit">Withdraw</div></a><a href="withdraw_log.php?id='+i+'" target="_blank" ><div class="commerit">History</div></a>');
 	//<a href="merit_statement.php?id='+i+'" target="_blank" class="btn btn-xs btn-default list-edit ref-btn" style="margin-left:5px;">Merit</a>
 });
 

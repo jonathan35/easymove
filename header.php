@@ -6,10 +6,10 @@
         <div class="row">
             <div class="col-10 p-0 offset-1">
                 <div class="row">
-                    <div class="col-12 col-md-5">
+                    <div class="col-12 col-md-4">
                         <div class="row">
                             <div class="col-12 pl-0 pr-0 d-flex justify-content-between">
-                                <div class="col-9 col-md-12 p-1 text-left">
+                                <div class="col-9 col-md-12 p-1 pt-2 text-left">
                                     <a href="<?php echo A_ROOT?>home">
                                         <img src="<?php echo ROOT?>images/logo.jpg" class="img-fluid d-inline">
                                     </a>
@@ -19,13 +19,12 @@
                                         <span class="navbar-toggler-icon">
                                             <i class="fas fa-bars burger-menu"></i>
                                         </span>
-
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="collapse d-md-inline col-md-7" id="mainMenu">
+                    <div class="collapse d-md-inline col-md-8" id="mainMenu">
                         <div class="row">
 
 
@@ -86,8 +85,9 @@
 
                                     $menu_items = array();
                                     $menu_width = $menu_str = '';
-                            
-                                    $menu_items[] = 'Delivery Goods';
+                                    
+                                    $menu_items[] = 'Home';
+                                    $menu_items[] = 'Order Delivery';
                                     $menu_items[] = 'Announcement';
                                     foreach((array)$pages as $p){
                                         $menu_items[] = $p['title'];
@@ -109,6 +109,12 @@
                                             $('#smenu'+i).fadeToggle();
                                         })
                                         </script>
+
+                                        <a href="<?php echo A_ROOT?>" style="color:#333;">
+                                        <div class="col-12 col-md p-1 hd-menu <?php if(strpos($_SERVER['PHP_SELF'], '/index.php')) echo 'active-hd-menu';?>">
+                                        Home
+                                        </div></a>
+
                                         <a href="<?php echo ROOT?>order" style="color:#333;">
                                         <div class="col-12 col-md p-1 hd-menu <?php if(strpos($_SERVER['PHP_SELF'], '/order.php')) echo 'active-hd-menu';?>">
                                         Order Delivery

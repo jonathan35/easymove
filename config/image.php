@@ -23,45 +23,38 @@ class img {
 		
 
 
-	function upload_image($file=array(), $table=null, $field=null, $id=null, $watermarking=null, $uniqid=null) {
+	function upload_image($file=array(), $table=null, $field=null, $id=null, $watermarking=null) {
 		
 		#file contain $_FILES[]
 		global $conn;
 
 		$source = $file['tmp_name']; 
-		$type = $file['type'];
+		$type = $file['type']; 
 		$ext = substr(strrchr($type, "/"), 1);
-
-		if(empty($uniqid)){
-			$name = uniqid();
-		}else{
-			$name = str_replace('.'.$ext,'',$file['name']);
-		}
-		
 		$compress = false;//requirement
 		$compressed = false;//compress status
 
 		list($width, $height) = getimagesize($source);
 
 		switch ( $ext ){ 
-			case 'pjpeg':$file = 'photo/'.$name.'.jpg';break;
-			case 'jpg':$file = 'photo/'.$name.'.jpg';break;
-			case 'jpeg':$file = 'photo/'.$name.'.jpg';break; 
-			case 'gif':$file = 'photo/'.$name.'.gif';break;
-			case 'png':$file = 'photo/'.$name.'.png';break;					
+			case 'pjpeg':$file = 'photo/'.uniqid().'.jpg';break;
+			case 'jpg':$file = 'photo/'.uniqid().'.jpg';break;
+			case 'jpeg':$file = 'photo/'.uniqid().'.jpg';break; 
+			case 'gif':$file = 'photo/'.uniqid().'.gif';break;
+			case 'png':$file = 'photo/'.uniqid().'.png';break;					
 			
-			case 'pdf':$file = 'files/'.$name.'.pdf';break;
+			case 'pdf':$file = 'files/'.uniqid().'.pdf';break;
 			
-			case 'webm':$file = 'video/'.$name.'.webm';break;
-			case 'mkv':$file = 'video/'.$name.'.mkv';break;
-			case 'flv':$file = 'video/'.$name.'.flv';break;
-			case 'vob':$file = 'video/'.$name.'.vob';break;
-			case 'avi':$file = 'video/'.$name.'.avi';break;
-			case 'wmv':$file = 'video/'.$name.'.wmv';break;
-			case 'mov':$file = 'video/'.$name.'.mov';break;
-			case 'rmvb':$file = 'video/'.$name.'.rmvb';break;
-			case 'mp4':$file = 'video/'.$name.'.mp4';break;
-			case 'mpg':$file = 'video/'.$name.'.mpg';break;								
+			case 'webm':$file = 'video/'.uniqid().'.webm';break;
+			case 'mkv':$file = 'video/'.uniqid().'.mkv';break;
+			case 'flv':$file = 'video/'.uniqid().'.flv';break;
+			case 'vob':$file = 'video/'.uniqid().'.vob';break;
+			case 'avi':$file = 'video/'.uniqid().'.avi';break;
+			case 'wmv':$file = 'video/'.uniqid().'.wmv';break;
+			case 'mov':$file = 'video/'.uniqid().'.mov';break;
+			case 'rmvb':$file = 'video/'.uniqid().'.rmvb';break;
+			case 'mp4':$file = 'video/'.uniqid().'.mp4';break;
+			case 'mpg':$file = 'video/'.uniqid().'.mpg';break;								
 		}
 		
 			
@@ -256,8 +249,13 @@ Warning: imagepng() expects parameter 1 to be resource, bool given in C:\xampp\h
 	
 	
 	function resize_image($file, $w, $h, $crop=FALSE) {
+
 		list($width, $height) = getimagesize($file);
-		$r = $width / $height;
+
+
+		$r = $width / $height;//original picture ratio
+		$t = $w / $h;//target picture ratio
+
 		if ($crop) {
 			if ($width > $height) {
 				$width = ceil($width-($width*abs($r-$w/$h)));
@@ -267,14 +265,15 @@ Warning: imagepng() expects parameter 1 to be resource, bool given in C:\xampp\h
 			$newwidth = $w;
 			$newheight = $h;
 		} else {
-			if ($w/$h > $r) {
-				$newwidth = $h*$r;
+			if ($r > $t) {//height shorter so base on height
 				$newheight = $h;
-			} else {
-				$newheight = $w/$r;
+				$newwidth = $h*$r;
+			} else {//width shorter so base on width
 				$newwidth = $w;
+				$newheight = $w/$r;
 			}
 		}
+
 		$src = imagecreatefromjpeg($file);
 		$dst = imagecreatetruecolor($newwidth, $newheight);
 		imagecopyresampled($dst, $src, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);

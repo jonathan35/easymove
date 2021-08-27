@@ -35,7 +35,6 @@ include_once 'head.php';
                                     <div class="col-12 col-md-8 offset-md-2">
                                         <h2><?php echo $_SESSION['auth_user']['branch_name']?></h2>
 <?php 
-
 $trips = sql_read("select * from trip where branch=? order by id asc", 'i', $_SESSION['auth_user']['branch']);
 $balance = 0;
 
@@ -49,6 +48,7 @@ $balance = 0;
         <tr style="border-top:none;">
             <th style="border-top:none;">Topup Date<th>
             <th style="border-top:none;">Trip<th>
+            <th style="border-top:none;">Topup<th>
             <th style="border-top:none;">Used<th>
             <th style="border-top:none;">Balance<th>
         </tr>
@@ -59,8 +59,9 @@ $balance = 0;
             <tr>
                 <td><?php echo date_format(date_create($trip['created']), 'd-m-y')?><td>
                 <td><?php echo $trip['trip_distance']?>KM<td>
+                <td><?php echo $trip['topup_trip']?><td>
                 <td><?php echo $trip['topup_trip']-$trip['trip_balance']?><td>
-                <td><?php echo $trip['trip_balance']?><td>
+                <td><?php if(!empty($trip['trip_balance'])) echo $trip['trip_balance']; else echo '0';?><td>
             </tr>
         <?php }?>
     </table>

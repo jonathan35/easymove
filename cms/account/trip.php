@@ -20,7 +20,19 @@ $add = true;
 $edit = true;
 $list = true;
 $list_method = 'list';
-$sort = 'order by trip_distance ASC';
+
+if($_POST['sort'] == 'distance_asc'){
+	$sort = 'order by trip_distance ASC';
+}elseif($_POST['sort'] == 'distance_desc'){
+	$sort = 'order by trip_distance DESC';
+}elseif($_POST['sort'] == 'date_asc'){
+	$sort = 'order by id ASC';
+}else{
+	$sort = 'order by id DESC';
+}
+
+unset($_POST['sort']);
+
 
 $keyword = false;//Component to search by keyword
 $keywordMustFullWord=false;

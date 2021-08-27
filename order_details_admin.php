@@ -152,6 +152,7 @@ if(!empty($order['id'])){?>
                 <div class="row title">
                     <div class="col-6">ORDER</div>
                     <div class="col-6 text-right">
+                        <a href="<?php echo ROOT?>track?i=<?php echo $defender->encrypt('encrypt', $order['id'])?>" target="_blank" style="border:2px solid white; display:inline-block; padding:0 8px 3px 8px; line-height:1; border-radius:20px; "><img src="<?php echo ROOT?>images/timeline.png"></a>
                         [<?php if($order['status'] =='Ordered') echo 'New'; 
                         else echo $order['status'];?>]
                     </div>

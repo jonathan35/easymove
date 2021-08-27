@@ -12,7 +12,7 @@ $gains = $loses = array();
 
 if(!empty($order_id) && !empty($_POST['action'])){
 
-    $order = sql_read('select id, collected_datetime, time, distance from orders where id=? limit 1', 'i', $order_id);
+    $order = sql_read('select id, collected_datetime, time, distance, driver from orders where id=? limit 1', 'i', $order_id);
 
     $deadline = 'expired';
 
@@ -31,11 +31,10 @@ if(!empty($order_id) && !empty($_POST['action'])){
 
     }elseif($_POST['action'] == 'accept'){
 
-        $taken = sql_read('select id from orders where id=? limit 1', 'i', $driver_id);
         $deadline = getFastPickDeadline($order['id']);
 
-        if(!empty($taken['id'])){
-            $result = array('result' => false, 'message' => 'Taken', 'deadline' => $deadline);
+        if($order['driver'] != $driver_id && !empty($order['driver'])){
+            $result = array('result' => false, 'message' => 'Taken id is: '.$taken['id'], 'deadline' => $deadline);
         }else{
             $driver = sql_read('select driver, name, mobile_number from driver where id=? limit 1', 's', $driver_id);
             $data['driver_name'] = $driver['name'];

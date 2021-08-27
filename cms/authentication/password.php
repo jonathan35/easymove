@@ -35,6 +35,7 @@ if ((hash('md5',$_POST['txtpassword']) == $row_Recordset1['password']) && ($tota
 		$_SESSION['user_id'] = $row_Recordset1['id'];
 		$_SESSION['group_id'] = $row_Recordset1['admin_group'];
 		$_SESSION['region'] = $row_Recordset1['region'];
+		sql_save('login', array('id'=> $row_Recordset1['id'], 'modified' => date('Y-m-d h:i:s')));
 		
 		if ($_POST['autoSignin']=='yes')
 		{

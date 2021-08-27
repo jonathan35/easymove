@@ -89,7 +89,7 @@ a:hover { text-decoration:none; color:#00a1e6/*#a2c253;*/}
 
 /*---------------------- General Form -------------------- */
 form {width:100%;}
-input[type=submit]{
+input[type=submit], input[type=reset]{
     padding:8px 40px; color:white; font-size:13px; border:none; 
     background: var(--bgclr-sharp);
     border-radius:17px;box-shadow: 1px 2px 2px rgba(0,0,0,.2); transition:background-color .4s, color .4s;

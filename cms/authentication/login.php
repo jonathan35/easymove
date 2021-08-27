@@ -60,15 +60,11 @@
 				</div>
 			</div>
 
-			<div class="row">
-				<div class="col-12 pt-5">
-				<a href="mailto:support@webnyou.com" >Forgot your password?</a>
-				</div>
-			</div>
+			
 
 			<div class="row pt-5">
 				<div class="col-12">
-					<?php if ($_GET['str']=='wrong'){ ?>                        
+					<?php if (!empty($_GET['str'])){ ?>                        
 				
 						<div style="font-size:18px; color:red;">
 						W R O N G - P A S S W O R D - F O U N D !!!
@@ -89,7 +85,15 @@
 
 		
 		</form>
-
+						
+		<div class="row">
+			<div class="col-12 pt-5">
+				<div class="hyperlink" data-toggle="modal" data-target="#forgetPasswordModal" data-dismiss="modal" style="cursor:pointer;">Forget Password</div>
+			</div>
+		</div>
+		<?php include 'forget_password.php'?>
+		<script src="../../js/jquery.min.js"></script>
+		<script src="../../js/4.3.1/bootstrap.min.js"></script>
 	</div>
 
 </div>

@@ -26,7 +26,7 @@ $keyword = true;//Component to search by keyword
 $keywordMustFullWord=false;
 $keywordFields=array('branch', 'contact_person');
 $filter = true;
-$filFields = array('company', 'type');
+$filFields = array('company_id', 'type');
 
 $actions=array('Delete');//, 'Display', 'Hide', 'Activate', 'Suspend'
 $msg['Delete']='Are you sure you want to delete?';

@@ -10,6 +10,7 @@ $gains = $loses = array();
 if(!empty($driver_id)){
 
     $data['driver'] = $driver_id;
+    $data['status'] = 0;
     if(!empty($driver_id)){ $data['withdraw'] = $withdraw_merit; }
     sql_save('withdraw_request', $data);
     $result = array('result' => true, 'message' => 'Request sent successfully.');

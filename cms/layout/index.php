@@ -44,7 +44,7 @@ if($_SESSION['validation']=='YES'){
     
     <img src="../images/account_circle.svg" width="24">
     <span class="d-none d-md-block pl-1">
-      <?php if(!empty($who['name'])) echo $who['name']?>
+      <?php if(!empty($who['name'])){ echo $who['name']?> (Last login on <?php echo date('d-m-y, g:ia', strtotime($who['modified']));?>)<?php }?>
     </span>
     <span class="d-block d-md-none">CMS</span>
   

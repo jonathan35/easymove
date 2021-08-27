@@ -25,6 +25,9 @@ $sort = 'order by id DESC';
 $keyword = true;//Component to search by keyword
 $keywordMustFullWord=false;
 $keywordFields=array('company', 'branch_name', 'contact_person', 'mobile_number');
+$filter = true;
+$filFields = array('branch');
+
 
 $actions=array('Delete', 'Activate', 'Suspend');//, 'Display', 'Hide'
 $msg['Delete']='Are you sure you want to delete?';

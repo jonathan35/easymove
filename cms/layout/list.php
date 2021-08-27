@@ -156,6 +156,18 @@ if($edit==true){?>
 				}
 			}
 		}?>
+
+			<?php if($table == 'trip'){?>
+				<div class="col-3">
+				<select name="sort" style="display:inline-block">
+					<option value="date_desc" <?php if($_REQUEST['sort'] == 'date_desc'){?>selected<?php }?>>Topup Date Descending< (9-1)</option>
+					<option value="date_asc" <?php if($_REQUEST['sort'] == 'date_asc'){?>selected<?php }?>>Topup Date Ascending (1-9)</option>
+					<option value="distance_desc" <?php if($_REQUEST['sort'] == 'distance_desc'){?>selected<?php }?>>Trip Distance Descending (9-1)</option>
+					<option value="distance_asc" <?php if($_REQUEST['sort'] == 'distance_asc'){?>selected<?php }?>>Trip Distance Ascending (1-9)</option>
+				</select>
+				</div>
+			<?php }?>
+
                 
                 &nbsp;&nbsp;<input type="submit" name="submit" value="Search">
 				&nbsp;&nbsp;<input type="submit" name="submit" value="Reset">

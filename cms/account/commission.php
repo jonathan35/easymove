@@ -29,6 +29,7 @@ if($_POST['Withdraw'] == 'Withdraw Now'){
 		$withdraw['driver'] = $id;
 		$withdraw['basic'] = $_POST['basic'];
 		$withdraw['bonus'] = $_POST['bonus'];
+		$withdraw['admin'] = $_SESSION['user_id'];
 		sql_save('withdraw', $withdraw);
 		
 		$last_withdraw = sql_read('select id from withdraw order by id desc limit 1');

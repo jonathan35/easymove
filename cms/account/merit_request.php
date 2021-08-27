@@ -31,16 +31,16 @@ $filter = true;
 $filFields = array('driver');
 
 
-$actions=array('Delete');//, 'Display', 'Hide'
+$actions=array('Delete', 'Done');//, 'Display', 'Hide'
 $msg['Delete']='Are you sure you want to delete?';
-$msg['Display']='Are you sure you want to display?';	$db['Display']=array('status', '1');
+$msg['Done']='Are you sure you want to done?';	$db['Done']=array('status', '1');
 $msg['Hide']='Are you sure you want to hide?';			$db['Hide']=array('status', '2');
 $msg['Activate']='Are you sure you want to activate?';	$db['Activate']=array('status', '1');
 $msg['Suspend']='Are you sure you want to suspend?';	$db['Suspend']=array('status', '0');
 
 
 
-$fields = array('id', 'withdraw', 'driver');
+$fields = array('id', 'withdraw', 'driver', 'status');
 $value = array();
 $type = array();
 $width = array();//width for input field
@@ -97,7 +97,7 @@ $type['note'] = 'textarea';
 $type['created'] = 'date';
 //$type['address'] = 'textarea'; $tinymce['address']=false;  $labelFullRow['address']=false; $height['address'] = '80px;'; $width['address'] = '100%;'; 
 $type['group_id'] = 'select'; $option['group_id'] = array('1'=>'Master Admin');//,'2'=>'Admin'
-//$type['status'] = 'select'; $option['status'] = array('1'=>'Activated','0'=>'Suspended');$default_option['status'] = '1';
+$type['status'] = 'select'; $option['status'] = array('0'=>'Pending', '1'=>'Done');$default_option['status'] = '1';
 
 $required['title'] = 'required';
 

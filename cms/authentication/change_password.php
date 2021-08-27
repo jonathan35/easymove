@@ -24,35 +24,36 @@ if($_SESSION['validation']=='YES'){
       </tr>
           <tr>
             <td class="border_background_no_color">
-  <table width="100%" border="0" cellpadding="2" cellspacing="2">
+  <table width="50%" border="0" cellpadding="2" cellspacing="2">
           <tr>
-            <td align="left"><Form METHOD="post" ACTION="change_password.php">
+            <td align="left"><Form METHOD="post" ACTION="change_password">
                 <span class="red">*Indicate Required Fields</span>
                 
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" id="form">
                   <tr>
-                    <td class="main_title" width="20%"><div align="left"><span class="red">*</span> <span class="content">Current Username:</span></div></td>
-                    <td align="left"><INPUT TYPE="user_name1" NAME="user_name1" VALUE="" SIZE=20 MAXLENGTH=20></td>
+                    <td class="main_title" width="40%"><div align="left"><span class="red">*</span> <span class="content">Current Username:</span></div></td>
+                    <td align="left"><INPUT TYPE="email" NAME="user_name1" VALUE="" SIZE=50 MAXLENGTH=50 autocomplete="off"></td>
                   </tr>              
                   <tr>
                     <td class="main_title"><div align="left"><span class="red">*</span> <span class="content">Current Password:</span></div></td>
-                    <td align="left"><INPUT TYPE="password" NAME="OldPassword" VALUE="" SIZE=20 MAXLENGTH=20>
+                    <td align="left"><INPUT TYPE="password" NAME="OldPassword" VALUE="" SIZE=20 MAXLENGTH=20 autocomplete="off">
                         <input type=hidden name=s value=a></td>
                   </tr>
                   <tr><td><br></td></tr>
                   <tr>
                     <td class="main_title"><div align="left"><span class="red">*</span> <span class="content">New Username:</span></div></td>
-                    <td align="left"><INPUT TYPE="user_name" NAME="user_name" VALUE="" SIZE=20 MAXLENGTH=20></td>
+                    <td align="left"><INPUT TYPE="email" NAME="user_name" VALUE="" SIZE=50 MAXLENGTH=50></td>
                   </tr> 
                   
                   <tr>
                     <td class="main_title"><div align="left"><font class="red">*</font> <span class="content">New Password:</span></div></td>
-                    <td align="left"><INPUT TYPE="password" NAME="NewPassword" VALUE="" SIZE=20 MAXLENGTH=20>
+                    <td align="left"><INPUT TYPE="password" NAME="NewPassword" VALUE="" SIZE=20 MAXLENGTH=20  autocomplete="off">
                     </td>
                   </tr>
                   <tr>
                     <td class="main_title"><div align="left"><span class="red">*</span> <span class="content">Re-enter Password:</span></div></td>
-                    <td align="left"><INPUT TYPE="password" NAME="ComfirmPassword" VALUE="" SIZE=20 MAXLENGTH=20></td>
+                    <td align="left"><INPUT TYPE="password" NAME="ComfirmPassword" VALUE="" SIZE=20 MAXLENGTH=20  autocomplete="off" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}">
+                    Must contain number, uppercase, lowercase & minimum 6 characters. </td>
                   </tr>
                 </table>
                 <br>

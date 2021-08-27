@@ -45,10 +45,10 @@ if(empty($_SESSION['auth_user']['id'])){
                                 <div class="row">
 
                                     <div class="col-12 col-md-6 offset-md-3">
-                                        <h2><?php echo $_SESSION['auth_user']['branch_name']?></h2>
                                         <?php 
+                                        $trips = sql_read("select * from trip where branch=? order by id asc", 'i', $_SESSION['auth_user']['branch']);
+                                        $balance = 0;
 
-                                        $trips = sql_read("select SUM(trip_balance) as balance, SUM(topup_trip) as topup, trip_distance as distance from trip where trip_balance > ? and branch =? group by trip_distance order by trip_distance asc", 'ii', array(0, $_SESSION['auth_user']['branch']));//id, trip_balance, distance
                                         ?>
                                         <div style="margin: 20px 0; padding: 10px; background:#fff1cc; border-radius:20px; border:1px solid #edd698; box-shadow:1px 1px 2px rgba(0,0,0,.2)">
                                             <div style="border-bottom:1px solid orange; font-size:20px; color:orange">
@@ -57,17 +57,24 @@ if(empty($_SESSION['auth_user']['id'])){
                                             </div>
                                             <table class="table table-sm table-white mb-1" >
                                                 <tr style="border-top:none;">
+                                                    <th style="border-top:none;">Topup Date<th>
                                                     <th style="border-top:none;">Trip<th>
+                                                    <th style="border-top:none;">Topup<th>
                                                     <th style="border-top:none;">Used<th>
                                                     <th style="border-top:none;">Balance<th>
                                                 </tr>
-                                            <?php foreach($trips as $trip){?>
-                                                <tr>
-                                                    <td><?php echo $trip['distance']?>KM<td>
-                                                    <td><?php echo $trip['topup']-$trip['balance']?><td>
-                                                    <td><?php echo $trip['balance']?><td>
-                                                </tr>
-                                            <?php }?>
+                                                <?php 
+                                                foreach($trips as $trip){
+                                                    $balance += $trip['trip_balance'];
+                                                    ?>
+                                                    <tr>
+                                                        <td><?php echo date_format(date_create($trip['created']), 'd-m-y')?><td>
+                                                        <td><?php echo $trip['trip_distance']?>KM<td>
+                                                        <td><?php echo $trip['topup_trip']?><td>
+                                                        <td><?php echo $trip['topup_trip']-$trip['trip_balance']?><td>
+                                                        <td><?php if(!empty($trip['trip_balance'])) echo $trip['trip_balance']; else echo '0';?><td>
+                                                    </tr>
+                                                <?php }?>
                                             </table>
                                         </div>
 

@@ -281,6 +281,7 @@ Order successfully.</div>';
                                     <?php }?>
                                     <th>CUSTOMER</th>
                                     <th>PHONE</th>
+                                    <th>TIMELINE</th>
                                     <th>STATUS</th>
                                 </tr>
                                 
@@ -303,7 +304,11 @@ Order successfully.</div>';
                                     <td>
                                         <?php echo $order['phone']?>
                                     </td>
+                                    <td class="text-center">                                        
+                                        <a href="<?php echo ROOT?>track?i=<?php echo $defender->encrypt('encrypt', $order['id'])?>" target="_blank" style="border:2px solid orange; display:inline-block; padding:0 8px 3px 8px; line-height:1; border-radius:20px; "><img src="<?php echo ROOT?>images/timeline.png"></a>
+                                    </td>
                                     <td>
+                                       
                                         <?php echo $order['status']?>
                                     </td>
                                 </tr>
